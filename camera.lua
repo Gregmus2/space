@@ -24,8 +24,7 @@ end
 function Camera:move(dX, dY)
     self.x = self.x + dX
     self.y = self.y + dY
-    self.object.x = self.object.x + dX
-    self.object.y = self.object.y + dY
+    self.object:move(dX, dY)
 end
 
 ---@param scale number

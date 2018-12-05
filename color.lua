@@ -1,4 +1,7 @@
 ---@class Color
+---@field public r number
+---@field public g number
+---@field public b number
 local Color = {}
 
 ---@param r number
@@ -15,19 +18,8 @@ function Color:blue()
     return Color:new(0, 0, 1)
 end
 
----@return number
-function Color:getR()
-    return self.r;
-end
-
----@return number
-function Color:getG()
-    return self.g;
-end
-
----@return number
-function Color:getB()
-    return self.b;
+function Color:red()
+    return Color:new(1, 0, 0)
 end
 
 return Color

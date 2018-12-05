@@ -1,36 +1,50 @@
 local GameObject = require('game_object')
-local DrawGenerator = require('draw_generator')
 local Color = require('color')
 local Camera = require('camera')
+local Drawable = require('drawable')
 
+---@type GameObject[]
 local objects = {}
 local actions = {}
 local events = { key = {} }
+
+local halfScreenW = love.graphics.getWidth() / 2;
+local halfScreenH = love.graphics.getHeight() / 2;
+local screenOutRadius = math.sqrt(love.graphics.getWidth() ^ 2 + love.graphics.getHeight() ^ 2) / 2
 
 ---@type Camera
 local camera;
 
 function love.load()
+    love.math.setRandomSeed(love.timer.getTime())
+
     -- todo create config file
-    local go = GameObject:new(0, 0, 100, 100)
-    local rectFunc = DrawGenerator.generateRectangle('fill', Color:blue())
-    go:setDraw(rectFunc)
-    objects[#objects + 1] = go
 
-    camera = Camera:new(0, 0)
+    for i = 0, 100 do
+        local go = GameObject:new(
+            love.math.random(0, 5000),
+            love.math.random(0, 5000),
+            love.math.random(0, 150),
+            love.math.random(0, 150)
+        )
+        local color = Color:new(love.math.random(), love.math.random(), love.math.random())
+        Drawable:rectangle(go, 'fill', color)
+        objects[#objects + 1] = go
+    end
 
-    local w = 100;
-    local h = 100;
+    camera = Camera:new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
+
+    local w = 50;
+    local h = 50;
     go = GameObject:new(
-    camera.x + love.graphics.getWidth() / 2 - w / 2,
-    camera.y + love.graphics.getHeight() / 2 - h / 2,
-        w, h
+        camera.x + love.graphics.getWidth() / 2,
+        camera.y + love.graphics.getHeight() / 2,
+            w, h
     )
-    rectFunc = DrawGenerator.generateRectangle('fill', Color:blue())
-    go:setDraw(rectFunc)
+    Drawable:circle(go, 'fill', Color:blue())
     objects[#objects + 1] = go
 
-    local shipSpeed = 200
+    local shipSpeed = 500
 
     -- todo create events for each main object and merge them in this events
     camera:assignObject(go)
@@ -63,9 +77,12 @@ function love.keyreleased(key)
 end
 
 function love.draw()
-    -- todo what we gona do when objects will be more 1000?
-    -- решать это здесь или же где-то в другом месте менять сам массив objects, исключая неиспользуемые объекты (вне зоны)
+    -- todo добавить плавность передвижений, масштабирования
     for i = 1, #objects do
-        objects[i]:draw(camera)
+        local go = objects[i]
+        local distance = math.sqrt((go.x - (camera.x + halfScreenW)) ^ 2 + (go.y - (camera.y + halfScreenH)) ^ 2) - go.draw.visibilityRadius
+        if math.abs(distance) <= screenOutRadius * (1/camera.scale) then
+            go.draw.draw(camera)
+        end
     end
 end
