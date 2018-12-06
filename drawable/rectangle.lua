@@ -31,8 +31,8 @@ function Rectangle:draw(camera, x, y)
     love.graphics.setColor(self.color.r, self.color.g, self.color.b)
     love.graphics.rectangle(
         self.mode,
-        self.calcX(camera, x),
-        self.calcY(camera, y),
+        self.calcX(camera, x) - self.w * camera.scale / 2,
+        self.calcY(camera, y) - self.h * camera.scale / 2,
         self.w * camera.scale,
         self.h * camera.scale
     )

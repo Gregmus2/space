@@ -21,28 +21,20 @@ function love.load()
 
     -- todo create config file
 
---[[    for i = 0, 100 do
-        local go = GameObject:new(
-            love.math.random(0, 5000),
-            love.math.random(0, 5000),
-            love.math.random(0, 150),
-            love.math.random(0, 150)
-        )
+    for i = 0, 100 do
         local color = Color:new(love.math.random(), love.math.random(), love.math.random())
-        Drawable:rectangle(go, 'fill', color)
+        local go = GameObjectFactory.generateRectangle(
+            world,
+            love.math.random(0, 5000),
+            love.math.random(0, 5000),
+            'fill',
+            color,
+            love.math.random(0, 150),
+            love.math.random(0, 150),
+            'static'
+        )
         objects[#objects + 1] = go
-    end]]
-
-    local go2 = GameObjectFactory.generateCircle(
-        world,
-        0,
-        0,
-        'fill',
-        Color:red(),
-        60,
-        'static'
-    )
-    objects[#objects + 1] = go2
+    end
 
     camera = Camera:new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
 

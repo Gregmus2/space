@@ -31,4 +31,26 @@ function GameObjectFactory.generateCircle(world, x, y, mode, color, radius, body
     return GameObject:new(drawable, physics)
 end
 
+---@param world World
+---@param x number
+---@param y number
+---@param mode string
+---@param color Color
+---@param w number
+---@param h number
+---@param bodyType string
+---@param mass number
+---@param restitution number|nil
+function GameObjectFactory.generateRectangle(world, x, y, mode, color, w, h, bodyType, mass, restitution)
+    local drawable = Rectangle:new(mode, color, w, h)
+    local body = love.physics.newBody(world, x, y, bodyType)
+    local shape = love.physics.newRectangleShape(w, h)
+    local physics = love.physics.newFixture(body, shape)
+    if (restitution ~= nil) then
+        physics:setRestitution(restitution)
+    end
+
+    return GameObject:new(drawable, physics)
+end
+
 return GameObjectFactory
