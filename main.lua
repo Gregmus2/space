@@ -1,15 +1,12 @@
-local GameObject = require('game_object')
 local Color = require('color')
 local Camera = require('camera')
-local Drawable = require('drawable')
+local GameObjectFactory = require('factory.game_object_factory')
 
 ---@type GameObject[]
 local objects = {}
 local actions = {}
 local events = { key = {} }
 
-local halfScreenW = love.graphics.getWidth() / 2;
-local halfScreenH = love.graphics.getHeight() / 2;
 local screenOutRadius = math.sqrt(love.graphics.getWidth() ^ 2 + love.graphics.getHeight() ^ 2) / 2
 
 ---@type Camera
@@ -17,10 +14,14 @@ local camera;
 
 function love.load()
     love.math.setRandomSeed(love.timer.getTime())
+    love.graphics.setBackgroundColor(0.03, 0.04, 0.08)
+
+    love.physics.setMeter(64)
+    world = love.physics.newWorld(0, 0, true)
 
     -- todo create config file
 
-    for i = 0, 100 do
+--[[    for i = 0, 100 do
         local go = GameObject:new(
             love.math.random(0, 5000),
             love.math.random(0, 5000),
@@ -30,31 +31,47 @@ function love.load()
         local color = Color:new(love.math.random(), love.math.random(), love.math.random())
         Drawable:rectangle(go, 'fill', color)
         objects[#objects + 1] = go
-    end
+    end]]
+
+    local go2 = GameObjectFactory.generateCircle(
+        world,
+        0,
+        0,
+        'fill',
+        Color:red(),
+        60,
+        'static'
+    )
+    objects[#objects + 1] = go2
 
     camera = Camera:new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
 
-    local w = 50;
-    local h = 50;
-    go = GameObject:new(
-        camera.x + love.graphics.getWidth() / 2,
-        camera.y + love.graphics.getHeight() / 2,
-            w, h
+    local go = GameObjectFactory.generateCircle(
+        world,
+        camera.x,
+        camera.y,
+        'fill',
+        Color:blue(),
+        50,
+        'dynamic',
+        1
     )
-    Drawable:circle(go, 'fill', Color:blue())
     objects[#objects + 1] = go
 
-    local shipSpeed = 500
+    local shipSpeed = 50000
 
     -- todo create events for each main object and merge them in this events
     camera:assignObject(go)
-    events['key']['d'] = function(dt) camera:move(shipSpeed * dt, 0) end
-    events['key']['w'] = function(dt) camera:move(0, -shipSpeed * dt) end
-    events['key']['a'] = function(dt) camera:move(-shipSpeed * dt, 0) end
-    events['key']['s'] = function(dt) camera:move(0, shipSpeed * dt) end
+    events['key']['d'] = function(dt) camera.object.physics:getBody():applyForce(shipSpeed * dt, 0) end
+    events['key']['w'] = function(dt) camera.object.physics:getBody():applyForce(0, -shipSpeed * dt) end
+    events['key']['a'] = function(dt) camera.object.physics:getBody():applyForce(-shipSpeed * dt, 0) end
+    events['key']['s'] = function(dt) camera.object.physics:getBody():applyForce(0, shipSpeed * dt) end
 end
 
 function love.update(dt)
+    world:update(dt)
+    camera:setCoords(camera.object.physics:getBody():getPosition())
+
     for _,action in pairs(actions) do
         action(dt)
     end
@@ -77,12 +94,13 @@ function love.keyreleased(key)
 end
 
 function love.draw()
-    -- todo добавить плавность передвижений, масштабирования
+    -- todo добавить плавность масштабирования
     for i = 1, #objects do
         local go = objects[i]
-        local distance = math.sqrt((go.x - (camera.x + halfScreenW)) ^ 2 + (go.y - (camera.y + halfScreenH)) ^ 2) - go.draw.visibilityRadius
+        local x, y = go.physics:getBody():getPosition()
+        local distance = math.sqrt((x - (camera.x)) ^ 2 + (y - (camera.y)) ^ 2) - go.draw.visibilityRadius
         if math.abs(distance) <= screenOutRadius * (1/camera.scale) then
-            go.draw.draw(camera)
+            go.draw:draw(camera, x, y)
         end
     end
 end

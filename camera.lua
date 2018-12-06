@@ -9,9 +9,10 @@ local Camera = {}
 ---@return Camera
 function Camera:new(x, y)
     newObj = { x = x, y = y, scale = 1, object = nil }
+    setmetatable(newObj, self)
     self.__index = self
 
-    return setmetatable(newObj, self)
+    return newObj
 end
 
 ---@param object GameObject
@@ -19,12 +20,11 @@ function Camera:assignObject(object)
     self.object = object
 end
 
----@param dX number
----@param dY number
-function Camera:move(dX, dY)
-    self.x = self.x + dX
-    self.y = self.y + dY
-    self.object:move(dX, dY)
+---@param x number
+---@param y number
+function Camera:setCoords(x, y)
+    self.x = x
+    self.y = y
 end
 
 ---@param scale number
