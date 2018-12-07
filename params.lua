@@ -1,7 +1,12 @@
 ---@class Params
 ---@field public halfScreenH number
 ---@field public halfScreenW number
-local Params = {}
+local Params = {
+    default = {
+        linearDumping = 0.1,
+        friction = 1
+    }
+}
 
 function Params:init()
     self.halfScreenW = love.graphics.getWidth() / 2;

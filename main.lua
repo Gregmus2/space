@@ -2,6 +2,7 @@ local Color = require('color')
 local Camera = require('camera')
 local GameObjectFactory = require('factory.game_object_factory')
 local Params = require('params')
+local PolygonFactory = require('factory.polygon_factory')
 
 ---@type GameObject[]
 local objects = {}
@@ -28,9 +29,10 @@ function love.load()
             love.math.random(0, 5000),
             'fill',
             color,
-            love.math.random(0, 150),
-            love.math.random(0, 150),
-            'static'
+            love.math.random(5, 150),
+            love.math.random(5, 150),
+            'dynamic',
+            1
         )
         objects[#objects + 1] = go
     end
@@ -49,15 +51,15 @@ function love.load()
     )
     objects[#objects + 1] = go2
 
-    local go = GameObjectFactory.generateRectangle(
+    local go = GameObjectFactory.generatePolygon(
         world,
         camera.x,
         camera.y,
         'fill',
         Color:blue(),
-        50,
-        50,
-        'dynamic'
+        PolygonFactory.generateShip(50),
+        'dynamic',
+        0.1
     )
     objects[#objects + 1] = go
 
@@ -95,7 +97,6 @@ function love.keyreleased(key)
 end
 
 function love.draw()
-
     -- todo добавить плавность масштабирования
     for i = 1, #objects do
         local go = objects[i]
