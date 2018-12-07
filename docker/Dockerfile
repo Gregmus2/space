@@ -1,0 +1,14 @@
+FROM debian
+
+RUN apt-get update && apt-get install -y zip wget
+
+RUN wget https://bitbucket.org/rude/love/downloads/love-11.2-win64.zip
+RUN mkdir /love-win && unzip love-11.2-win64.zip -d /love-win && rm love-11.2-win64.zip
+RUN mkdir /love-win/dist && cp /love-win/love-11.2.0-win64/* /love-win/dist
+RUN cd /love-win/dist && rm readme.txt love.ico love.exe lovec.exe game.ico changes.txt
+
+WORKDIR /app
+
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+ENTRYPOINT /entrypoint.sh
