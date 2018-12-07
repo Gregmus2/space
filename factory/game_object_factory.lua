@@ -19,6 +19,7 @@ local GameObjectFactory = {}
 ---@param bodyType string
 ---@param mass number
 ---@param restitution number|nil
+---@return GameObject
 function GameObjectFactory.generateCircle(world, x, y, mode, color, radius, bodyType, mass, restitution)
     local drawable = Circle:new(mode, color, radius)
     local body = love.physics.newBody(world, x, y, bodyType)
@@ -39,11 +40,12 @@ end
 ---@param w number
 ---@param h number
 ---@param bodyType string
----@param mass number
 ---@param restitution number|nil
-function GameObjectFactory.generateRectangle(world, x, y, mode, color, w, h, bodyType, mass, restitution)
+---@return GameObject
+function GameObjectFactory.generateRectangle(world, x, y, mode, color, w, h, bodyType, restitution)
     local drawable = Rectangle:new(mode, color, w, h)
     local body = love.physics.newBody(world, x, y, bodyType)
+    body:setFixedRotation(true)
     local shape = love.physics.newRectangleShape(w, h)
     local physics = love.physics.newFixture(body, shape)
     if (restitution ~= nil) then
