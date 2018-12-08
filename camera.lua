@@ -8,16 +8,11 @@ local Camera = {}
 ---@param y number
 ---@return Camera
 function Camera:new(x, y)
-    newObj = { x = x, y = y, scale = 1, object = nil }
+    newObj = { x = x, y = y, scale = 1 }
     setmetatable(newObj, self)
     self.__index = self
 
     return newObj
-end
-
----@param object GameObject
-function Camera:assignObject(object)
-    self.object = object
 end
 
 ---@param x number

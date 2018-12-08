@@ -1,16 +1,18 @@
-local Color = require('color')
 local Camera = require('camera')
-local GameObjectFactory = require('factory.game_object_factory')
 local Params = require('params')
-local PolygonFactory = require('factory.polygon_factory')
+local Config = require('config')
+local SpaceScene = require('scenes.space_scene')
+local LoadScene = require('scenes.pause_scene')
+local Action = require('action')
 
----@type GameObject[]
-local objects = {}
+---@type table<string, fun(dt:number):void>
 local actions = {}
-local events = { key = {} }
-
 ---@type Camera
 local camera;
+---@type Scene
+local scene = SpaceScene
+---@type table<string, table<string, Action>>
+local globalEvents = { key = {} }
 
 function love.load()
     Config:load()
@@ -20,59 +22,24 @@ function love.load()
     love.physics.setMeter(Params.worldMeter)
     Params:init()
 
-    for i = 0, 100 do
-        local color = Color:new(love.math.random(), love.math.random(), love.math.random())
-        local go = GameObjectFactory.generateRectangle(
-            world,
-            love.math.random(0, 5000),
-            love.math.random(0, 5000),
-            'fill',
-            color,
-            love.math.random(5, 150),
-            love.math.random(5, 150),
-            'dynamic',
-            1
-        )
-        objects[#objects + 1] = go
-    end
+    camera = Camera:new(Params.halfScreenW, Params.halfScreenH)
 
-    camera = Camera:new(love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
+    scene:load(camera)
 
-    local go2 = GameObjectFactory.generateCircle(
-            world,
-            0,
-            0,
-            'fill',
-            Color:blue(),
-            50,
-            'static',
-            1
-    )
-    objects[#objects + 1] = go2
-
-    local go = GameObjectFactory.generatePolygon(
-        world,
-        camera.x,
-        camera.y,
-        'fill',
-        Color:blue(),
-        PolygonFactory.generateShip(50),
-        'dynamic',
-        0.1
-    )
-    objects[#objects + 1] = go
-
-    -- todo create events for each main object and merge them in this events
-    camera:assignObject(go)
-    events['key']['d'] = function(dt) camera.object:rotate(dt, 1) end
-    events['key']['w'] = function(dt) camera.object:move(dt, 1) end
-    events['key']['a'] = function(dt) camera.object:rotate(dt, -1) end
-    events['key']['s'] = function(dt) camera.object:move(dt, -1) end
+    globalEvents['key']['space'] = Action:new(function(dt)
+        -- todo сделать app класс и вынести все туда. Вынести эту логику туда в отдельную функцию
+        if scene == SpaceScene then
+            LoadScene:load(camera)
+            scene = LoadScene
+        else
+            SpaceScene:load(camera)
+            scene = SpaceScene
+        end
+    end)
 end
 
 function love.update(dt)
-    world:update(dt)
-    camera:setCoords(camera.object.physics:getBody():getPosition())
+    scene:update(dt)
 
     for _,action in pairs(actions) do
         action(dt)
@@ -80,12 +47,18 @@ function love.update(dt)
 end
 
 function love.wheelmoved(x, y)
+    -- todo добавить плавность масштабирования
     camera:addScale(y * 0.1)
 end
 
 function love.keypressed(key)
-    if events['key'][key] ~= nil then
-        actions[key] = events['key'][key]
+    local action = scene.events['key'][key] or globalEvents['key'][key]
+    if action == nil then return end
+
+    if action.isLong then
+        actions[key] = action.action
+    else
+        action.action()
     end
 end
 
@@ -96,9 +69,8 @@ function love.keyreleased(key)
 end
 
 function love.draw()
-    -- todo добавить плавность масштабирования
-    for i = 1, #objects do
-        local go = objects[i]
+    for i = 1, #scene.objects do
+        local go = scene.objects[i]
         local x, y = go.physics:getBody():getPosition()
         local distance = math.sqrt((x - (camera.x)) ^ 2 + (y - (camera.y)) ^ 2) - go.draw.visibilityRadius
         if math.abs(distance) <= Params.screenOutRadius * (1/camera.scale) then
