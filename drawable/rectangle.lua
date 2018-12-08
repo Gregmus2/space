@@ -1,9 +1,9 @@
-local Drawable = require('drawable.drawable')
+local Draw = require('drawable.drawable')
 
----@class Rectangle : Drawable
+---@class Rectangle : Draw
 ---@field public w number
 ---@field public h number
-local Rectangle = Drawable:new()
+local Rectangle = Draw:new()
 
 ---@param mode string
 ---@param color Color

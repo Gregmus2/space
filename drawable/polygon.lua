@@ -1,8 +1,8 @@
-local Drawable = require('drawable.drawable')
+local Draw = require('drawable.drawable')
 
----@class Polygon : Drawable
+---@class Polygon : Draw
 ---@field public vertexes table
-local Polygon = Drawable:new()
+local Polygon = Draw:new()
 
 ---@param mode string
 ---@param color Color

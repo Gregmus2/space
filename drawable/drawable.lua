@@ -1,14 +1,14 @@
 local params = require('params')
 
----@class Drawable
+---@class Draw
 ---@field public visibilityRadius number
 ---@field public color Color
 ---@field public mode string
 ---@field public angle number
-local Drawable = {}
+local Draw = {}
 
-function Drawable:new(o)
-    newObj = o or { angle = 0 }
+function Draw:new()
+    newObj = { angle = 0 }
     self.__index = self
     setmetatable(newObj, self)
 
@@ -18,13 +18,13 @@ end
 ---@param camera Camera
 ---@param x number
 ---@param y number
-function Drawable:draw(camera, x, y) end
+function Draw:draw(camera, x, y) end
 
 ---@param camera Camera
 ---@param x number
 ---@return number
 ---@protected
-function Drawable.calcX(camera, x)
+function Draw.calcX(camera, x)
     return (x - camera.x) * camera.scale + params.halfScreenW
 end
 
@@ -32,17 +32,17 @@ end
 ---@param y number
 ---@return number
 ---@protected
-function Drawable.calcY(camera, y)
+function Draw.calcY(camera, y)
     return (y - camera.y) * camera.scale + params.halfScreenH
 end
 
 ---@param realXCenter number
 ---@param realYCenter number
 ---@protected
-function Drawable:rotate(realXCenter, realYCenter)
+function Draw:rotate(realXCenter, realYCenter)
     love.graphics.translate(realXCenter, realYCenter)
     love.graphics.rotate(self.angle)
     love.graphics.translate(-realXCenter, -realYCenter)
 end
 
-return Drawable
+return Draw

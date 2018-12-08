@@ -1,8 +1,8 @@
-local Drawable = require('drawable.drawable')
+local Draw = require('drawable.drawable')
 
----@class Circle : Drawable
+---@class Circle : Draw
 ---@field public r number
-local Circle = Drawable:new()
+local Circle = Draw:new()
 
 ---@param mode string
 ---@param color Color

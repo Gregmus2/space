@@ -69,9 +69,9 @@ function love.keyreleased(key)
 end
 
 function love.draw()
-    for i = 1, #scene.objects do
-        local go = scene.objects[i]
-        local x, y = go.physics:getBody():getPosition()
+    for i = 1, #scene.drawableObjects do
+        local go = scene.drawableObjects[i]
+        local x, y = go:getPosition()
         local distance = math.sqrt((x - (camera.x)) ^ 2 + (y - (camera.y)) ^ 2) - go.draw.visibilityRadius
         if math.abs(distance) <= Params.screenOutRadius * (1/camera.scale) then
             go.draw:draw(camera, x, y)

@@ -1,5 +1,5 @@
 ---@class Scene
----@field public objects GameObject[]
+---@field public drawableObjects DrawObject[]
 ---@field public world World
 ---@field public camera Camera
 ---@field public isLoaded boolean
@@ -8,7 +8,7 @@ local Scene = {}
 
 function Scene:new()
     newObj = {
-        objects = {},
+        drawableObjects = {},
         events = { key = {} },
         world = nil,
         camera = nil,

@@ -1,6 +1,6 @@
 local Scene = require('scenes.scene')
 local Color = require('color')
-local GameObjectFactory = require('factory.game_object_factory')
+local GameObjectBuilder = require('game_object_builder')
 local PolygonFactory = require('factory.polygon_factory')
 local Action = require('action')
 
@@ -22,43 +22,25 @@ function SpaceScene:load(camera)
 
     for _ = 0, 100 do
         local color = Color:new(love.math.random(), love.math.random(), love.math.random())
-        local go = GameObjectFactory.generateRectangle(
-            self.world,
+        local w = love.math.random(5, 150)
+        local h = love.math.random(5, 150)
+        local go = GameObjectBuilder:new(
             love.math.random(0, 5000),
-            love.math.random(0, 5000),
-            'fill',
-            color,
-            love.math.random(5, 150),
-            love.math.random(5, 150),
-            'dynamic',
-            1
+            love.math.random(0, 5000)
         )
-        self.objects[#self.objects + 1] = go
+            :addRectangleDraw('fill', color, w, h)
+            :addRectanglePhysics(self.world, w, h, 'dynamic', 1)
+            :createGameObject()
+        self.drawableObjects[#self.drawableObjects + 1] = go
     end
 
-    local go2 = GameObjectFactory.generateCircle(
-            self.world,
-            0,
-            0,
-            'fill',
-            Color:blue(),
-            50,
-            'static',
-            1
-    )
-    self.objects[#self.objects + 1] = go2
-
-    self.hero = GameObjectFactory.generatePolygon(
-            self.world,
-            self.camera.x,
-            self.camera.y,
-            'fill',
-            Color:blue(),
-            PolygonFactory.generateShip(50),
-            'dynamic',
-            0.1
-    )
-    self.objects[#self.objects + 1] = self.hero
+    local shipVertexes = PolygonFactory.generateShip(50)
+    self.hero = GameObjectBuilder
+        :new(self.camera.x, self.camera.y)
+        :addPolygonDraw('fill', Color:blue(), shipVertexes)
+        :addPolygonPhysics(self.world, shipVertexes, 'dynamic', 0.1)
+        :createGameObject()
+    self.drawableObjects[#self.drawableObjects + 1] = self.hero
 
     self.events['key']['d'] = Action:new(function(dt) self.hero:rotate(dt, 1) end, true)
     self.events['key']['w'] = Action:new(function(dt) self.hero:move(dt, 1) end, true)
@@ -69,7 +51,7 @@ end
 ---@param dt number
 function SpaceScene:update(dt)
     self.world:update(dt)
-    self.camera:setCoords(self.hero.physics:getBody():getPosition())
+    self.camera:setCoords(self.hero:getPosition())
 end
 
 return SpaceScene

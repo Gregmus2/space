@@ -22,4 +22,8 @@ function Color:red()
     return Color:new(1, 0, 0)
 end
 
+function Color:white()
+    return Color:new(1, 1, 1)
+end
+
 return Color
