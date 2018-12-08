@@ -2,19 +2,16 @@ local Camera = require('camera')
 local Params = require('params')
 local Config = require('config')
 local SpaceScene = require('scenes.space_scene')
-local EventCollection = require('collection.event_collection')
 
 ---@class App
 ---@field public camera Camera
 ---@field public scene Scene
----@field public events EventCollection
-local App = {
+App = {
     camera = nil,
-    scene = SpaceScene,
-    events = EventCollection:new()
+    scene = SpaceScene
 }
 
-function App:load()
+function App.load()
     Config:load()
     love.window.setMode(Config.width, Config.height, { msaa = Config.msaa } )
     love.math.setRandomSeed(love.timer.getTime())
@@ -22,18 +19,23 @@ function App:load()
     love.physics.setMeter(Params.worldMeter)
     Params:init()
 
-    self.camera = Camera:new(Params.halfScreenW, Params.halfScreenH)
+    App.camera = Camera:new(Params.halfScreenW, Params.halfScreenH)
 end
 
 ---@param scene Scene
-function App:changeScene(scene)
-    scene:load(App.camera)
+function App.changeScene(scene)
+    scene:load()
+    App.scene = scene
+end
+
+---@param scene Scene
+---@param param any
+function App.changeSceneWithParam(scene, param)
+    scene:load(param)
     App.scene = scene
 end
 
 ---@param dt number
-function App:update(dt)
+function App.update(dt)
     App.scene:update(dt)
 end
-
-return App

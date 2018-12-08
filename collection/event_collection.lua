@@ -22,7 +22,7 @@ function EventCollection:addEvent(event, trigger, action)
     self.events[event][trigger] = action
 end
 
----@param event string @ EventCollection.EVENT_TYPE.*
+---@param event string @ enum.event
 ---@param trigger string
 ---@return Action|nil
 function EventCollection:findAction(event, trigger)

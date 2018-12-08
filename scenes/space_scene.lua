@@ -1,4 +1,5 @@
 local Scene = require('scenes.scene')
+local PauseScene = require('scenes.pause_scene')
 local Color = require('color')
 local GameObjectBuilder = require('game_object_builder')
 local PolygonFactory = require('factory.polygon_factory')
@@ -11,14 +12,12 @@ local SpaceScene = Scene:new()
 
 SpaceScene.isLoaded = false
 
----@param camera Camera
-function SpaceScene:load(camera)
+function SpaceScene:load()
     if self.isLoaded then
         return
     end
 
     self.isLoaded = true
-    self.camera = camera
     self.world = love.physics.newWorld(0, 0, true)
 
     for _ = 0, 100 do
@@ -37,7 +36,7 @@ function SpaceScene:load(camera)
 
     local shipVertexes = PolygonFactory.generateShip(50)
     self.hero = GameObjectBuilder
-        :new(self.camera.x, self.camera.y)
+        :new(App.camera.x, App.camera.y)
         :addPolygonDraw('fill', Color:blue(), shipVertexes)
         :addPolygonPhysics(self.world, shipVertexes, 'dynamic', 0.1)
         :createGameObject()
@@ -47,12 +46,14 @@ function SpaceScene:load(camera)
     self.events:addEvent(Event.KEY, 'w', Action:new(function(dt) self.hero:move(dt, 1) end, true))
     self.events:addEvent(Event.KEY, 'a', Action:new(function(dt) self.hero:rotate(dt, -1) end, true))
     self.events:addEvent(Event.KEY, 's', Action:new(function(dt) self.hero:move(dt, -1) end, true))
+
+    self.events:addEvent(Event.KEY, 'space', Action:new(function(dt) App.changeSceneWithParam(PauseScene, self) end ))
 end
 
 ---@param dt number
 function SpaceScene:update(dt)
     self.world:update(dt)
-    self.camera:setCoords(self.hero:getPosition())
+    App.camera:setCoords(self.hero:getPosition())
 end
 
 return SpaceScene
