@@ -1,45 +1,30 @@
-local Camera = require('camera')
 local Params = require('params')
-local Config = require('config')
 local SpaceScene = require('scenes.space_scene')
 local LoadScene = require('scenes.pause_scene')
 local Action = require('action')
+local App = require('app')
+local Event = require('enum.event')
 
 ---@type table<string, fun(dt:number):void>
 local actions = {}
----@type Camera
-local camera;
----@type Scene
-local scene = SpaceScene
----@type table<string, table<string, Action>>
-local globalEvents = { key = {} }
 
 function love.load()
-    Config:load()
-    love.window.setMode(Config.width, Config.height, { msaa = Config.msaa } )
-    love.math.setRandomSeed(love.timer.getTime())
-    love.graphics.setBackgroundColor(0.03, 0.04, 0.08)
-    love.physics.setMeter(Params.worldMeter)
-    Params:init()
+    App:load()
 
-    camera = Camera:new(Params.halfScreenW, Params.halfScreenH)
+    App.scene:load(App.camera)
 
-    scene:load(camera)
-
-    globalEvents['key']['space'] = Action:new(function(dt)
-        -- todo сделать app класс и вынести все туда. Вынести эту логику туда в отдельную функцию
-        if scene == SpaceScene then
-            LoadScene:load(camera)
-            scene = LoadScene
+    local changeSceneAction = Action:new(function(dt)
+        if App.scene == SpaceScene then
+            App:changeScene(LoadScene)
         else
-            SpaceScene:load(camera)
-            scene = SpaceScene
+            App:changeScene(SpaceScene)
         end
     end)
+    App.events:addEvent(Event.KEY, 'space', changeSceneAction)
 end
 
 function love.update(dt)
-    scene:update(dt)
+    App:update(dt)
 
     for _,action in pairs(actions) do
         action(dt)
@@ -48,11 +33,12 @@ end
 
 function love.wheelmoved(x, y)
     -- todo добавить плавность масштабирования
-    camera:addScale(y * 0.1)
+    -- todo вынести в App.events
+    App.camera:addScale(y * 0.1)
 end
 
 function love.keypressed(key)
-    local action = scene.events['key'][key] or globalEvents['key'][key]
+    local action = App.scene.events:findAction(Event.KEY, key) or App.events:findAction(Event.KEY, key)
     if action == nil then return end
 
     if action.isLong then
@@ -69,12 +55,13 @@ function love.keyreleased(key)
 end
 
 function love.draw()
-    for i = 1, #scene.drawableObjects do
-        local go = scene.drawableObjects[i]
+    -- todo вынести в App
+    for i = 1, #App.scene.drawableObjects do
+        local go = App.scene.drawableObjects[i]
         local x, y = go:getPosition()
-        local distance = math.sqrt((x - (camera.x)) ^ 2 + (y - (camera.y)) ^ 2) - go.draw.visibilityRadius
-        if math.abs(distance) <= Params.screenOutRadius * (1/camera.scale) then
-            go.draw:draw(camera, x, y)
+        local distance = math.sqrt((x - (App.camera.x)) ^ 2 + (y - (App.camera.y)) ^ 2) - go.draw.visibilityRadius
+        if math.abs(distance) <= Params.screenOutRadius * (1/App.camera.scale) then
+            go.draw:draw(App.camera, x, y)
         end
     end
 end

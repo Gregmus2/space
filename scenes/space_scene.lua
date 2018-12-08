@@ -3,6 +3,7 @@ local Color = require('color')
 local GameObjectBuilder = require('game_object_builder')
 local PolygonFactory = require('factory.polygon_factory')
 local Action = require('action')
+local Event = require('enum.event')
 
 ---@class SpaceScene : Scene
 ---@field protected hero GameObject
@@ -42,10 +43,10 @@ function SpaceScene:load(camera)
         :createGameObject()
     self.drawableObjects[#self.drawableObjects + 1] = self.hero
 
-    self.events['key']['d'] = Action:new(function(dt) self.hero:rotate(dt, 1) end, true)
-    self.events['key']['w'] = Action:new(function(dt) self.hero:move(dt, 1) end, true)
-    self.events['key']['a'] = Action:new(function(dt) self.hero:rotate(dt, -1) end, true)
-    self.events['key']['s'] = Action:new(function(dt) self.hero:move(dt, -1) end, true)
+    self.events:addEvent(Event.KEY, 'd', Action:new(function(dt) self.hero:rotate(dt, 1) end, true))
+    self.events:addEvent(Event.KEY, 'w', Action:new(function(dt) self.hero:move(dt, 1) end, true))
+    self.events:addEvent(Event.KEY, 'a', Action:new(function(dt) self.hero:rotate(dt, -1) end, true))
+    self.events:addEvent(Event.KEY, 's', Action:new(function(dt) self.hero:move(dt, -1) end, true))
 end
 
 ---@param dt number
