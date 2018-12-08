@@ -13,12 +13,11 @@ local events = { key = {} }
 local camera;
 
 function love.load()
-    love.window.setMode( 1024, 768, {msaa=8} )
+    Config:load()
+    love.window.setMode(Config.width, Config.height, { msaa = Config.msaa } )
     love.math.setRandomSeed(love.timer.getTime())
     love.graphics.setBackgroundColor(0.03, 0.04, 0.08)
-    love.physics.setMeter(64)
-    world = love.physics.newWorld(0, 0, true)
-
+    love.physics.setMeter(Params.worldMeter)
     Params:init()
 
     for i = 0, 100 do

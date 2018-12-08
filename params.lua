@@ -4,8 +4,14 @@
 local Params = {
     default = {
         linearDumping = 0.1,
-        friction = 1
-    }
+        friction = 1,
+        config = {
+            width = 1024,
+            height = 768,
+            msaa = 8
+        }
+    },
+    worldMeter = 64,
 }
 
 function Params:init()
