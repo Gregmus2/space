@@ -12,20 +12,28 @@ function EventCollection:new()
 end
 
 ---@param event string @ enum.event
----@param trigger string
 ---@param action Action
-function EventCollection:addEvent(event, trigger, action)
+---@param trigger string|nil
+function EventCollection:addEvent(event, action, trigger)
     if self.events[event] == nil then
         self.events[event] = {}
     end
 
-    self.events[event][trigger] = action
+    if trigger == nil then
+        self.events[event] = action
+    else
+        self.events[event][trigger] = action
+    end
 end
 
 ---@param event string @ enum.event
 ---@param trigger string
 ---@return Action|nil
 function EventCollection:findAction(event, trigger)
+    if trigger == nil then
+        return self.events[event]
+    end
+
     return self.events[event] and self.events[event][trigger]
 end
 

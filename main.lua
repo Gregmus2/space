@@ -1,8 +1,7 @@
 require('app')
-local Params = require('params')
 local Event = require('enum.event')
 
----@type table<string, fun(dt:number):void>
+---@type table<string, function>
 local actions = {}
 
 function love.load()
@@ -21,8 +20,10 @@ end
 
 function love.wheelmoved(x, y)
     -- todo добавить плавность масштабирования
-    -- todo вынести в App.events
-    App.camera:addScale(y * 0.1)
+    local action = App.scene.events:findAction(Event.WHEEL)
+    if action == nil then return end
+
+    action.action(x, y)
 end
 
 function love.keypressed(key)
@@ -43,13 +44,9 @@ function love.keyreleased(key)
 end
 
 function love.draw()
-    -- todo вынести в App
     for i = 1, #App.scene.drawableObjects do
         local go = App.scene.drawableObjects[i]
         local x, y = go:getPosition()
-        local distance = math.sqrt((x - (App.camera.x)) ^ 2 + (y - (App.camera.y)) ^ 2) - go.draw.visibilityRadius
-        if math.abs(distance) <= Params.screenOutRadius * (1/App.camera.scale) then
-            go.draw:draw(App.camera, x, y)
-        end
+        App.scene:draw(go, x, y)
     end
 end

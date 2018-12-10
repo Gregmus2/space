@@ -30,7 +30,7 @@ function LoadScene:load(scene)
     self.drawableObjects[#self.drawableObjects + 1] = self.pause1
     self.drawableObjects[#self.drawableObjects + 1] = self.pause2
 
-    self.events:addEvent(Event.KEY, 'space', Action:new(function(dt) App.changeScene(scene) end ))
+    self.events:addEvent(Event.KEY, Action:new(function(dt) App.changeScene(scene) end), 'space')
 end
 
 ---@private

@@ -5,15 +5,19 @@ local GameObjectBuilder = require('game_object_builder')
 local PolygonFactory = require('factory.polygon_factory')
 local Action = require('action')
 local Event = require('enum.event')
+local Params = require('params')
 
 ---@class SpaceScene : Scene
 ---@field protected hero GameObject
+---@field protected cameraState table<string, any>
 local SpaceScene = Scene:new()
 
 SpaceScene.isLoaded = false
 
 function SpaceScene:load()
     if self.isLoaded then
+        self:awake()
+
         return
     end
 
@@ -42,18 +46,38 @@ function SpaceScene:load()
         :createGameObject()
     self.drawableObjects[#self.drawableObjects + 1] = self.hero
 
-    self.events:addEvent(Event.KEY, 'd', Action:new(function(dt) self.hero:rotate(dt, 1) end, true))
-    self.events:addEvent(Event.KEY, 'w', Action:new(function(dt) self.hero:move(dt, 1) end, true))
-    self.events:addEvent(Event.KEY, 'a', Action:new(function(dt) self.hero:rotate(dt, -1) end, true))
-    self.events:addEvent(Event.KEY, 's', Action:new(function(dt) self.hero:move(dt, -1) end, true))
+    self.events:addEvent(Event.KEY, Action:new(function(dt) self.hero:rotate(dt, 1) end, true), 'd')
+    self.events:addEvent(Event.KEY, Action:new(function(dt) self.hero:move(dt, 1) end, true), 'w')
+    self.events:addEvent(Event.KEY, Action:new(function(dt) self.hero:rotate(dt, -1) end, true), 'a')
+    self.events:addEvent(Event.KEY, Action:new(function(dt) self.hero:move(dt, -1) end, true), 's')
 
-    self.events:addEvent(Event.KEY, 'space', Action:new(function(dt) App.changeSceneWithParam(PauseScene, self) end ))
+    self.events:addEvent(Event.WHEEL, Action:new(function(x, y) App.camera:addScale(y * 0.1) end))
+
+    self.events:addEvent(Event.KEY, Action:new(function(dt) App.changeSceneWithParam(PauseScene, self) end), 'space')
+end
+
+function SpaceScene:sleep()
+    self.cameraState = App.camera:getState()
+end
+
+function SpaceScene:awake()
+    App.camera:setState(self.cameraState)
 end
 
 ---@param dt number
 function SpaceScene:update(dt)
     self.world:update(dt)
     App.camera:setCoords(self.hero:getPosition())
+end
+
+---@param go GameObject
+---@param x number
+---@param y number
+function SpaceScene:draw(go, x, y)
+    local distance = math.sqrt((x - (App.camera.x)) ^ 2 + (y - (App.camera.y)) ^ 2) - go.draw.visibilityRadius
+    if math.abs(distance) <= Params.screenOutRadius * (1/App.camera.scale) then
+        go.draw:draw(App.camera, x, y)
+    end
 end
 
 return SpaceScene

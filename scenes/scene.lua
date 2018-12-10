@@ -25,4 +25,13 @@ function Scene:load() end
 ---@param dt number
 function Scene:update(dt) end
 
+function Scene:sleep() end
+
+---@param go GameObject
+---@param x number
+---@param y number
+function Scene:draw(go, x, y)
+    go.draw:draw(App.camera, x, y)
+end
+
 return Scene

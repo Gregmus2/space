@@ -1,9 +1,9 @@
 ---@class Action
----@field public action fun(dt:number|nil):void
+---@field public action function
 ---@field public isLong boolean
 local Action = {}
 
----@param action fun(dt:number):void
+---@param action function
 ---@param isLong boolean|nil
 function Action:new(action, isLong)
     newObj = { action = action, isLong = isLong or false }
