@@ -21,14 +21,12 @@ function Draw:draw(x, y) end
 
 ---@param x number
 ---@return number
----@protected
 function Draw.calcX(x)
     return (x - App.camera.x) * App.camera.scale + params.halfScreenW
 end
 
 ---@param y number
 ---@return number
----@protected
 function Draw.calcY(y)
     return (y - App.camera.y) * App.camera.scale + params.halfScreenH
 end

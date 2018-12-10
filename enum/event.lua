@@ -1,5 +1,6 @@
 ---@class Event
 return {
     KEY = 'key',
-    WHEEL = 'wheel'
+    WHEEL = 'wheel',
+    MOUSE = 'mouse'
 }
