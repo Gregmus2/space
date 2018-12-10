@@ -19,7 +19,6 @@ function love.update(dt)
 end
 
 function love.wheelmoved(x, y)
-    -- todo добавить плавность масштабирования
     local action = App.scene.events:findAction(Event.WHEEL)
     if action == nil then return end
 
@@ -45,8 +44,9 @@ end
 
 function love.draw()
     for i = 1, #App.scene.drawableObjects do
-        local go = App.scene.drawableObjects[i]
-        local x, y = go:getPosition()
-        App.scene:draw(go, x, y)
+        App.scene:draw(App.scene.drawableObjects[i])
+    end
+    for i = 1, #App.scene.menuObjects do
+        App.scene:drawMenu(App.scene.menuObjects[i])
     end
 end

@@ -2,6 +2,7 @@ local EventCollection = require('collection.event_collection')
 
 ---@class Scene
 ---@field public drawableObjects DrawObject[]
+---@field public menuObjects MenuObject[]
 ---@field public world World
 ---@field public isLoaded boolean
 ---@field public events EventCollection
@@ -10,6 +11,7 @@ local Scene = {}
 function Scene:new()
     newObj = {
         drawableObjects = {},
+        menuObjects = {},
         events = EventCollection:new(),
         world = nil,
         isLoaded = false
@@ -28,10 +30,14 @@ function Scene:update(dt) end
 function Scene:sleep() end
 
 ---@param go GameObject
----@param x number
----@param y number
-function Scene:draw(go, x, y)
-    go.draw:draw(App.camera, x, y)
+function Scene:draw(go)
+    local x, y = go:getPosition()
+    go.draw:draw(x, y)
+end
+
+---@param mo MenuObject
+function Scene:drawMenu(mo)
+    mo:draw()
 end
 
 return Scene

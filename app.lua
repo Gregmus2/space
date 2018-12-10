@@ -25,6 +25,7 @@ end
 ---@param scene Scene
 function App.changeScene(scene)
     App.scene:sleep()
+    App.camera:reset()
     scene:load()
     App.scene = scene
 end

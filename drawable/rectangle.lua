@@ -24,21 +24,20 @@ function Rectangle:new(mode, color, w, h)
     return newObj
 end
 
----@param camera Camera
 ---@param x number
 ---@param y number
-function Rectangle:draw(camera, x, y)
+function Rectangle:draw(x, y)
     love.graphics.setColor(self.color.r, self.color.g, self.color.b)
 
-    local realXCenter = self.calcX(camera, x)
-    local realYCenter = self.calcY(camera, y)
+    local realXCenter = self.calcX(x)
+    local realYCenter = self.calcY(y)
     self:rotate(realXCenter, realYCenter)
     love.graphics.rectangle(
         self.mode,
-        realXCenter - self.w * camera.scale / 2,
-        realYCenter - self.h * camera.scale / 2,
-        self.w * camera.scale,
-        self.h * camera.scale
+        realXCenter - self.w * App.camera.scale / 2,
+        realYCenter - self.h * App.camera.scale / 2,
+        self.w * App.camera.scale,
+        self.h * App.camera.scale
     )
 end
 

@@ -51,6 +51,7 @@ end
 
 ---@param scale number
 function Camera:addScale(scale)
+    -- todo добавить плавность масштабирования
     if (self.scale + scale < 0.1) then
         return
     end

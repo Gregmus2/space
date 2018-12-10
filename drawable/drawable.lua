@@ -15,25 +15,22 @@ function Draw:new()
     return newObj
 end
 
----@param camera Camera
 ---@param x number
 ---@param y number
-function Draw:draw(camera, x, y) end
+function Draw:draw(x, y) end
 
----@param camera Camera
 ---@param x number
 ---@return number
 ---@protected
-function Draw.calcX(camera, x)
-    return (x - camera.x) * camera.scale + params.halfScreenW
+function Draw.calcX(x)
+    return (x - App.camera.x) * App.camera.scale + params.halfScreenW
 end
 
----@param camera Camera
 ---@param y number
 ---@return number
 ---@protected
-function Draw.calcY(camera, y)
-    return (y - camera.y) * camera.scale + params.halfScreenH
+function Draw.calcY(y)
+    return (y - App.camera.y) * App.camera.scale + params.halfScreenH
 end
 
 ---@param realXCenter number

@@ -21,16 +21,15 @@ function Circle:new(mode, color, r)
     return newObj
 end
 
----@param camera Camera
 ---@param x number
 ---@param y number
-function Circle:draw(camera, x, y)
+function Circle:draw(x, y)
     love.graphics.setColor(self.color.r, self.color.g, self.color.b)
     love.graphics.circle(
         self.mode,
-        self.calcX(camera, x),
-        self.calcY(camera, y),
-        self.r * camera.scale
+        self.calcX(x),
+        self.calcY(y),
+        self.r * App.camera.scale
     )
 end
 

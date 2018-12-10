@@ -1,5 +1,6 @@
 local Scene = require('scenes.scene')
 local PauseScene = require('scenes.pause_scene')
+local BuilderScene = require('scenes.builder_scene')
 local Color = require('color')
 local GameObjectBuilder = require('game_object_builder')
 local PolygonFactory = require('factory.polygon_factory')
@@ -53,7 +54,8 @@ function SpaceScene:load()
 
     self.events:addEvent(Event.WHEEL, Action:new(function(x, y) App.camera:addScale(y * 0.1) end))
 
-    self.events:addEvent(Event.KEY, Action:new(function(dt) App.changeSceneWithParam(PauseScene, self) end), 'space')
+    self.events:addEvent(Event.KEY, Action:new(function() App.changeSceneWithParam(PauseScene, self) end), 'space')
+    self.events:addEvent(Event.KEY, Action:new(function() App.changeScene(BuilderScene) end), 'f')
 end
 
 function SpaceScene:sleep()
@@ -71,12 +73,11 @@ function SpaceScene:update(dt)
 end
 
 ---@param go GameObject
----@param x number
----@param y number
-function SpaceScene:draw(go, x, y)
+function SpaceScene:draw(go)
+    local x, y = go:getPosition()
     local distance = math.sqrt((x - (App.camera.x)) ^ 2 + (y - (App.camera.y)) ^ 2) - go.draw.visibilityRadius
     if math.abs(distance) <= Params.screenOutRadius * (1/App.camera.scale) then
-        go.draw:draw(App.camera, x, y)
+        go.draw:draw(x, y)
     end
 end
 
