@@ -1,20 +1,21 @@
 local EventCollection = require('collection.event_collection')
+local Menu = require('menu')
 
 ---@class Scene
 ---@field public drawableObjects DrawObject[]
----@field public menuObjects MenuObject[]
 ---@field public world World
 ---@field public isLoaded boolean
 ---@field public events EventCollection
+---@field public menu Menu
 local Scene = {}
 
 function Scene:new()
     newObj = {
         drawableObjects = {},
-        menuObjects = {},
         events = EventCollection:new(),
         world = nil,
-        isLoaded = false
+        isLoaded = false,
+        menu = Menu:new()
     }
     self.__index = self
     setmetatable(newObj, self)
@@ -33,11 +34,6 @@ function Scene:sleep() end
 function Scene:draw(go)
     local x, y = go:getPosition()
     go.draw:draw(x, y)
-end
-
----@param mo MenuObject
-function Scene:drawMenu(mo)
-    mo:draw()
 end
 
 return Scene

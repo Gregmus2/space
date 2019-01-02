@@ -32,6 +32,7 @@ function Polygon:draw(x, y)
     self:rotate(realXCenter, realYCenter)
 
     love.graphics.polygon(self.mode, self:calcRealVertexes(x, y))
+    love.graphics.reset()
 end
 
 ---@param x number

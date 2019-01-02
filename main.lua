@@ -38,6 +38,8 @@ end
 function love.mousereleased(x, y, button)
     actions[button] = nil
     mouseMovedActions[button] = nil
+
+    App.scene.menu:mouseRelease(x, y)
 end
 
 function love.wheelmoved(x, y)
@@ -77,7 +79,5 @@ function love.draw()
     for i = 1, #App.scene.drawableObjects do
         App.scene:draw(App.scene.drawableObjects[i])
     end
-    for i = 1, #App.scene.menuObjects do
-        App.scene:drawMenu(App.scene.menuObjects[i])
-    end
+    App.scene.menu:draw()
 end
