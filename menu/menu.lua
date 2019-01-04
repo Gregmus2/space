@@ -3,7 +3,7 @@ local MenuObject = {}
 
 ---@return MenuObject
 function MenuObject:new()
-    newObj = {}
+    local newObj = {}
     setmetatable(newObj, self)
     self.__index = self
 

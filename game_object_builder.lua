@@ -17,7 +17,7 @@ local GameObjectBuilder = {}
 ---@param x number
 ---@param y number
 function GameObjectBuilder:new(x, y)
-    newObj = {
+    local newObj = {
         x = x,
         y = y
     }

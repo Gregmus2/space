@@ -11,7 +11,7 @@ local PhysicalDrawObject = GameObject:new()
 ---@param draw Draw
 ---@param physics Fixture
 function PhysicalDrawObject:new(draw, physics)
-    newObj = {
+    local newObj = {
         draw = draw,
         physics = physics,
         speed = 5000,

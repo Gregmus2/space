@@ -57,8 +57,6 @@ function SpaceScene:load()
 
     self.events:addEvent(Event.KEY, Action:new(function() App.changeSceneWithParam(PauseScene, self) end), 'space')
     self.events:addEvent(Event.KEY, Action:new(function() App.changeScene(BuilderScene) end), 'f')
-
-    self.menu:addButton(Button:new(100, 100, 200, 50, function() print(123) end))
 end
 
 function SpaceScene:sleep()

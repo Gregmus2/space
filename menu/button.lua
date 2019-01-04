@@ -18,7 +18,7 @@ local Button = MenuObject:new()
 ---@param color Color
 ---@param action function
 function Button:new(x, y, w, h, action, color)
-    newObj = {
+    local newObj = {
         x = x,
         y = y,
         w = w,

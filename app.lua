@@ -1,14 +1,14 @@
 local Camera = require('camera')
 local Params = require('params')
 local Config = require('config')
-local SpaceScene = require('scenes.space_scene')
+local MainMenuScene = require('scenes.main_menu_scene')
 
 ---@class App
 ---@field public camera Camera
 ---@field public scene Scene
 App = {
     camera = nil,
-    scene = SpaceScene
+    scene = MainMenuScene
 }
 
 function App.load()
@@ -18,6 +18,7 @@ function App.load()
     love.graphics.setBackgroundColor(0.03, 0.04, 0.08)
     love.physics.setMeter(Params.worldMeter)
     Params:init()
+    Params.default.scene = MainMenuScene
 
     App.camera = Camera:new(Params.halfScreenW, Params.halfScreenH)
 end

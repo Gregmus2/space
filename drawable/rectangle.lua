@@ -11,7 +11,7 @@ local Rectangle = Draw:new()
 ---@param h number
 ---@return Rectangle
 function Rectangle:new(mode, color, w, h)
-    newObj = {
+    local newObj = {
         visibilityRadius = math.sqrt(w ^ 2 + h ^ 2) / 2,
         mode = mode,
         color = color,

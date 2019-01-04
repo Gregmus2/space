@@ -4,7 +4,7 @@ local EventCollection = {}
 
 ---@return EventCollection
 function EventCollection:new()
-    newObj = { events = {} }
+    local newObj = { events = {} }
     self.__index = self
     setmetatable(newObj, self)
 

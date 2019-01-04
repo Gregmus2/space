@@ -9,7 +9,7 @@ local Circle = Draw:new()
 ---@param r number
 ---@return Circle
 function Circle:new(mode, color, r)
-    newObj = {
+    local newObj = {
         visibilityRadius = r / 2,
         mode = mode,
         color = color,

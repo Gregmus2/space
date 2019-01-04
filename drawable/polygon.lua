@@ -9,7 +9,7 @@ local Polygon = Draw:new()
 ---@param vertexes table
 ---@return Polygon
 function Polygon:new(mode, color, vertexes)
-    newObj = {
+    local newObj = {
         visibilityRadius = 0, -- todo
         mode = mode,
         color = color,

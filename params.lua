@@ -5,6 +5,7 @@ local Params = {
     default = {
         linearDumping = 0.1,
         friction = 1,
+        scene = nil,
         config = {
             width = 1024,
             height = 768,

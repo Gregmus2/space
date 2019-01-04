@@ -9,7 +9,7 @@ local Action = {}
 ---@param noReturn boolean|nil
 ---@param isMouseMoved boolean|nil
 function Action:new(action, isLong, noReturn, isMouseMoved)
-    newObj = { isMouseMoved = isMouseMoved or false }
+    local newObj = { isMouseMoved = isMouseMoved or false }
     newObj.isLong = isLong or false
     if isLong and noReturn ~= true then
         newObj.action = function() return action end
