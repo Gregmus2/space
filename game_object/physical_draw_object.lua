@@ -1,18 +1,18 @@
 local GameObject = require('game_object.game_object')
 
 ---@class PhysicalDrawObject : GameObject
----@field public draw Draw
+---@field public drawable Draw
 ---@field public physics Fixture
 ---@field protected speed number
 ---@field protected rotateSpeed number
 ---@field protected angle number
 local PhysicalDrawObject = GameObject:new()
 
----@param draw Draw
+---@param drawable Draw
 ---@param physics Fixture
-function PhysicalDrawObject:new(draw, physics)
+function PhysicalDrawObject:new(drawable, physics)
     newObj = {
-        draw = draw,
+        drawable = drawable,
         physics = physics,
         speed = 5000,
         rotateSpeed = 5,
@@ -28,7 +28,7 @@ end
 ---@param direction number
 function PhysicalDrawObject:rotate(dt, direction)
     self.angle = self.angle + self.rotateSpeed * dt * direction
-    self.draw.angle = self.angle
+    self.drawable.angle = self.angle
     self.physics:getBody():setAngle(self.angle)
 end
 
@@ -48,6 +48,10 @@ end
 ---@param y number
 function PhysicalDrawObject:setPosition(x, y)
     return self.physics:getBody():setPosition(x, y)
+end
+
+function PhysicalDrawObject:draw(x, y)
+    self.drawable:draw(x, y)
 end
 
 return PhysicalDrawObject

@@ -32,7 +32,7 @@ function Scene:sleep() end
 ---@param go GameObject
 function Scene:draw(go)
     local x, y = go:getPosition()
-    go.draw:draw(x, y)
+    go:draw(x, y)
 end
 
 ---@param mo MenuObject

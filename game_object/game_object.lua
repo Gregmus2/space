@@ -41,4 +41,6 @@ function GameObject:setPosition(x, y)
     self.x, self.y = x, y
 end
 
+function GameObject:draw(x, y) end
+
 return GameObject

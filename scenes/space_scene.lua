@@ -75,9 +75,9 @@ end
 ---@param go GameObject
 function SpaceScene:draw(go)
     local x, y = go:getPosition()
-    local distance = math.sqrt((x - (App.camera.x)) ^ 2 + (y - (App.camera.y)) ^ 2) - go.draw.visibilityRadius
+    local distance = math.sqrt((x - (App.camera.x)) ^ 2 + (y - (App.camera.y)) ^ 2) - go.drawable.visibilityRadius
     if math.abs(distance) <= Params.screenOutRadius * (1/App.camera.scale) then
-        go.draw:draw(x, y)
+        go:draw(x, y)
     end
 end
 
