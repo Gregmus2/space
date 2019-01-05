@@ -8,7 +8,7 @@ local Color = {}
 ---@param g number
 ---@param b number
 function Color:new(r, g ,b)
-    newObj = { r = r, g = g, b = b }
+    local newObj = { r = r, g = g, b = b }
     self.__index = self
 
     return setmetatable(newObj, self)

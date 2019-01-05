@@ -9,7 +9,7 @@ local PhysicalObject = GameObject:new()
 
 ---@param physics Fixture
 function PhysicalObject:new(physics)
-    newObj = {
+    local newObj = {
         angle = 0,
         speed = 5000,
         rotateSpeed = 5,

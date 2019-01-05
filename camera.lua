@@ -9,7 +9,7 @@ local Camera = {}
 ---@param y number
 ---@return Camera
 function Camera:new(x, y)
-    newObj = {
+    local newObj = {
         default = {
             x = x,
             y = y,

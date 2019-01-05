@@ -8,7 +8,7 @@ local params = require('params')
 local Draw = {}
 
 function Draw:new()
-    newObj = { angle = 0 }
+    local newObj = { angle = 0 }
     self.__index = self
     setmetatable(newObj, self)
 

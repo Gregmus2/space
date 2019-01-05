@@ -6,7 +6,7 @@ local GameObject = {}
 ---@param x number
 ---@param y number
 function GameObject:new(x, y)
-    newObj = {
+    local newObj = {
         x = x,
         y = y
     }

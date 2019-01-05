@@ -11,7 +11,7 @@ local DrawObject = GameObject:new()
 ---@param x number
 ---@param y number
 function DrawObject:new(drawable, x, y)
-    newObj = {
+    local newObj = {
         x = x,
         y = y,
         angle = 0,

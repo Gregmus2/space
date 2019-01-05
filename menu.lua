@@ -3,7 +3,7 @@
 local Menu = {}
 
 function Menu:new()
-    newObj = {
+    local newObj = {
         buttons = {}
     }
     self.__index = self

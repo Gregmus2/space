@@ -1,5 +1,8 @@
 local EventCollection = require('collection.event_collection')
 local Menu = require('menu')
+local Action = require('action')
+local Event = require('enum.event')
+local Params = require('params')
 
 ---@class Scene
 ---@field public drawableObjects DrawObject[]
@@ -10,7 +13,7 @@ local Menu = require('menu')
 local Scene = {}
 
 function Scene:new()
-    newObj = {
+    local newObj = {
         drawableObjects = {},
         events = EventCollection:new(),
         world = nil,
@@ -19,6 +22,7 @@ function Scene:new()
     }
     self.__index = self
     setmetatable(newObj, self)
+    newObj.events:addEvent(Event.KEY, Action:new(function() App.changeScene(Params.default.scene) end), 'escape')
 
     return newObj
 end

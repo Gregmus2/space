@@ -9,7 +9,7 @@ local mouseMovedActions = {}
 function love.load()
     App.load()
 
-    App.scene:load(App.camera)
+    App.scene:load()
 end
 
 function love.update(dt)
