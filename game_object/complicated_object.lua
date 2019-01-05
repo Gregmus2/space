@@ -23,27 +23,30 @@ end
 ---@param dt number
 ---@param direction number
 function ComplicatedObject:rotate(dt, direction)
-    self.angle = self.angle + self.rotateSpeed * dt * direction
-    self.draw.angle = self.angle
-    self.physics:getBody():setAngle(self.angle)
+
 end
 
 ---@param dt number
 ---@param direction number
 function ComplicatedObject:move(dt, direction)
-    local dSpeed = direction * self.speed * dt
-    self.physics:getBody():applyForce(math.cos(self.angle) * dSpeed, math.sin(self.angle) * dSpeed)
+
 end
 
 ---@return number, number @ x, y
 function ComplicatedObject:getPosition()
-    return self.physics:getBody():getPosition()
+
 end
 
 ---@param x number
 ---@param y number
 function ComplicatedObject:setPosition(x, y)
-    return self.physics:getBody():setPosition(x, y)
+
+end
+
+function ComplicatedObject:draw()
+    for _, object in ipairs(self.gameObjects) do
+        object:draw()
+    end
 end
 
 return ComplicatedObject

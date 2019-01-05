@@ -34,10 +34,11 @@ function Scene:update(dt) end
 
 function Scene:sleep() end
 
----@param go GameObject
-function Scene:draw(go)
-    local x, y = go:getPosition()
-    go:draw(x, y)
+function Scene:draw()
+    for _, object in ipairs(self.drawableObjects) do
+        object:draw()
+    end
+    self.menu:draw()
 end
 
 return Scene

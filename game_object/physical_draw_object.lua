@@ -1,4 +1,5 @@
 local GameObject = require('game_object.game_object')
+local Params = require('params')
 
 ---@class PhysicalDrawObject : GameObject
 ---@field public drawable Draw
@@ -50,8 +51,12 @@ function PhysicalDrawObject:setPosition(x, y)
     return self.physics:getBody():setPosition(x, y)
 end
 
-function PhysicalDrawObject:draw(x, y)
-    self.drawable:draw(x, y)
+function PhysicalDrawObject:draw()
+    local x, y = self:getPosition()
+    local distance = math.sqrt((x - (App.camera.x)) ^ 2 + (y - (App.camera.y)) ^ 2) - self.drawable.visibilityRadius
+    if math.abs(distance) <= Params.screenOutRadius * (1/App.camera.scale) then
+        self.drawable:draw(x, y)
+    end
 end
 
 return PhysicalDrawObject

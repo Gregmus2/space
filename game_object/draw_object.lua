@@ -32,8 +32,12 @@ function DrawObject:rotate(dt, direction)
     self.drawable.angle = self.angle
 end
 
-function DrawObject:draw(x, y)
-    self.drawable:draw(x, y)
+function DrawObject:draw()
+    local x, y = self:getPosition()
+    local distance = math.sqrt((x - (App.camera.x)) ^ 2 + (y - (App.camera.y)) ^ 2) - self.drawable.visibilityRadius
+    if math.abs(distance) <= Params.screenOutRadius * (1/App.camera.scale) then
+        self.drawable:draw(x, y)
+    end
 end
 
 return DrawObject

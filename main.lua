@@ -76,8 +76,5 @@ function love.keyreleased(key)
 end
 
 function love.draw()
-    for i = 1, #App.scene.drawableObjects do
-        App.scene:draw(App.scene.drawableObjects[i])
-    end
-    App.scene.menu:draw()
+    App.scene:draw()
 end
