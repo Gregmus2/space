@@ -39,6 +39,7 @@ function Rectangle:draw(x, y)
         self.w * App.camera.scale,
         self.h * App.camera.scale
     )
+    love.graphics.reset()
 end
 
 return Rectangle
