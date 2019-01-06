@@ -12,8 +12,10 @@ local ShipComponentBuilder = {}
 ---@param color Color
 ---@param vertexes number[]
 ---@param mass number
-function ShipComponentBuilder:buildCore(world, x, y, color, vertexes, mass)
-    return Core:new(self.build(world, x, y, color, vertexes, mass))
+---@param rotateSpeed number
+function ShipComponentBuilder:buildCore(world, x, y, color, vertexes, mass, rotateSpeed)
+    local draw, fixture = self.build(world, x, y, color, vertexes, mass)
+    return Core:new(draw, fixture, rotateSpeed)
 end
 
 ---@param world World
@@ -22,8 +24,10 @@ end
 ---@param color Color
 ---@param vertexes number[]
 ---@param mass number
-function ShipComponentBuilder:buildEngine(world, x, y, color, vertexes, mass)
-    return Engine:new(self.build(world, x, y, color, vertexes, mass))
+---@param speed number
+function ShipComponentBuilder:buildEngine(world, x, y, color, vertexes, mass, speed)
+    local draw, fixture = self.build(world, x, y, color, vertexes, mass)
+    return Engine:new(draw, fixture, speed)
 end
 
 ---@protected
@@ -40,7 +44,7 @@ function ShipComponentBuilder.build(world, x, y, color, vertexes, mass)
     local body = love.physics.newBody(world, x, y, 'dynamic')
     body:setFixedRotation(false)
     body:setLinearDamping(Params.default.linearDumping)
-    body:setAngularDamping(0.1)
+    body:setAngularDamping(10)
     local physics = love.physics.newFixture(body, shape, mass)
     physics:setFriction(Params.default.friction)
 

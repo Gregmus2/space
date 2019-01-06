@@ -5,15 +5,16 @@ local PhysicalDrawObject = require('game_object.physical_draw_object')
 ---@field public physics Fixture
 ---@field protected speed number
 ---@field protected rotateSpeed number
----@field protected angle number
 local Engine = PhysicalDrawObject:new()
 
 ---@param drawable Draw
 ---@param physics Fixture
-function Engine:new(drawable, physics)
+---@param speed number
+function Engine:new(drawable, physics, speed)
     local newObj = {
         drawable = drawable,
-        physics = physics
+        physics = physics,
+        speed = speed
     }
     physics:getBody():setFixedRotation(false)
     setmetatable(newObj, self)

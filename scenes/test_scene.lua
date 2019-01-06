@@ -20,9 +20,9 @@ function TestScene:load()
 
     self.world = love.physics.newWorld(0, 0, true)
 
-    local core = ShipComponentBuilder:buildCore(self.world, 100, 100, Color:white(), PolygonFactory.generateRectangle(50, 50), 0.1)
-    local engine = ShipComponentBuilder:buildEngine(self.world, 100, 65, Color:red(), PolygonFactory.generateRocket(20, 40, 10), 0.1)
-    local engine2 = ShipComponentBuilder:buildEngine(self.world, 100, 135, Color:red(), PolygonFactory.generateRocket(20, 40, 10), 0.1)
+    local core = ShipComponentBuilder:buildCore(self.world, 100, 100, Color:white(), PolygonFactory.generateRectangle(50, 50), 0.1, 500)
+    local engine = ShipComponentBuilder:buildEngine(self.world, 100, 65, Color:red(), PolygonFactory.generateRocket(20, 40, 10), 0.1, 1000)
+    local engine2 = ShipComponentBuilder:buildEngine(self.world, 100, 135, Color:red(), PolygonFactory.generateRocket(20, 40, 10), 0.1, 1000)
     local gob = Ship:new(core, {engine, engine2})
     self.drawableObjects[#self.drawableObjects + 1] = gob
     self.hero = gob
