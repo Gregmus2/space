@@ -4,10 +4,10 @@ local BuilderScene = require('scenes.builder_scene')
 local Color = require('color')
 local GameObjectBuilder = require('game_object_builder')
 local PolygonFactory = require('factory.polygon_factory')
+local ShipComponentBuilder = require('ship_component_builder')
 local Action = require('action')
 local Event = require('enum.event')
-local Params = require('params')
-local Button = require('menu.button')
+local Ship = require('ship_components.ship')
 
 ---@class SpaceScene : Scene
 ---@field protected hero GameObject
@@ -37,16 +37,14 @@ function SpaceScene:load()
             :addRectangleDraw('fill', color, w, h)
             :addRectanglePhysics(self.world, w, h, 'dynamic', 1)
             :createGameObject()
-        self.drawableObjects[#self.drawableObjects + 1] = go
+        self.objects[#self.objects + 1] = go
     end
 
-    local shipVertexes = PolygonFactory.generateShip(50)
-    self.hero = GameObjectBuilder
-        :new(App.camera.x, App.camera.y)
-        :addPolygonDraw('fill', Color:blue(), shipVertexes)
-        :addPolygonPhysics(self.world, shipVertexes, 'dynamic', 0.1)
-        :createGameObject()
-    self.drawableObjects[#self.drawableObjects + 1] = self.hero
+    local core = ShipComponentBuilder:buildCore(self.world, App.camera.x, App.camera.y, Color:white(), PolygonFactory.generateRectangle(50, 50), 0.1, 1000)
+    local engine = ShipComponentBuilder:buildEngine(self.world, App.camera.x, App.camera.y - 35, Color:red(), PolygonFactory.generateRocket(20, 40, 10), 0.1, 1500)
+    local engine2 = ShipComponentBuilder:buildEngine(self.world, App.camera.x, App.camera.y + 35, Color:red(), PolygonFactory.generateRocket(20, 40, 10), 0.1, 1500)
+    self.hero = Ship:new(core, {engine, engine2})
+    self.objects[#self.objects + 1] = self.hero
 
     self.events:addEvent(Event.KEY, Action:new(function(dt) self.hero:rotate(dt, 1) end, true), 'd')
     self.events:addEvent(Event.KEY, Action:new(function(dt) self.hero:move(dt, 1) end, true), 'w')

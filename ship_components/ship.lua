@@ -38,6 +38,13 @@ function Ship:move(dt, direction)
     end
 end
 
+---@return number, number @ x, y
+function Ship:getPosition()
+    local body = self.components.core.physics:getBody()
+
+    return body:getX(), body:getY()
+end
+
 function Ship:draw()
     self.components.core:draw()
     for _, engine in ipairs(self.components.engines) do

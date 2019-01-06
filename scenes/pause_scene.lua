@@ -24,8 +24,8 @@ function LoadScene:load(scene)
         :addRectangleDraw('fill', Color:white(), 50, 100)
         :createGameObject()
 
-    self.drawableObjects[#self.drawableObjects + 1] = gameObject1
-    self.drawableObjects[#self.drawableObjects + 1] = gameObject2
+    self.objects[#self.objects + 1] = gameObject1
+    self.objects[#self.objects + 1] = gameObject2
 
     self.events:addEvent(Event.KEY, Action:new(function(dt) App.changeScene(scene) end), 'space')
 end

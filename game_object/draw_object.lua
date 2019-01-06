@@ -34,7 +34,7 @@ end
 
 ---@param dt number
 ---@param direction number
-function GameObject:move(dt, direction)
+function DrawObject:move(dt, direction)
     local dSpeed = direction * self.speed * dt
     self.x = self.x + math.cos(self.angle) * dSpeed
     self.y = self.y + math.sin(self.angle) * dSpeed

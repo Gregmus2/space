@@ -5,7 +5,7 @@ local Event = require('enum.event')
 local Params = require('params')
 
 ---@class Scene
----@field public drawableObjects DrawObject[]
+---@field public objects GameObject[]
 ---@field public world World
 ---@field public isLoaded boolean
 ---@field public events EventCollection
@@ -14,7 +14,7 @@ local Scene = {}
 
 function Scene:new()
     local newObj = {
-        drawableObjects = {},
+        objects = {},
         events = EventCollection:new(),
         world = nil,
         isLoaded = false,
@@ -35,7 +35,7 @@ function Scene:update(dt) end
 function Scene:sleep() end
 
 function Scene:draw()
-    for _, object in ipairs(self.drawableObjects) do
+    for _, object in ipairs(self.objects) do
         object:draw()
     end
     self.menu:draw()
