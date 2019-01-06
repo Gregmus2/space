@@ -18,17 +18,11 @@ end
 
 ---@param dt number
 ---@param direction number
-function GameObject:rotate(dt, direction)
-    self.angle = self.angle + self.rotateSpeed * dt * direction
-end
+function GameObject:rotate(dt, direction) end
 
 ---@param dt number
 ---@param direction number
-function GameObject:move(dt, direction)
-    local dSpeed = direction * self.speed * dt
-    self.x = self.x + math.cos(self.angle) * dSpeed
-    self.y = self.y + math.sin(self.angle) * dSpeed
-end
+function GameObject:move(dt, direction) end
 
 ---@return number, number @ x, y
 function GameObject:getPosition()

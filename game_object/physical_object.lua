@@ -4,13 +4,11 @@ local GameObject = require('game_object.game_object')
 ---@field public physics Fixture
 ---@field protected speed number
 ---@field protected rotateSpeed number
----@field protected angle number
 local PhysicalObject = GameObject:new()
 
 ---@param physics Fixture
 function PhysicalObject:new(physics)
     local newObj = {
-        angle = 0,
         speed = 5000,
         rotateSpeed = 5,
         physics = physics
@@ -24,15 +22,15 @@ end
 ---@param dt number
 ---@param direction number
 function PhysicalObject:rotate(dt, direction)
-    self.angle = self.angle + self.rotateSpeed * dt * direction
-    self.physics:getBody():setAngle(self.angle)
+    local angle = self.physics:getBody():getAngle() + self.rotateSpeed * dt * direction
+    self.physics:getBody():setAngle(angle)
 end
 
 ---@param dt number
 ---@param direction number
 function PhysicalObject:move(dt, direction)
     local dSpeed = direction * self.speed * dt
-    self.physics:getBody():applyForce(math.cos(self.angle) * dSpeed, math.sin(self.angle) * dSpeed)
+    self.physics:getBody():applyForce(math.cos(self.physics:getBody():getAngle()) * dSpeed, math.sin(self.physics:getBody():getAngle()) * dSpeed)
 end
 
 ---@return number, number @ x, y

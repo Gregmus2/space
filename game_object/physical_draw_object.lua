@@ -6,7 +6,6 @@ local Params = require('params')
 ---@field public physics Fixture
 ---@field protected speed number
 ---@field protected rotateSpeed number
----@field protected angle number
 local PhysicalDrawObject = GameObject:new()
 
 ---@param drawable Draw
@@ -16,8 +15,7 @@ function PhysicalDrawObject:new(drawable, physics)
         drawable = drawable,
         physics = physics,
         speed = 5000,
-        rotateSpeed = 5,
-        angle = 0
+        rotateSpeed = 50
     }
     setmetatable(newObj, self)
     self.__index = self
@@ -28,16 +26,14 @@ end
 ---@param dt number
 ---@param direction number
 function PhysicalDrawObject:rotate(dt, direction)
-    self.angle = self.angle + self.rotateSpeed * dt * direction
-    self.drawable.angle = self.angle
-    self.physics:getBody():setAngle(self.angle)
+    self.physics:getBody():applyAngularImpulse(self.rotateSpeed * dt * direction)
 end
 
 ---@param dt number
 ---@param direction number
 function PhysicalDrawObject:move(dt, direction)
     local dSpeed = direction * self.speed * dt
-    self.physics:getBody():applyForce(math.cos(self.angle) * dSpeed, math.sin(self.angle) * dSpeed)
+    self.physics:getBody():applyForce(math.cos(self.physics:getBody():getAngle()) * dSpeed, math.sin(self.physics:getBody():getAngle()) * dSpeed)
 end
 
 ---@return number, number @ x, y
@@ -55,7 +51,7 @@ function PhysicalDrawObject:draw()
     local x, y = self:getPosition()
     local distance = math.sqrt((x - (App.camera.x)) ^ 2 + (y - (App.camera.y)) ^ 2) - self.drawable.visibilityRadius
     if math.abs(distance) <= Params.screenOutRadius * (1/App.camera.scale) then
-        self.drawable:draw(x, y)
+        self.drawable:draw(x, y, self.physics:getBody():getAngle())
     end
 end
 

@@ -23,7 +23,7 @@ end
 
 ---@param x number
 ---@param y number
-function Circle:draw(x, y)
+function Circle:draw(x, y, angle)
     love.graphics.setColor(self.color.r, self.color.g, self.color.b)
     love.graphics.circle(
         self.mode,
