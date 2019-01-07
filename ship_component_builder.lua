@@ -2,6 +2,9 @@ local Params = require('params')
 local Core = require('ship_components.core')
 local Engine = require('ship_components.engine')
 local Polygon = require('drawable.polygon')
+local ParticlesFactory = require('factory.particles_factory')
+local Event = require('enum.event')
+local Action = require('action')
 
 ---@class ShipComponentBuilder
 local ShipComponentBuilder = {}
@@ -19,15 +22,23 @@ function ShipComponentBuilder:buildCore(world, x, y, color, vertexes, mass, rota
 end
 
 ---@param world World
+---@param scene Scene
 ---@param x number
 ---@param y number
 ---@param color Color
 ---@param vertexes number[]
 ---@param mass number
 ---@param speed number
-function ShipComponentBuilder:buildEngine(world, x, y, color, vertexes, mass, speed)
+function ShipComponentBuilder:buildEngine(world, scene, x, y, color, vertexes, mass, speed)
     local draw, fixture = self.build(world, x, y, color, vertexes, mass)
-    return Engine:new(draw, fixture, speed)
+    local particle = ParticlesFactory.getEngineFire(20, 0)
+    particle:pause()
+    scene:addParticle(particle)
+    local engine = Engine:new(draw, fixture, speed, particle)
+    scene.events:addEvent(Event.KEY, Action:new(function(dt) particle:start() end), 'w')
+    scene.events:addEvent(Event.KEY_RELEASE, Action:new(function(dt) particle:pause() end, true), 'w')
+
+    return engine
 end
 
 ---@protected

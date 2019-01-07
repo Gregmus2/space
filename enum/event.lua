@@ -2,5 +2,6 @@
 return {
     KEY = 'key',
     WHEEL = 'wheel',
-    MOUSE = 'mouse'
+    MOUSE = 'mouse',
+    KEY_RELEASE = 'key_release'
 }

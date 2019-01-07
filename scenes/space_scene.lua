@@ -41,8 +41,8 @@ function SpaceScene:load()
     end
 
     local core = ShipComponentBuilder:buildCore(self.world, App.camera.x, App.camera.y, Color:white(), PolygonFactory.generateRectangle(50, 50), 0.1, 1000)
-    local engine = ShipComponentBuilder:buildEngine(self.world, App.camera.x, App.camera.y - 35, Color:red(), PolygonFactory.generateRocket(20, 40, 10), 0.1, 1500)
-    local engine2 = ShipComponentBuilder:buildEngine(self.world, App.camera.x, App.camera.y + 35, Color:red(), PolygonFactory.generateRocket(20, 40, 10), 0.1, 1500)
+    local engine = ShipComponentBuilder:buildEngine(self.world, self, App.camera.x, App.camera.y - 35, Color:red(), PolygonFactory.generateRocket(20, 40, 10), 0.1, 1500)
+    local engine2 = ShipComponentBuilder:buildEngine(self.world, self, App.camera.x, App.camera.y + 35, Color:red(), PolygonFactory.generateRocket(20, 40, 10), 0.1, 1500)
     self.hero = Ship:new(core, {engine, engine2})
     self.objects[#self.objects + 1] = self.hero
 
@@ -68,7 +68,16 @@ end
 ---@param dt number
 function SpaceScene:update(dt)
     self.world:update(dt)
+    self:updateParticles(dt)
     App.camera:setCoords(self.hero:getPosition())
+end
+
+function Scene:draw()
+    for _, object in ipairs(self.objects) do
+        object:draw()
+    end
+    self.menu:draw()
+    self:drawParticles()
 end
 
 return SpaceScene
