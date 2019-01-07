@@ -1,22 +1,21 @@
 local GameObject = require('game_object.game_object')
+local Params = require('params')
 
 ---@class PhysicalDrawObject : GameObject
----@field public draw Draw
+---@field public drawable Draw
 ---@field public physics Fixture
 ---@field protected speed number
 ---@field protected rotateSpeed number
----@field protected angle number
 local PhysicalDrawObject = GameObject:new()
 
----@param draw Draw
+---@param drawable Draw
 ---@param physics Fixture
-function PhysicalDrawObject:new(draw, physics)
+function PhysicalDrawObject:new(drawable, physics)
     local newObj = {
-        draw = draw,
+        drawable = drawable,
         physics = physics,
         speed = 5000,
-        rotateSpeed = 5,
-        angle = 0
+        rotateSpeed = 50
     }
     setmetatable(newObj, self)
     self.__index = self
@@ -27,16 +26,14 @@ end
 ---@param dt number
 ---@param direction number
 function PhysicalDrawObject:rotate(dt, direction)
-    self.angle = self.angle + self.rotateSpeed * dt * direction
-    self.draw.angle = self.angle
-    self.physics:getBody():setAngle(self.angle)
+    self.physics:getBody():applyAngularImpulse(self.rotateSpeed * dt * direction)
 end
 
 ---@param dt number
 ---@param direction number
 function PhysicalDrawObject:move(dt, direction)
     local dSpeed = direction * self.speed * dt
-    self.physics:getBody():applyForce(math.cos(self.angle) * dSpeed, math.sin(self.angle) * dSpeed)
+    self.physics:getBody():applyForce(math.cos(self.physics:getBody():getAngle()) * dSpeed, math.sin(self.physics:getBody():getAngle()) * dSpeed)
 end
 
 ---@return number, number @ x, y
@@ -48,6 +45,14 @@ end
 ---@param y number
 function PhysicalDrawObject:setPosition(x, y)
     return self.physics:getBody():setPosition(x, y)
+end
+
+function PhysicalDrawObject:draw()
+    local x, y = self:getPosition()
+    local distance = math.sqrt((x - (App.camera.x)) ^ 2 + (y - (App.camera.y)) ^ 2) - self.drawable.visibilityRadius
+    if math.abs(distance) <= Params.screenOutRadius * (1/App.camera.scale) then
+        self.drawable:draw(x, y, self.physics:getBody():getAngle())
+    end
 end
 
 return PhysicalDrawObject

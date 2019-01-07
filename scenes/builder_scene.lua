@@ -24,7 +24,7 @@ function BuilderScene:load()
         :addRectangleDraw('fill', Color:white(), 100, 100)
         :addRectanglePhysics(self.world, 100, 100, 'dynamic')
         :createGameObject()
-    self.drawableObjects[#self.drawableObjects + 1] = draggable
+    self.objects[#self.objects + 1] = draggable
     self.draggableObject[#self.draggableObject + 1] = draggable
 
     local dragAction = Action:new(

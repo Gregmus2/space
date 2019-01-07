@@ -86,7 +86,7 @@ end
 ---@param friction number|nil
 function GameObjectBuilder:addPhysics(shape, world, bodyType, mass, linearDamping, friction)
     local body = love.physics.newBody(world, self.x, self.y, bodyType)
-    body:setFixedRotation(true)
+    body:setFixedRotation(false)
     if (linearDamping ~= nil) then
         body:setLinearDamping(linearDamping or Params.default.linearDumping)
     end

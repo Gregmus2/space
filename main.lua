@@ -129,10 +129,7 @@ function love.keyreleased(key)
 end
 
 function love.draw()
-    for i = 1, #App.scene.drawableObjects do
-        App.scene:draw(App.scene.drawableObjects[i])
-    end
-    App.scene.menu:draw()
+    App.scene:draw()
 
     love.graphics.draw(psystem, love.graphics.getWidth() / 2, love.graphics.getHeight() / 2)
 end

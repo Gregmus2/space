@@ -4,11 +4,10 @@ local params = require('params')
 ---@field public visibilityRadius number
 ---@field public color Color
 ---@field public mode string
----@field public angle number
 local Draw = {}
 
 function Draw:new()
-    local newObj = { angle = 0 }
+    local newObj = {}
     self.__index = self
     setmetatable(newObj, self)
 
@@ -17,7 +16,7 @@ end
 
 ---@param x number
 ---@param y number
-function Draw:draw(x, y) end
+function Draw:draw(x, y, angle) end
 
 ---@param x number
 ---@return number
@@ -33,10 +32,11 @@ end
 
 ---@param realXCenter number
 ---@param realYCenter number
+---@param angle number
 ---@protected
-function Draw:rotate(realXCenter, realYCenter)
+function Draw:rotate(realXCenter, realYCenter, angle)
     love.graphics.translate(realXCenter, realYCenter)
-    love.graphics.rotate(self.angle)
+    love.graphics.rotate(angle)
     love.graphics.translate(-realXCenter, -realYCenter)
 end
 
