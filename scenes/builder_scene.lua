@@ -2,7 +2,6 @@ local Scene = require('scenes.scene')
 local Color = require('color')
 local GameObjectBuilder = require('game_object_builder')
 local Event = require('enum.event')
-local Action = require('action')
 local Draw = require('drawable.drawable')
 
 
@@ -27,20 +26,24 @@ function BuilderScene:load()
     self.objects[#self.objects + 1] = draggable
     self.draggableObject[#self.draggableObject + 1] = draggable
 
-    local dragAction = Action:new(
-        function(x, y)
-            for _, go in pairs(self.draggableObject) do
+    self.events:addAction(Event.MOUSE,
+        function(params)
+            for _, go in ipairs(self.draggableObject) do
                 if go.physics:getShape():testPoint(
                     Draw.calcX(go.physics:getBody():getX()),
                     Draw.calcY(go.physics:getBody():getY()),
-                    0, x, y
+                    0, params.x, params.y
                 ) then
-                    return function(xx, yy) go.physics:getBody():setPosition(xx, yy) end
+                    self.events:addAction(Event.MOUSE_MOVE, function(moveParams) go.physics:getBody():setPosition(moveParams.x, moveParams.y) end, nil, 'drag')
                 end
             end
-        end, true, true, true
+        end, 1
     )
-    self.events:addEvent(Event.MOUSE, dragAction, 1)
+    self.events:addAction(Event.MOUSE_RELEASE,
+        function(params)
+            self.events:removeAction(Event.MOUSE_MOVE, nil, 'drag')
+        end, 1
+    )
 end
 
 return BuilderScene
