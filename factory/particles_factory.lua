@@ -12,7 +12,7 @@ function ParticlesFactory.getEngineFire(w, direction)
     particles:setSpeed(300, 300)
     particles:setDirection(direction)
     particles:setSizes(0.5, 0.3, 0.1)
-    particles:setLinearAcceleration(-100, -100, -80, -80)
+    --particles:setLinearAcceleration(-100, -100, -80, -80)
     particles:setColors(255, 0, 0, 255, 255, 122, 0, 255, 255, 255, 0, 255, 255, 255, 0, 0)
 
     return particles

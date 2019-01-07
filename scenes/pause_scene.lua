@@ -2,7 +2,6 @@ local Scene = require('scenes.scene')
 local Color = require('color')
 local GameObjectBuilder = require('game_object_builder')
 local Event = require('enum.event')
-local Action = require('action')
 
 ---@class LoadScene : Scene
 local LoadScene = Scene:new()
@@ -27,7 +26,7 @@ function LoadScene:load(scene)
     self.objects[#self.objects + 1] = gameObject1
     self.objects[#self.objects + 1] = gameObject2
 
-    self.events:addEvent(Event.KEY, Action:new(function(dt) App.changeScene(scene) end), 'space')
+    self.events:addAction(Event.KEY, function() App.changeScene(scene) end, 'space')
 end
 
 return LoadScene

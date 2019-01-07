@@ -4,7 +4,6 @@ local Engine = require('ship_components.engine')
 local Polygon = require('drawable.polygon')
 local ParticlesFactory = require('factory.particles_factory')
 local Event = require('enum.event')
-local Action = require('action')
 
 ---@class ShipComponentBuilder
 local ShipComponentBuilder = {}
@@ -35,8 +34,8 @@ function ShipComponentBuilder:buildEngine(world, scene, x, y, color, vertexes, m
     particle:pause()
     scene:addParticle(particle)
     local engine = Engine:new(draw, fixture, speed, particle)
-    scene.events:addEvent(Event.KEY, Action:new(function(dt) particle:start() end), 'w')
-    scene.events:addEvent(Event.KEY_RELEASE, Action:new(function(dt) particle:pause() end, true), 'w')
+    scene.events:addAction(Event.KEY, function() particle:start() end, 'w')
+    scene.events:addAction(Event.KEY_RELEASE, function() particle:pause() end, 'w')
 
     return engine
 end

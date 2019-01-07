@@ -1,4 +1,5 @@
 local GameObject = require('game_object.game_object')
+local Params = require('params')
 
 ---@class DrawObject : GameObject
 ---@field protected drawable Draw

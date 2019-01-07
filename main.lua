@@ -1,82 +1,57 @@
 require('app')
 local Event = require('enum.event')
 
----@type table<string, function>
-local actions = {}
----@type table<string, function>
-local mouseMovedActions = {}
+---@param actions function[]
+---@param params table|nil
+local function triggerEvent(actions, params)
+    if actions == nil then return end
+    for _, action in pairs(actions) do
+        action(params)
+    end
+end
 
 function love.load()
     App.load()
-
     App.scene:load()
 end
 
 function love.update(dt)
-    App.update(dt)
+    local actions = App.scene.events:findActions(Event.UPDATE)
+    triggerEvent(actions, {dt = dt})
 
-    for _,action in pairs(actions) do
-        action(dt)
-    end
+    App.update(dt)
 end
 
 function love.mousepressed(x, y, button)
-    local action = App.scene.events:findAction(Event.MOUSE, button)
-    if action == nil then return end
-
-    local result = action.action(x, y)
-    if action.isLong == false or result == nil then
-        return
-    end
-    if action.isMouseMoved then
-        mouseMovedActions[button] = result
-    else
-        actions[button] = result
-    end
+    local actions = App.scene.events:findActions(Event.MOUSE, button)
+    triggerEvent(actions, {x = x, y = y})
 end
 
 function love.mousereleased(x, y, button)
-    actions[button] = nil
-    mouseMovedActions[button] = nil
+    local actions = App.scene.events:findActions(Event.MOUSE_RELEASE, button)
+    triggerEvent(actions, {x = x, y = y})
 
     App.scene.menu:mouseRelease(x, y)
 end
 
 function love.wheelmoved(x, y)
-    local action = App.scene.events:findAction(Event.WHEEL)
-    if action == nil then return end
-
-    action.action(x, y)
+    local actions = App.scene.events:findActions(Event.WHEEL)
+    triggerEvent(actions, {x = x, y = y})
 end
 
 function love.keypressed(key)
-    local action = App.scene.events:findAction(Event.KEY, key)
-    if action == nil then return end
-
-    local result = action.action()
-    if action.isLong == false or result == nil then
-        return
-    end
-    if action.isMouseMoved then
-        mouseMovedActions[key] = result
-    else
-        actions[key] = result
-    end
+    local actions = App.scene.events:findActions(Event.KEY, key)
+    triggerEvent(actions)
 end
 
 function love.mousemoved(x, y)
-    for _,action in pairs(mouseMovedActions) do
-        action(x, y)
-    end
+    local actions = App.scene.events:findActions(Event.MOUSE_MOVE)
+    triggerEvent(actions, {x = x, y = y})
 end
 
 function love.keyreleased(key)
-    actions[key] = nil
-    mouseMovedActions[key] = nil
-
-    local action = App.scene.events:findAction(Event.KEY_RELEASE, key)
-    if action == nil then return end
-    action.action()
+    local actions = App.scene.events:findActions(Event.KEY_RELEASE, key)
+    triggerEvent(actions)
 end
 
 function love.draw()

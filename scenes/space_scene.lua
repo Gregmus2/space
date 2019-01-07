@@ -5,7 +5,6 @@ local Color = require('color')
 local GameObjectBuilder = require('game_object_builder')
 local PolygonFactory = require('factory.polygon_factory')
 local ShipComponentBuilder = require('ship_component_builder')
-local Action = require('action')
 local Event = require('enum.event')
 local Ship = require('ship_components.ship')
 
@@ -46,15 +45,16 @@ function SpaceScene:load()
     self.hero = Ship:new(core, {engine, engine2})
     self.objects[#self.objects + 1] = self.hero
 
-    self.events:addEvent(Event.KEY, Action:new(function(dt) self.hero:rotate(dt, 1) end, true), 'd')
-    self.events:addEvent(Event.KEY, Action:new(function(dt) self.hero:move(dt, 1) end, true), 'w')
-    self.events:addEvent(Event.KEY, Action:new(function(dt) self.hero:rotate(dt, -1) end, true), 'a')
-    self.events:addEvent(Event.KEY, Action:new(function(dt) self.hero:move(dt, -1) end, true), 's')
 
-    self.events:addEvent(Event.WHEEL, Action:new(function(x, y) App.camera:addScale(y * 0.1) end))
+    self.events:longUpdate(Event.KEY, Event.KEY_RELEASE, function(params) self.hero:rotate(params.dt, 1) end, 'd')
+    self.events:longUpdate(Event.KEY, Event.KEY_RELEASE, function(params) self.hero:move(params.dt, 1) end, 'w')
+    self.events:longUpdate(Event.KEY, Event.KEY_RELEASE, function(params) self.hero:rotate(params.dt, -1) end, 'a')
+    self.events:longUpdate(Event.KEY, Event.KEY_RELEASE, function(params) self.hero:move(params.dt, -1) end, 's')
 
-    self.events:addEvent(Event.KEY, Action:new(function() App.changeSceneWithParam(PauseScene, self) end), 'space')
-    self.events:addEvent(Event.KEY, Action:new(function() App.changeScene(BuilderScene) end), 'f')
+    self.events:addAction(Event.WHEEL, function(params) App.camera:addScale(params.y * 0.1) end)
+
+    self.events:addAction(Event.KEY, function() App.changeSceneWithParam(PauseScene, self) end, 'space')
+    self.events:addAction(Event.KEY, function() App.changeScene(BuilderScene) end, 'f')
 end
 
 function SpaceScene:sleep()
@@ -77,7 +77,7 @@ function Scene:draw()
         object:draw()
     end
     self.menu:draw()
-    self:drawParticles()
+    --self:drawParticles()
 end
 
 return SpaceScene
