@@ -10,8 +10,4 @@ cp Space.love /love-mac/Space.app/Contents/Resources/
 zip -y -r Space_mac.zip /love-mac/Space.app
 chmod 777 -R Space_mac.zip
 
-#cp Space.love /love-android-sdl2/app/src/main/assets/game.love
-#ant debug
-#cp ~/bin/love_android_sdl2-debug.apk ./
-
 rm Space.love
