@@ -30,10 +30,13 @@ end
 ---@param speed number
 function ShipComponentBuilder:buildEngine(world, scene, x, y, color, vertexes, mass, speed)
     local draw, fixture = self.build(world, x, y, color, vertexes, mass)
-    local particle = ParticlesFactory.getEngineFire(20, 0)
-    particle:pause()
-    scene:addParticle(particle)
+    local particle = ParticlesFactory.getEngineFire(3)
     local engine = Engine:new(draw, fixture, speed, particle)
+    particle:stop()
+    particle:setPosition(x, y)
+    particle:setDirection(engine.physics:getBody():getAngle() - 3.14159)
+    scene:addParticle(particle)
+
     scene.events:addAction(Event.KEY, function() particle:start() end, 'w')
     scene.events:addAction(Event.KEY_RELEASE, function() particle:pause() end, 'w')
 

@@ -51,14 +51,6 @@ function Scene:updateParticles(dt)
     end
 end
 
-function Scene:drawParticles()
-    ---@param particle ParticleSystem
-    for _, particle in ipairs(self.particles) do
-        local x, y = particle:getPosition()
-        love.graphics.draw(particle, Draw.calcX(x), Draw.calcY(y))
-    end
-end
-
 ---@param particle ParticleSystem
 function Scene:addParticle(particle)
     self.particles[#self.particles + 1] = particle
