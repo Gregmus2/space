@@ -44,7 +44,10 @@ end
 ---@param trigger string
 ---@param uniq string
 function EventCollection:removeAction(event, trigger, uniq)
-    self:findActions(event, trigger)[uniq] = nil
+    local actions = self:findActions(event, trigger)
+    if type(actions) == 'table' then
+        actions[uniq] = nil
+    end
 end
 
 ---@param startEvent string @ enum.event
