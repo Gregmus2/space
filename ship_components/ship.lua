@@ -25,6 +25,11 @@ function Ship:new(core, engines)
     return newObj
 end
 
+---@param engine Engine
+function Ship:addEngine(engine)
+    self.engines[#self.engines + 1] = engine
+end
+
 ---@param dt number
 ---@param direction number
 function Ship:rotate(dt, direction)
@@ -73,8 +78,8 @@ end
 
 function Ship:reJoin()
     local coreBody = self.core.physics:getBody()
-    for object, _ in pairs(self.joints) do
-        self.joints[object] = love.physics.newWeldJoint( coreBody, object.physics:getBody(), coreBody:getX(), coreBody:getY() )
+    for _, engine in ipairs(self.engines) do
+        self.joints[engine] = love.physics.newWeldJoint( coreBody, engine.physics:getBody(), coreBody:getX(), coreBody:getY() )
     end
 end
 
@@ -82,6 +87,11 @@ function Ship:clearVisual()
     for _, engine in ipairs(self.engines) do
         engine:resetParticles()
     end
+end
+
+---@return World
+function Ship:getWorld()
+    return self.core.physics:getBody():getWorld()
 end
 
 return Ship
