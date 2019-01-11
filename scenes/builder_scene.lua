@@ -14,23 +14,10 @@ local BuilderScene = Scene:new()
 ---@param prevScene Scene
 function BuilderScene:load(prevScene, hero)
     self.hero = hero
-    if self.isLoaded then
-        self:awake(prevScene)
-        return
-    end
-    self.isLoaded = true
     self.draggableObject = {}
+    self.objects = {}
     self.world = love.physics.newWorld(0, 0, true)
 
-    self:awake(prevScene)
-end
-
-function BuilderScene:sleep()
-    self.hero:reJoin()
-    self.draggableObject = {}
-end
-
-function BuilderScene:awake(prevScene)
     self.hero:unJoin()
     self.hero:clearVisual()
     App.camera:setCoords(self.hero:getPosition())
@@ -71,6 +58,14 @@ function BuilderScene:awake(prevScene)
     )
 
     self.events:addAction(Event.KEY, function() App.changeScene(prevScene) end, 'f')
+end
+
+function BuilderScene:sleep()
+    self.hero:reJoin()
+end
+
+function BuilderScene:update(dt)
+    self.world:update(dt)
 end
 
 return BuilderScene

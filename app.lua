@@ -27,6 +27,7 @@ end
 function App.changeScene(scene)
     App.scene:sleep()
     App.camera:reset()
+    collectgarbage()
     scene:load(App.scene)
     App.scene = scene
 end
@@ -36,6 +37,7 @@ end
 function App.changeSceneWithParam(scene, param)
     App.scene:sleep()
     App.camera:reset()
+    collectgarbage()
     scene:load(App.scene, param)
     App.scene = scene
 end
