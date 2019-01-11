@@ -30,6 +30,14 @@ function Draw.calcY(y)
     return (y - App.camera.y) * App.camera.scale + params.halfScreenH
 end
 
+function Draw:calcRealX(x)
+    return (x - params.halfScreenW) * App.camera.scale + App.camera.x
+end
+
+function Draw:calcRealY(y)
+    return (y - params.halfScreenH) * App.camera.scale + App.camera.y
+end
+
 ---@param realXCenter number
 ---@param realYCenter number
 ---@param angle number

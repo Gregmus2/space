@@ -6,8 +6,8 @@ local Event = require('enum.event')
 ---@class LoadScene : Scene
 local LoadScene = Scene:new()
 
----@param scene Scene
-function LoadScene:load(scene)
+---@param prevScene Scene
+function LoadScene:load(prevScene)
     if self.isLoaded then
         return
     end
@@ -26,7 +26,7 @@ function LoadScene:load(scene)
     self.objects[#self.objects + 1] = gameObject1
     self.objects[#self.objects + 1] = gameObject2
 
-    self.events:addAction(Event.KEY, function() App.changeScene(scene) end, 'space')
+    self.events:addAction(Event.KEY, function() App.changeScene(prevScene) end, 'space')
 end
 
 return LoadScene

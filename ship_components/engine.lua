@@ -8,6 +8,7 @@ local Draw = require('drawable.drawable')
 ---@field protected speed number
 ---@field protected rotateSpeed number
 ---@field protected particle ParticleSystem
+---@field protected joint Joint
 local Engine = PhysicalDrawObject:new()
 
 ---@param drawable Draw
@@ -50,6 +51,10 @@ function Engine:draw()
     if math.abs(distance) <= Params.screenOutRadius * (1/App.camera.scale) then
         self.drawable:draw(x, y, self.physics:getBody():getAngle())
     end
+end
+
+function Engine:resetParticles()
+    self.particle:reset()
 end
 
 return Engine

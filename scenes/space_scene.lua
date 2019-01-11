@@ -15,7 +15,7 @@ local SpaceScene = Scene:new()
 
 SpaceScene.isLoaded = false
 
-function SpaceScene:load()
+function SpaceScene:load(prevScene)
     if self.isLoaded then
         self:awake()
 
@@ -53,8 +53,8 @@ function SpaceScene:load()
 
     self.events:addAction(Event.WHEEL, function(params) App.camera:addScale(params.y * 0.1) end)
 
-    self.events:addAction(Event.KEY, function() App.changeSceneWithParam(PauseScene, self) end, 'space')
-    self.events:addAction(Event.KEY, function() App.changeScene(BuilderScene) end, 'f')
+    self.events:addAction(Event.KEY, function() App.changeScene(PauseScene) end, 'space')
+    self.events:addAction(Event.KEY, function() App.changeSceneWithParam(BuilderScene, self.hero) end, 'f')
 end
 
 function SpaceScene:sleep()

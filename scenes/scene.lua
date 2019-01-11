@@ -29,7 +29,8 @@ function Scene:new()
     return newObj
 end
 
-function Scene:load() end
+---@param prevScene Scene
+function Scene:load(prevScene) end
 
 ---@param dt number
 function Scene:update(dt) end
