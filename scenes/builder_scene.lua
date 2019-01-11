@@ -58,6 +58,7 @@ function BuilderScene:awake(prevScene)
                     0, params.x, params.y
                 ) then
                     self.events:addAction(Event.MOUSE_MOVE, function(moveParams) go:setPosition(Draw:calcRealX(moveParams.x), Draw:calcRealY(moveParams.y)) end, nil, 'drag')
+                    self.events:addAction(Event.WHEEL, function(wheelParams) go:forceRotate(wheelParams.y * 0.1) end, nil, 'drag')
                 end
             end
         end, 1
@@ -65,6 +66,7 @@ function BuilderScene:awake(prevScene)
     self.events:addAction(Event.MOUSE_RELEASE,
         function(params)
             self.events:removeAction(Event.MOUSE_MOVE, nil, 'drag')
+            self.events:removeAction(Event.WHEEL, nil, 'drag')
         end, 1
     )
 

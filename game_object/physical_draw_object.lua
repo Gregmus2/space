@@ -29,6 +29,11 @@ function PhysicalDrawObject:rotate(dt, direction)
     self.physics:getBody():applyAngularImpulse(self.rotateSpeed * dt * direction)
 end
 
+---@param angle number
+function PhysicalDrawObject:forceRotate(angle)
+    self.physics:getBody():setAngle(self.physics:getBody():getAngle() + angle)
+end
+
 ---@param dt number
 ---@param direction number
 function PhysicalDrawObject:move(dt, direction)
