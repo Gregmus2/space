@@ -1,4 +1,6 @@
 require('app')
+require('utils.string')
+require('utils.table')
 local Event = require('enum.event')
 
 ---@param actions function[]
