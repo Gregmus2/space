@@ -121,6 +121,15 @@ function GameObjectBuilder:addPolygonPhysics(world, vertexes, bodyType, mass, li
         local shape = love.physics.newPolygonShape(vertexes)
         self.physics = self:addPhysics(shape, world, bodyType, mass, linearDamping, friction)
     else
+        --[[
+            если вершин более 8(на одну вершину x и y), то нужно делить их на полигоны,
+            так как box2d не принимает полигоны с более 8 вершинами. В таком кейсе
+            выходит объект, состоящий из vertexes/8 связанных между собой полигонов
+            + каждый полигон должен начинаться с 0, 0, таким образом образуется фигура пиццы или пирога,
+            что скрывает пробелы между полигонами
+            + нельзя иметь полигон с меньше, чем 3 вершинами, поэтому приходится
+            распределять вершины равномерно по полигонам, этим и занимается этот кусок.
+        --]]
         self.physics = {}
         local groups = math.ceil((countOfVertexes - 2) / 14)
         local vertexesInGroup = (math.ceil((countOfVertexes - 2) / 2 / groups)) * 2
