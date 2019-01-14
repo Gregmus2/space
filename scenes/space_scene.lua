@@ -25,16 +25,16 @@ function SpaceScene:load(prevScene)
     self.isLoaded = true
     self.world = love.physics.newWorld(0, 0, true)
 
-    for _ = 0, 100 do
+    for _ = 0, 15 do
         local color = Color:new(love.math.random(), love.math.random(), love.math.random())
-        local w = love.math.random(5, 150)
-        local h = love.math.random(5, 150)
+        local vertexes = PolygonFactory.generateRandomConvex(20, 20, 500)
+
         local go = GameObjectBuilder:new(
             love.math.random(0, 5000),
             love.math.random(0, 5000)
         )
-            :addRectangleDraw('fill', color, w, h)
-            :addRectanglePhysics(self.world, w, h, 'dynamic', 1)
+            :addPolygonDraw('fill', color, vertexes)
+            :addPolygonPhysics(self.world, vertexes, 'dynamic', 1)
             :createGameObject()
         self.objects[#self.objects + 1] = go
     end

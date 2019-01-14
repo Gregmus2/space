@@ -112,7 +112,7 @@ end
 ---@param friction number|nil
 ---@return GameObjectBuilder
 function GameObjectBuilder:addPolygonPhysics(world, vertexes, bodyType, mass, linearDamping, friction)
-    local shape = love.physics.newPolygonShape(vertexes)
+    local shape = love.physics.newChainShape(true, vertexes)
     self:addPhysics(shape, world, bodyType, mass, linearDamping, friction)
 
     return self
