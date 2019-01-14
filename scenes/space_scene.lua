@@ -27,14 +27,14 @@ function SpaceScene:load(prevScene)
 
     for _ = 0, 15 do
         local color = Color:new(love.math.random(), love.math.random(), love.math.random())
-        local vertexes = PolygonFactory.generateRandomConvex(20, 20, 500)
+        local vertexes = PolygonFactory.generateRandomConvex(17, 17, 500)
 
         local go = GameObjectBuilder:new(
             love.math.random(0, 5000),
             love.math.random(0, 5000)
         )
             :addPolygonDraw('fill', color, vertexes)
-            :addPolygonPhysics(self.world, vertexes, 'dynamic', 1)
+            :addPolygonPhysics(self.world, vertexes, 'dynamic', 0.1)
             :createGameObject()
         self.objects[#self.objects + 1] = go
     end

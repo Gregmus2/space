@@ -2,7 +2,9 @@
 local PolygonFactory = {}
 
 --- http://cglab.ca/~sander/misc/ConvexGeneration/convex.html
----
+---@param minPoints number
+---@param maxPoints number
+---@param avgSize number
 function PolygonFactory.generateRandomConvex(minPoints, maxPoints, avgSize)
     local X, Y, avgHalfSize = {}, {}, math.floor(avgSize / 2)
 
