@@ -37,8 +37,20 @@ function ShipComponentBuilder:buildEngine(world, scene, x, y, color, vertexes, m
     particle:setDirection(engine.physics:getBody():getAngle() - 3.14159)
     scene:addParticle(particle)
 
+    --particles
     scene.events:addAction(Event.KEY, function() particle:start() end, 'w')
     scene.events:addAction(Event.KEY_RELEASE, function() particle:pause() end, 'w')
+
+    -- sound
+    scene.events:addAction(Event.KEY, function()
+        TEsound.play('resources/engine_start.wav', 'static', {'engine_start'}, 1, 1, function()
+            TEsound.playLooping('resources/engine.wav', 'static', {'engine'})
+        end)
+    end, 'w')
+    scene.events:addAction(Event.KEY_RELEASE, function()
+        TEsound.stop('engine_start')
+        TEsound.stop('engine')
+    end, 'w')
 
     return engine
 end

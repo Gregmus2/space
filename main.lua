@@ -1,6 +1,7 @@
 require('app')
 require('utils.string')
 require('utils.table')
+require('lib.tesound')
 local Event = require('enum.event')
 
 ---@param actions function[]
@@ -22,6 +23,7 @@ function love.update(dt)
     triggerEvent(actions, {dt = dt})
 
     App.update(dt)
+    TEsound.cleanup()
 end
 
 function love.mousepressed(x, y, button)
