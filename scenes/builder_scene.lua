@@ -7,7 +7,7 @@ local PolygonFactory = require('factory.polygon_factory')
 
 ---@class BuilderScene : Scene
 ---@field protected world World
----@field protected draggableObject PhysicalDrawObject[]
+---@field protected draggableObject GameObject[]
 local BuilderScene = Scene:new()
 
 ---@param hero Ship
@@ -29,7 +29,7 @@ function BuilderScene:load(prevScene, hero)
     self.events:addAction(Event.KEY, function()
         local engine = ShipComponentBuilder:buildEngine(hero:getWorld(), prevScene, Draw:calcRealX(100), Draw:calcRealY(100), Color:red(), PolygonFactory.generateRocket(20, 40, 10), 0.1, 1500)
         self.hero:addEngine(engine)
-        table.insert(self.draggableObject, engine)
+        table.insert(self.draggableObjects, engine)
     end, 'space')
 
     self.events:addAction(Event.KEY, function() App.changeScene(prevScene) end, 'f')
@@ -48,9 +48,9 @@ function BuilderScene:draggableEvent()
         function(params)
             ---@param go PhysicalDrawObject
             for _, go in ipairs(self.draggableObjects) do
-                if go.physics:getShape():testPoint(
-                    Draw.calcX(go.physics:getBody():getX()),
-                    Draw.calcY(go.physics:getBody():getY()),
+                if go.fixture:getShape():testPoint(
+                    Draw.calcX(go.fixture:getBody():getX()),
+                    Draw.calcY(go.fixture:getBody():getY()),
                     0, params.x, params.y
                 ) then
                     self.events:addAction(Event.MOUSE_MOVE, function(moveParams) go:setPosition(Draw:calcRealX(moveParams.x), Draw:calcRealY(moveParams.y)) end, nil, uniqName)

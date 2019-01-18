@@ -2,10 +2,9 @@ local EventCollection = require('collection.event_collection')
 local Menu = require('menu')
 local Event = require('enum.event')
 local Params = require('params')
-local Draw = require('drawable.drawable')
 
 ---@class Scene
----@field public objects GameObject[]
+---@field public objects GameObject[]|DrawObject[]
 ---@field public world World
 ---@field public isLoaded boolean
 ---@field public events EventCollection

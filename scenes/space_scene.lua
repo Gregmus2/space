@@ -7,9 +7,10 @@ local PolygonFactory = require('factory.polygon_factory')
 local ShipComponentBuilder = require('ship_component_builder')
 local Event = require('enum.event')
 local Ship = require('ship_components.ship')
+local Polygon = require('drawable.polygon')
 
 ---@class SpaceScene : Scene
----@field protected hero GameObject
+---@field protected hero Ship
 ---@field protected cameraState table<string, any>
 local SpaceScene = Scene:new()
 
@@ -28,14 +29,15 @@ function SpaceScene:load(prevScene)
     for _ = 0, 15 do
         local color = Color:new(love.math.random(), love.math.random(), love.math.random())
         local vertexes = PolygonFactory.generateRandomConvex(17, 17, 500)
+        local polygon = Polygon:new('fill', color, vertexes)
 
         local go = GameObjectBuilder:new(
             love.math.random(0, 5000),
             love.math.random(0, 5000)
         )
-            :addPolygonDraw('fill', color, vertexes)
             :addPolygonPhysics(self.world, vertexes, 'dynamic', 0.1)
             :createGameObject()
+            :addDraw(polygon)
         self.objects[#self.objects + 1] = go
     end
 

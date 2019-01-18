@@ -1,18 +1,18 @@
-local PhysicalDrawObject = require('game_object.physical_draw_object')
+local GameObject = require('game_object.game_object')
 
----@class Core : PhysicalDrawObject
+---@class Core : GameObject
 ---@field public drawable Draw
----@field public physics Fixture
+---@field public fixture Fixture
 ---@field protected rotateSpeed number
-local Core = PhysicalDrawObject:new()
+local Core = GameObject:new()
 
 ---@param drawable Draw
----@param physics Fixture
+---@param fixture Fixture
 ---@param rotateSpeed number
-function Core:new(drawable, physics, rotateSpeed)
+function Core:new(drawable, fixture, rotateSpeed)
     local newObj = {
         drawable = drawable,
-        physics = physics,
+        fixture = fixture,
         rotateSpeed = rotateSpeed
     }
     setmetatable(newObj, self)

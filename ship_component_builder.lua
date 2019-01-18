@@ -34,7 +34,7 @@ function ShipComponentBuilder:buildEngine(world, scene, x, y, color, vertexes, m
     local engine = Engine:new(draw, fixture, speed, particle)
     particle:stop()
     particle:setPosition(x, y)
-    particle:setDirection(engine.physics:getBody():getAngle() - 3.14159)
+    particle:setDirection(engine.fixture:getBody():getAngle() - 3.14159)
     scene:addParticle(particle)
 
     --particles
@@ -70,10 +70,10 @@ function ShipComponentBuilder.build(world, x, y, color, vertexes, mass)
     body:setFixedRotation(false)
     body:setLinearDamping(1)
     body:setAngularDamping(10)
-    local physics = love.physics.newFixture(body, shape, mass)
-    physics:setFriction(Params.default.friction)
+    local fixture = love.physics.newFixture(body, shape, mass)
+    fixture:setFriction(Params.default.friction)
 
-    return draw, physics
+    return draw, fixture
 end
 
 return ShipComponentBuilder

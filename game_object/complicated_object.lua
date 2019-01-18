@@ -3,17 +3,16 @@ local Params = require('params')
 
 ---@class ComplicatedObject : PhysicalDrawObject
 ---@field public drawable[] Draw
----@field public physics[] Fixture
+---@field public fixture[] Fixture
 ---@field protected speed number
 ---@field protected rotateSpeed number
 local ComplicatedObject = GameObject:new()
 
----@param drawable Draw[]
----@param physics Fixture[]
-function ComplicatedObject:new(drawable, physics)
+---@param fixture Fixture[]
+function ComplicatedObject:new(fixture)
     local newObj = {
-        drawable = drawable,
-        physics = physics,
+        drawable = {},
+        fixture = fixture,
         speed = 5000,
         rotateSpeed = 50
     }
@@ -21,6 +20,14 @@ function ComplicatedObject:new(drawable, physics)
     self.__index = self
 
     return newObj
+end
+
+---@param draw Draw
+---@return GameObject
+function GameObject:addDraw(draw)
+    self.drawable[#self.drawable + 1] = draw
+
+    return self
 end
 
 ---@param dt number
@@ -43,11 +50,15 @@ function ComplicatedObject:setPosition(x, y) end
 
 -- TODO refactoring
 function ComplicatedObject:draw()
-    local x, y = self.physics[1]:getBody():getPosition()
+    if #self.drawable == 0 then
+        return
+    end
+
+    local x, y = self.fixture[1]:getBody():getPosition()
     local distance = math.sqrt((x - (App.camera.x)) ^ 2 + (y - (App.camera.y)) ^ 2) - self.drawable[1].visibilityRadius
     if math.abs(distance) <= Params.screenOutRadius * (1/App.camera.scale) then
         for _, drawable in ipairs(self.drawable) do
-            drawable:draw(x, y, self.physics[1]:getBody():getAngle())
+            drawable:draw(x, y, self.fixture[1]:getBody():getAngle())
         end
     end
 end
