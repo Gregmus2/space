@@ -8,7 +8,7 @@ local EventFactory = require('factory.event_factory')
 
 ---@class BuilderScene : Scene
 ---@field protected world World
----@field protected draggableObject PhysicalDrawObject[]
+---@field protected draggableObject GameObject[]
 local BuilderScene = Scene:new()
 
 ---@param hero Ship

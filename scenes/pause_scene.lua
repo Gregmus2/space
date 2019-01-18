@@ -1,7 +1,8 @@
 local Scene = require('scenes.scene')
 local Color = require('color')
-local GameObjectBuilder = require('game_object_builder')
+local DrawObject = require('game_object.draw_object')
 local Event = require('enum.event')
+local Rectangle = require('drawable.rectangle')
 
 ---@class LoadScene : Scene
 local LoadScene = Scene:new()
@@ -13,15 +14,9 @@ function LoadScene:load(prevScene)
     end
     self.isLoaded = true
 
-    local gameObject1 = GameObjectBuilder
-        :new(App.camera.x - 50, App.camera.y)
-        :addRectangleDraw('fill', Color:white(), 50, 100)
-        :createGameObject()
-
-    local gameObject2 = GameObjectBuilder
-        :new(App.camera.x + 50, App.camera.y)
-        :addRectangleDraw('fill', Color:white(), 50, 100)
-        :createGameObject()
+    local rect = Rectangle:new('fill', Color:white(), 50, 100)
+    local gameObject1 = DrawObject:new(rect, App.camera.x - 50, App.camera.y)
+    local gameObject2 = DrawObject:new(rect, App.camera.x + 50, App.camera.y)
 
     self.objects[#self.objects + 1] = gameObject1
     self.objects[#self.objects + 1] = gameObject2

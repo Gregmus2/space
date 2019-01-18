@@ -7,9 +7,10 @@ local PolygonFactory = require('factory.polygon_factory')
 local ShipComponentBuilder = require('ship_component_builder')
 local Event = require('enum.event')
 local Ship = require('ship_components.ship')
+local Rectangle = require('drawable.rectangle')
 
 ---@class SpaceScene : Scene
----@field protected hero GameObject
+---@field protected hero Ship
 ---@field protected cameraState table<string, any>
 local SpaceScene = Scene:new()
 
@@ -33,9 +34,9 @@ function SpaceScene:load(prevScene)
             love.math.random(0, 5000),
             love.math.random(0, 5000)
         )
-            :addRectangleDraw('fill', color, w, h)
             :addRectanglePhysics(self.world, w, h, 'dynamic', 1)
             :createGameObject()
+            :addDraw(Rectangle:new('fill', color, w, h))
         self.objects[#self.objects + 1] = go
     end
 

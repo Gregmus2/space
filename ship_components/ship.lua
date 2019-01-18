@@ -13,9 +13,9 @@ function Ship:new(core, engines)
         joints = {}
     }
 
-    local coreBody = core.physics:getBody()
+    local coreBody = core.fixture:getBody()
     for _, engine in ipairs(engines) do
-        local joint = love.physics.newWeldJoint( coreBody, engine.physics:getBody(), coreBody:getX(), coreBody:getY() )
+        local joint = love.physics.newWeldJoint( coreBody, engine.fixture:getBody(), coreBody:getX(), coreBody:getY() )
         newObj.joints[engine] = joint
     end
 
@@ -47,7 +47,7 @@ end
 
 ---@return number, number @ x, y
 function Ship:getPosition()
-    local body = self.core.physics:getBody()
+    local body = self.core.fixture:getBody()
 
     return body:getX(), body:getY()
 end
@@ -77,9 +77,9 @@ function Ship:unJoin()
 end
 
 function Ship:reJoin()
-    local coreBody = self.core.physics:getBody()
+    local coreBody = self.core.fixture:getBody()
     for _, engine in ipairs(self.engines) do
-        self.joints[engine] = love.physics.newWeldJoint( coreBody, engine.physics:getBody(), coreBody:getX(), coreBody:getY() )
+        self.joints[engine] = love.physics.newWeldJoint( coreBody, engine.fixture:getBody(), coreBody:getX(), coreBody:getY() )
     end
 end
 
@@ -91,7 +91,7 @@ end
 
 ---@return World
 function Ship:getWorld()
-    return self.core.physics:getBody():getWorld()
+    return self.core.fixture:getBody():getWorld()
 end
 
 return Ship

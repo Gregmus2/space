@@ -5,17 +5,17 @@ local Draw = require('drawable.drawable')
 local EventFactory= {}
 
 ---@param events EventCollection
----@param draggableObjects PhysicalDrawObject[]
+---@param draggableObjects GameObject[]
 function EventFactory.draggableEvent(events, draggableObjects)
     local uniqName = string.random(10)
 
     events:addAction(Event.MOUSE,
         function(params)
-            ---@param go PhysicalDrawObject
+            ---@param go GameObject
             for _, go in ipairs(draggableObjects) do
-                if go.physics:getShape():testPoint(
-                    Draw.calcX(go.physics:getBody():getX()),
-                    Draw.calcY(go.physics:getBody():getY()),
+                if go.fixture:getShape():testPoint(
+                    Draw.calcX(go.fixture:getBody():getX()),
+                    Draw.calcY(go.fixture:getBody():getY()),
                     0, params.x, params.y
                 ) then
                     events:addAction(Event.MOUSE_MOVE, function(moveParams) go:setPosition(Draw:calcRealX(moveParams.x), Draw:calcRealY(moveParams.y)) end, nil, uniqName)

@@ -1,27 +1,27 @@
-local PhysicalDrawObject = require('game_object.physical_draw_object')
+local GameObject = require('game_object.game_object')
 local Params = require('params')
 local Draw = require('drawable.drawable')
 
----@class Engine : PhysicalDrawObject
+---@class Engine : GameObject
 ---@field public drawable Draw
----@field public physics Fixture
+---@field public fixture Fixture
 ---@field protected speed number
 ---@field protected rotateSpeed number
 ---@field protected particle ParticleSystem
 ---@field protected joint Joint
-local Engine = PhysicalDrawObject:new()
+local Engine = GameObject:new()
 
 ---@param drawable Draw
----@param physics Fixture
+---@param fixture Fixture
 ---@param speed number
-function Engine:new(drawable, physics, speed, particle)
+function Engine:new(drawable, fixture, speed, particle)
     local newObj = {
         drawable = drawable,
-        physics = physics,
+        fixture = fixture,
         speed = speed,
         particle = particle
     }
-    physics:getBody():setFixedRotation(false)
+    fixture:getBody():setFixedRotation(false)
 
     setmetatable(newObj, self)
     self.__index = self
@@ -37,9 +37,9 @@ function Engine:rotate(dt, direction) end
 ---@param direction number
 function Engine:move(dt, direction)
     local dSpeed = direction * self.speed * dt
-    self.physics:getBody():applyForce(math.cos(self.physics:getBody():getAngle()) * dSpeed, math.sin(self.physics:getBody():getAngle()) * dSpeed)
+    self.fixture:getBody():applyForce(math.cos(self.fixture:getBody():getAngle()) * dSpeed, math.sin(self.fixture:getBody():getAngle()) * dSpeed)
 
-    self.particle:setDirection(self.physics:getBody():getAngle() - 3.14159)
+    self.particle:setDirection(self.fixture:getBody():getAngle() - 3.14159)
     self.particle:moveTo(self:getPosition())
 end
 
@@ -49,7 +49,7 @@ function Engine:draw()
     local x, y = self:getPosition()
     local distance = math.sqrt((x - (App.camera.x)) ^ 2 + (y - (App.camera.y)) ^ 2) - self.drawable.visibilityRadius
     if math.abs(distance) <= Params.screenOutRadius * (1/App.camera.scale) then
-        self.drawable:draw(x, y, self.physics:getBody():getAngle())
+        self.drawable:draw(x, y, self.fixture:getBody():getAngle())
     end
 end
 
