@@ -1,13 +1,27 @@
 local Scene = require('scenes.scene')
+local Color = require('color')
+local Draw = require('drawable.drawable')
+local ShipComponentBuilder = require('ship_component_builder')
+local PolygonFactory = require('factory.polygon_factory')
+local Collection = require('collection.collection')
+local Grid = require('menu.grid')
 
 ---@class TestScene : Scene
 local TestScene = Scene:new()
 
 function TestScene:load(prevScene)
-    if self.isLoaded then
-        return
+    self.objects = {}
+    self.world = love.physics.newWorld(0, 0, true)
+
+    local engines = {}
+    for i = 1, 15 do
+        engines[i] = ShipComponentBuilder:buildEngine(self.world, prevScene, Draw:calcRealX(100), Draw:calcRealY(100), Color:red(), PolygonFactory.generateRocket(20, 40, 10), 0.1, 1500)
+        self.objects[#self.objects + 1] = engines[i]
     end
-    self.isLoaded = true
+    local grid = Grid:new(App.camera.x, App.camera.y, 400, 500, 2, 100)
+    local collection = Collection:new(engines)
+    grid:setCollection(collection)
+    self.menu:addGrid(grid)
 end
 
 return TestScene

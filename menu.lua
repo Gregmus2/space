@@ -4,7 +4,8 @@ local Menu = {}
 
 function Menu:new()
     local newObj = {
-        buttons = {}
+        buttons = {},
+        grids = {}
     }
     self.__index = self
     setmetatable(newObj, self)
@@ -27,9 +28,18 @@ function Menu:addButton(button)
     self.buttons[#self.buttons + 1] = button
 end
 
+---@param grid Grid
+function Menu:addGrid(grid)
+    self.grids[#self.grids + 1] = grid
+end
+
 function Menu:draw()
     for _, button in ipairs(self.buttons) do
         button:draw()
+    end
+    -- todo refactoring
+    for _, grid in ipairs(self.grids) do
+        grid:draw()
     end
 end
 
