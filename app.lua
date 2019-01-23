@@ -28,8 +28,9 @@ function App.changeScene(scene)
     App.scene:sleep()
     App.camera:reset()
     collectgarbage()
-    scene:load(App.scene)
+    local prevScene = App.scene
     App.scene = scene
+    scene:load(prevScene)
 end
 
 ---@param scene Scene
@@ -38,8 +39,9 @@ function App.changeSceneWithParam(scene, param)
     App.scene:sleep()
     App.camera:reset()
     collectgarbage()
-    scene:load(App.scene, param)
+    local prevScene = App.scene
     App.scene = scene
+    scene:load(prevScene, param)
 end
 
 ---@param dt number

@@ -1,6 +1,5 @@
-local Rectangle = require('drawable.rectangle')
 local Color = require('color')
-local MenuObject = require('menu.menu')
+local Scroll = require('menu.scroll')
 
 ---@class Grid : MenuObject
 ---@field protected x number
@@ -14,7 +13,9 @@ local MenuObject = require('menu.menu')
 ---@field protected columnHeight number
 ---@field protected columnWidth number
 ---@field protected collectionLength number
-local Grid = MenuObject:new()
+---@field protected scroll Scroll|nil
+---@field protected offset number
+local Grid = {}
 
 ---@param x number
 ---@param y number
@@ -33,7 +34,9 @@ function Grid:new(x, y, w, h, columns, columnHeight, color)
         color = color or Color:white(),
         grid = {},
         collectionLength = 0,
-        columnWidth = w / columns
+        columnWidth = w / columns,
+        offset = 0,
+        scroll = Scroll:new(0, 10)
     }
     setmetatable(newObj, self)
     self.__index = self
@@ -41,9 +44,16 @@ function Grid:new(x, y, w, h, columns, columnHeight, color)
     return newObj
 end
 
-function Grid:recalculateGrid()
-    self.grid = self.collection:chunk(self.columns)
+function Grid:handleScroll()
     self.collectionLength = self.collection:getCount()
+    local diff = (self.collection:getCount() / 2) * self.columnHeight - self.h
+    self.scroll = Scroll:new(diff, 10)
+end
+
+function Grid:recalculateGrid()
+    local firstValue = math.floor(self.offset / self.columnHeight)
+    local endValue = math.ceil(self.h / self.columnHeight) + firstValue + 1
+    self.grid = self.collection:chunk(self.columns, (firstValue * 2) + 1, endValue * 2)
 end
 
 ---@param collection Collection
@@ -53,8 +63,12 @@ function Grid:setCollection(collection)
 end
 
 function Grid:draw()
-    if self.collectionLength ~= self.collection:getCount() then
+    if self.scroll:getCurrent() ~= self.offset then
+        self.offset = self.scroll:getCurrent()
         self:recalculateGrid()
+    end
+    if self.collectionLength ~= self.collection:getCount() then
+        self:handleScroll()
     end
 
     love.graphics.setColor(self.color.r, self.color.g, self.color.b)
@@ -62,13 +76,24 @@ function Grid:draw()
 
     local x2 = self.x + self.w
     -- todo сжимать объект, чтобы вмещался в ячейку
-    for i, row in ipairs(self.grid) do
-        local y = self.y + self.columnHeight * i
-        love.graphics.line(self.x, y, x2, y)
-
-        for j, element in ipairs(row) do
-            element:setPosition(self.x + self.columnWidth * (j - 0.5), y - self.columnHeight / 2)
+    local y2 = self.y + self.h
+    for i = 1, #self.grid do
+        local y = (self.y - self.offset % self.columnHeight) + self.columnHeight * i
+        for j, element in ipairs(self.grid[i]) do
+            local elementY = y - self.columnHeight / 2
+            if
+                elementY - element.drawable.visibilityRadius > self.y and
+                elementY + element.drawable.visibilityRadius < y2
+            then
+                element:setPosition(self.x + self.columnWidth * (j - 0.5), elementY)
+                element:draw()
+            end
         end
+        if i == #self.grid then
+            break;
+        end
+
+        love.graphics.line(self.x, y, x2, y)
     end
 
     local x = self.x + self.w / 2

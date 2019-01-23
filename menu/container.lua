@@ -1,6 +1,4 @@
-local Rectangle = require('drawable.rectangle')
 local Color = require('color')
-local MenuObject = require('menu.menu')
 
 ---@class Container : MenuObject
 ---@field protected x number
@@ -9,7 +7,7 @@ local MenuObject = require('menu.menu')
 ---@field protected h number
 ---@field protected color Color
 ---@field protected objects MenuObject[]
-local Container = MenuObject:new()
+local Container = {}
 
 ---@param x number
 ---@param y number

@@ -40,14 +40,14 @@ end
 
 ---@param chunkCount number
 ---@return table[]
-function Collection:chunk(chunkCount)
+function Collection:chunk(chunkCount, startElement, endElement)
     assert(chunkCount > 0, 'Can\'t split by zero or less')
 
     local chunks = {}
     local currentChunk = {}
     local counter = 0
 
-    for i = 1, self.count do
+    for i = startElement, endElement do
         currentChunk[#currentChunk + 1] = self.elements[i]
         counter = counter + 1
         if counter == chunkCount then
