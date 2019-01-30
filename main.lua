@@ -1,6 +1,7 @@
 require('app')
 require('utils.string')
 require('utils.table')
+require('utils.oop')
 require('lib.tesound')
 local Event = require('enum.event')
 

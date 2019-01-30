@@ -10,6 +10,8 @@ function MenuObject:new()
     return newObj
 end
 
+function MenuObject:update() end
+
 function MenuObject:draw() end
 
 return MenuObject

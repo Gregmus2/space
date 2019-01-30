@@ -25,6 +25,7 @@ end
 ---@param x number
 ---@param y number
 function Polygon:draw(x, y, angle)
+    love.graphics.push()
     love.graphics.setColor(self.color.r, self.color.g, self.color.b)
 
     local realXCenter = self.calcX(x)
@@ -32,7 +33,7 @@ function Polygon:draw(x, y, angle)
     self:rotate(realXCenter, realYCenter, angle)
 
     love.graphics.polygon(self.mode, self:calcRealVertexes(x, y))
-    love.graphics.reset()
+    love.graphics.pop()
 end
 
 ---@param x number

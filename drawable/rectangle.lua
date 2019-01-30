@@ -27,6 +27,7 @@ end
 ---@param x number
 ---@param y number
 function Rectangle:draw(x, y, angle)
+    love.graphics.push()
     love.graphics.setColor(self.color.r, self.color.g, self.color.b)
 
     local realXCenter = self.calcX(x)
@@ -39,7 +40,7 @@ function Rectangle:draw(x, y, angle)
         self.w * App.camera.scale,
         self.h * App.camera.scale
     )
-    love.graphics.reset()
+    love.graphics.pop()
 end
 
 return Rectangle

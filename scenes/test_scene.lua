@@ -20,7 +20,11 @@ function TestScene:load(prevScene)
     local grid = Grid:new(App.camera.x, App.camera.y, 400, 500, 2, 100)
     local collection = Collection:new(engines)
     grid:setCollection(collection)
-    self.menu:addGrid(grid)
+    self.menu:addElement(grid)
+end
+
+function TestScene:update(dt)
+    self.menu:update()
 end
 
 return TestScene
