@@ -28,7 +28,7 @@ function SpaceScene:load(prevScene)
 
     for _ = 0, 15 do
         local color = Color:new(love.math.random(), love.math.random(), love.math.random())
-        local vertexes = PolygonFactory.generateRandomConvex(17, 17, 500)
+        local vertexes = PolygonFactory.generateRandomConvex(15, 30, 500)
         local polygon = Polygon:new('fill', color, vertexes)
 
         local go = GameObjectBuilder:new(

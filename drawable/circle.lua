@@ -23,12 +23,13 @@ end
 
 ---@param x number
 ---@param y number
-function Circle:draw(x, y, angle)
-    love.graphics.setColor(self.color.r, self.color.g, self.color.b)
+---@param realX number
+---@param realY number
+function Circle:drawShape(x, y, realX, realY)
     love.graphics.circle(
         self.mode,
-        self.calcX(x),
-        self.calcY(y),
+        realX,
+        realY,
         self.r * App.camera.scale
     )
 end

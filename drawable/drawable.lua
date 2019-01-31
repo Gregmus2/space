@@ -4,6 +4,7 @@ local params = require('params')
 ---@field public visibilityRadius number
 ---@field public color Color
 ---@field public mode string
+---@field public shader string
 local Draw = {}
 
 function Draw:new()
@@ -16,7 +17,26 @@ end
 
 ---@param x number
 ---@param y number
-function Draw:draw(x, y, angle) end
+function Draw:draw(x, y, angle)
+    love.graphics.push()
+    love.graphics.setShader(self.shader)
+    love.graphics.setColor(self.color.r, self.color.g, self.color.b)
+
+    local realXCenter = self.calcX(x)
+    local realYCenter = self.calcY(y)
+    self:rotate(realXCenter, realYCenter, angle)
+
+    self:drawShape(x, y, realXCenter, realYCenter)
+    love.graphics.setShader()
+    love.graphics.pop()
+end
+
+---@protected
+---@param x number
+---@param y number
+---@param realX number
+---@param realY number
+function Draw:drawShape(x, y, realX, realY) end
 
 ---@param x number
 ---@return number

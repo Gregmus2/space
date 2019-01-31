@@ -22,18 +22,13 @@ function Polygon:new(mode, color, vertexes)
     return newObj
 end
 
+---@protected
 ---@param x number
 ---@param y number
-function Polygon:draw(x, y, angle)
-    love.graphics.push()
-    love.graphics.setColor(self.color.r, self.color.g, self.color.b)
-
-    local realXCenter = self.calcX(x)
-    local realYCenter = self.calcY(y)
-    self:rotate(realXCenter, realYCenter, angle)
-
+---@param realX number
+---@param realY number
+function Polygon:drawShape(x, y, realX, realY)
     love.graphics.polygon(self.mode, self:calcRealVertexes(x, y))
-    love.graphics.pop()
 end
 
 ---@param x number

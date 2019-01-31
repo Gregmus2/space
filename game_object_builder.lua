@@ -88,19 +88,28 @@ function GameObjectBuilder:addPolygonPhysics(world, vertexes, bodyType, mass, li
             так как box2d не принимает полигоны с более 8 вершинами. В таком кейсе
             выходит объект, состоящий из vertexes/8 связанных между собой полигонов
             + каждый полигон должен начинаться с 0, 0, таким образом образуется фигура пиццы или пирога,
-            что скрывает пробелы между полигонами
+            что скрывает пробелы между полигонами. Только нулевая вершина находится не в центре фигуры,
+            а скраю
             + нельзя иметь полигон с меньше, чем 3 вершинами, поэтому приходится
             распределять вершины равномерно по полигонам, этим и занимается этот кусок.
         --]]
         self.fixture = {}
-        local groups = math.ceil((countOfVertexes - 2) / 14)
+        --[[
+            8 = максимальное кол-во вершин
+            (8 - 2) = две зарезервированные вершины (0-я вершина и вершина для стыка с прошлым полигоном)
+            * 2 = количество точек (x, y)
+            (countOfVertexes - 2) = минус нулевая вершина (0, 0)
+        --]]
+        local groups = math.ceil((countOfVertexes - 2) / ((8 - 2) * 2))
         local vertexesInGroup = (math.ceil((countOfVertexes - 2) / 2 / groups)) * 2
         for i = 1, groups do
             local vertexesPart = {}
-            local a = (i-1)*vertexesInGroup+3
+            local a = (i-1)*vertexesInGroup+5
             local remainder = countOfVertexes - a
-            table.move(vertexes, a, a + (remainder < vertexesInGroup and remainder or vertexesInGroup - 1), 3, vertexesPart)
+            -- копировать элементы от а до a + vertexesInGroup в vertexesPart на 5 элемент и далее (0-я вершина и вершина для склейки)
+            table.move(vertexes, a, a + (remainder < vertexesInGroup and remainder or vertexesInGroup - 1), 5, vertexesPart)
             vertexesPart[1], vertexesPart[2] = 0, 0
+            vertexesPart[3], vertexesPart[4] = vertexes[a-2], vertexes[a-1]
             local shape = love.physics.newPolygonShape(vertexesPart)
             self.fixture[i] = self:addPhysics(shape, world, bodyType, mass, linearDamping, friction)
         end

@@ -23,8 +23,8 @@ function ComplicatedObject:new(fixture)
 end
 
 ---@param draw Draw
----@return GameObject
-function GameObject:addDraw(draw)
+---@return ComplicatedObject
+function ComplicatedObject:addDraw(draw)
     self.drawable[#self.drawable + 1] = draw
 
     return self

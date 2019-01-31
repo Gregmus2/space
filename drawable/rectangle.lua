@@ -26,21 +26,16 @@ end
 
 ---@param x number
 ---@param y number
-function Rectangle:draw(x, y, angle)
-    love.graphics.push()
-    love.graphics.setColor(self.color.r, self.color.g, self.color.b)
-
-    local realXCenter = self.calcX(x)
-    local realYCenter = self.calcY(y)
-    self:rotate(realXCenter, realYCenter, angle)
+---@param realX number
+---@param realY number
+function Rectangle:drawShape(x, y, realX, realY)
     love.graphics.rectangle(
         self.mode,
-        realXCenter - self.w * App.camera.scale / 2,
-        realYCenter - self.h * App.camera.scale / 2,
+        realX - self.w * App.camera.scale / 2,
+        realY - self.h * App.camera.scale / 2,
         self.w * App.camera.scale,
         self.h * App.camera.scale
     )
-    love.graphics.pop()
 end
 
 return Rectangle
