@@ -1,9 +1,14 @@
 local Params = require('params')
 local Core = require('ship_components.core')
 local Engine = require('ship_components.engine')
+local Weapon = require('ship_components.weapon')
 local Polygon = require('drawable.polygon')
 local ParticlesFactory = require('factory.particles_factory')
+local GameObjectBuilder = require('game_object_builder')
 local Event = require('enum.event')
+local BulletEmitter = require('bullet_emitter')
+local Circle = require('drawable.circle')
+local Color = require('color')
 
 ---@class ShipComponentBuilder
 local ShipComponentBuilder = {}
@@ -35,7 +40,7 @@ function ShipComponentBuilder:buildEngine(world, scene, x, y, color, vertexes, m
     particle:stop()
     particle:setPosition(x, y)
     particle:setDirection(engine.fixture:getBody():getAngle() - 3.14159)
-    scene:addParticle(particle)
+    scene:addUpdatable(particle)
 
     --particles
     scene.events:addAction(Event.KEY, function() particle:start() end, 'w')
@@ -53,6 +58,29 @@ function ShipComponentBuilder:buildEngine(world, scene, x, y, color, vertexes, m
     end, 'w')
 
     return engine
+end
+
+---@param world World
+---@param scene Scene
+---@param x number
+---@param y number
+---@param color Color
+---@param vertexes number[]
+---@param mass number
+function ShipComponentBuilder:buildWeapon(world, scene, x, y, color, vertexes, mass)
+    local draw, fixture = self.build(world, x, y, color, vertexes, mass)
+    local bulletPrototype = GameObjectBuilder:new(x, y)
+        :addCirclePhysics(world, 5, 'dynamic', 0.1, 0)
+        :createGameObject()
+        :addDraw(Circle:new('fill', Color:white(), 5))
+    local bulletEmitter = BulletEmitter:new(x, y, 0, 5, bulletPrototype)
+    local weapon =  Weapon:new(draw, fixture, bulletEmitter)
+    scene:addUpdatable(weapon)
+
+    scene.events:addAction(Event.MOUSE, function() bulletEmitter:start() end, 1)
+    scene.events:addAction(Event.MOUSE_RELEASE, function() bulletEmitter:stop() end, 1)
+
+    return weapon
 end
 
 ---@protected

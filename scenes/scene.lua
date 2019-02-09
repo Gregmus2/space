@@ -2,6 +2,7 @@ local EventCollection = require('collection.event_collection')
 local Menu = require('menu')
 local Event = require('enum.event')
 local Params = require('params')
+local Updatable = require('interface.updatable')
 
 ---@class Scene
 ---@field public objects GameObject[]|DrawObject[]
@@ -9,7 +10,7 @@ local Params = require('params')
 ---@field public isLoaded boolean
 ---@field public events EventCollection
 ---@field public menu Menu
----@field protected particles ParticleSystem[]
+---@field protected updatable Updatable[]
 local Scene = {}
 
 function Scene:new()
@@ -19,7 +20,7 @@ function Scene:new()
         world = nil,
         isLoaded = false,
         menu = Menu:new(),
-        particles = {}
+        updatable = {}
     }
     self.__index = self
     setmetatable(newObj, self)
@@ -32,7 +33,9 @@ end
 function Scene:load(prevScene) end
 
 ---@param dt number
-function Scene:update(dt) end
+function Scene:update(dt)
+    self:updateElements(dt)
+end
 
 function Scene:sleep() end
 
@@ -45,15 +48,16 @@ end
 
 ---@protected
 ---@param dt number
-function Scene:updateParticles(dt)
-    for _, particle in ipairs(self.particles) do
-        particle:update(dt)
+function Scene:updateElements(dt)
+    for _, element in ipairs(self.updatable) do
+        element:update(dt)
     end
 end
 
----@param particle ParticleSystem
-function Scene:addParticle(particle)
-    self.particles[#self.particles + 1] = particle
+---@param updatable Updatable
+function Scene:addUpdatable(updatable)
+    assert(isImplement(updatable, Updatable), 'object hasn\'t update method')
+    self.updatable[#self.updatable + 1] = updatable
 end
 
 return Scene

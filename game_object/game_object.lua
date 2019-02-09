@@ -39,6 +39,11 @@ function GameObject:forceRotate(angle)
     self.fixture:getBody():setAngle(self.fixture:getBody():getAngle() + angle)
 end
 
+---@param angle number
+function GameObject:setAngle(angle)
+    self.fixture:getBody():setAngle(angle)
+end
+
 ---@param dt number
 ---@param direction number
 function GameObject:move(dt, direction)
