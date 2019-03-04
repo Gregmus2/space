@@ -8,6 +8,9 @@ local ShipComponentBuilder = require('ship_component_builder')
 local Event = require('enum.event')
 local Ship = require('ship_components.ship')
 local Polygon = require('drawable.polygon')
+local Circle = require('drawable.circle')
+local BulletEmitter = require('bullet_emitter')
+local BulletsConfigModel = require('model.bullets_config_model')
 
 ---@class SpaceScene : Scene
 ---@field protected hero Ship
@@ -44,7 +47,8 @@ function SpaceScene:load(prevScene)
     local core = ShipComponentBuilder:buildCore(self.world, App.camera.x, App.camera.y, Color:white(), PolygonFactory.generateRectangle(50, 50), 0.1, 1000)
     local engine = ShipComponentBuilder:buildEngine(self.world, self, App.camera.x, App.camera.y - 35, Color:red(), PolygonFactory.generateRocket(20, 40, 10), 0.1, 1500)
     local engine2 = ShipComponentBuilder:buildEngine(self.world, self, App.camera.x, App.camera.y + 35, Color:red(), PolygonFactory.generateRocket(20, 40, 10), 0.1, 1500)
-    local weapon = ShipComponentBuilder:buildWeapon(self.world, self, App.camera.x + 50, App.camera.y, Color:blue(), PolygonFactory.generateRocket(10, 30, 5), 0.1)
+    local bulletEmitter = BulletEmitter:new(5, BulletsConfigModel:new(5, Circle:new('fill', Color:white(), 5), 50))
+    local weapon = ShipComponentBuilder:buildWeapon(self.world, self, App.camera.x + 50, App.camera.y, Color:blue(), PolygonFactory.generateRocket(10, 30, 5), 0.1, bulletEmitter)
     self.hero = Ship:new(core, {engine, engine2}, {weapon})
     self.objects[#self.objects + 1] = self.hero
 

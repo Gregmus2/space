@@ -4,11 +4,7 @@ local Engine = require('ship_components.engine')
 local Weapon = require('ship_components.weapon')
 local Polygon = require('drawable.polygon')
 local ParticlesFactory = require('factory.particles_factory')
-local GameObjectBuilder = require('game_object_builder')
 local Event = require('enum.event')
-local BulletEmitter = require('bullet_emitter')
-local Circle = require('drawable.circle')
-local Color = require('color')
 
 ---@class ShipComponentBuilder
 local ShipComponentBuilder = {}
@@ -67,9 +63,9 @@ end
 ---@param color Color
 ---@param vertexes number[]
 ---@param mass number
-function ShipComponentBuilder:buildWeapon(world, scene, x, y, color, vertexes, mass)
+---@param bulletEmitter BulletEmitter
+function ShipComponentBuilder:buildWeapon(world, scene, x, y, color, vertexes, mass, bulletEmitter)
     local draw, fixture = self.build(world, x, y, color, vertexes, mass)
-    local bulletEmitter = BulletEmitter:new(x, y, 0, 5)
     local weapon =  Weapon:new(draw, fixture, bulletEmitter)
     scene:addUpdatable(weapon)
 

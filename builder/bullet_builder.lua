@@ -1,19 +1,19 @@
 local GameObjectBuilder = require('game_object_builder')
-local Circle = require('drawable.circle')
-local Color = require('color')
 
 ---@class BulletBuilder
 local BulletBuilder = {}
 
+-- todo билдить разные типы пуль (форма)
+
 ---@param x number
 ---@param y number
 ---@return GameObject
-function BulletBuilder.buildBullet(x, y)
+function BulletBuilder.buildBullet(x, y, radius, draw)
     return GameObjectBuilder
         :new(x, y)
-        :addCirclePhysics(App.scene.world, 5, 'dynamic', 0.1, 0)
+        :addCirclePhysics(App.scene.world, radius, 'dynamic', 0.1, 0)
         :createGameObject()
-        :addDraw(Circle:new('fill', Color:white(), 5))
+        :addDraw(draw)
 end
 
 return BulletBuilder

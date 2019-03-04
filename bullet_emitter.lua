@@ -7,20 +7,17 @@ local BulletBuilder = require('builder.bullet_builder')
 ---@field protected creationPeriod number
 ---@field protected timer number
 ---@field protected bullets GameObject[]
+---@field protected bulletsConfig BulletsConfigModel
 local BulletEmitter = {}
 
----@param x number
----@param y number
 ---@param angle number
 ---@param bulletsPerSec number
-function BulletEmitter:new(x, y, angle, bulletsPerSec)
+function BulletEmitter:new(bulletsPerSec, bulletsConfig)
     local newObj = {
-        x = x,
-        y = y,
-        angle = angle,
         creationPeriod = 1 / bulletsPerSec,
         timer = 1 / bulletsPerSec,
-        bullets = {}
+        bullets = {},
+        bulletsConfig = bulletsConfig
     }
 
     setmetatable(newObj, self)
@@ -57,10 +54,12 @@ function BulletEmitter:update(dt)
         ---@type GameObject
         local bullet = BulletBuilder.buildBullet(
             self.x + math.cos(self.angle) * 30,
-            self.y + math.sin(self.angle) * 3
+            self.y + math.sin(self.angle) * 3,
+            self.bulletsConfig.radius,
+            self.bulletsConfig.draw
         )
         bullet:setAngle(self.angle)
-        bullet:move(50, 1)
+        bullet:move(self.bulletsConfig.speed * dt, 1)
         self.bullets[#self.bullets + 1] = bullet
     end
 end
