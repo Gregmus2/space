@@ -1,10 +1,11 @@
+local BulletBuilder = require('builder.bullet_builder')
+
 ---@class BulletEmitter
 ---@field protected x number
 ---@field protected y number
 ---@field protected angle number
 ---@field protected creationPeriod number
 ---@field protected timer number
----@field protected bulletPrototype GameObject
 ---@field protected bullets GameObject[]
 local BulletEmitter = {}
 
@@ -12,15 +13,13 @@ local BulletEmitter = {}
 ---@param y number
 ---@param angle number
 ---@param bulletsPerSec number
----@param bullet GameObject
-function BulletEmitter:new(x, y, angle, bulletsPerSec, bullet)
+function BulletEmitter:new(x, y, angle, bulletsPerSec)
     local newObj = {
         x = x,
         y = y,
         angle = angle,
         creationPeriod = 1 / bulletsPerSec,
         timer = 1 / bulletsPerSec,
-        bulletPrototype = bullet,
         bullets = {}
     }
 
@@ -56,11 +55,12 @@ function BulletEmitter:update(dt)
     self.timer = self.timer + dt
     if self.timer >= self.creationPeriod then
         ---@type GameObject
-        local bullet = table.deepCopy(self.bulletPrototype, 3) -- deep: gameObject -> fixture -> body !> world
-        bullet:setPosition(self.x + math.cos(self.angle) * 30, self.y + math.sin(self.angle) * 30)
-        --bullet:setAngle(self.angle)
-        -- todo if world wouldn't has the new bullet, we need to add bullet to world with BodyList
-        bullet:move(50, 0)
+        local bullet = BulletBuilder.buildBullet(
+            self.x + math.cos(self.angle) * 30,
+            self.y + math.sin(self.angle) * 3
+        )
+        bullet:setAngle(self.angle)
+        bullet:move(50, 1)
         self.bullets[#self.bullets + 1] = bullet
     end
 end

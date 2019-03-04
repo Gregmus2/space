@@ -69,11 +69,7 @@ end
 ---@param mass number
 function ShipComponentBuilder:buildWeapon(world, scene, x, y, color, vertexes, mass)
     local draw, fixture = self.build(world, x, y, color, vertexes, mass)
-    local bulletPrototype = GameObjectBuilder:new(x, y)
-        :addCirclePhysics(world, 5, 'dynamic', 0.1, 0)
-        :createGameObject()
-        :addDraw(Circle:new('fill', Color:white(), 5))
-    local bulletEmitter = BulletEmitter:new(x, y, 0, 5, bulletPrototype)
+    local bulletEmitter = BulletEmitter:new(x, y, 0, 5)
     local weapon =  Weapon:new(draw, fixture, bulletEmitter)
     scene:addUpdatable(weapon)
 
