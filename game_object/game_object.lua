@@ -2,7 +2,7 @@ local Params = require('params')
 
 ---@class GameObject
 ---@field public drawable Draw
----@field protected fixture Fixture
+---@field public fixture Fixture
 ---@field protected speed number
 ---@field protected rotateSpeed number
 local GameObject = {}

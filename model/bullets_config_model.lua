@@ -1,18 +1,18 @@
 ---@class BulletsConfigModel
 ---@field public radius number
----@field public draw Draw
+---@field public color Color
 ---@field public speed number
 local BulletsConfigModel = {}
 
 
 ---@param radius number
----@param draw Draw
+---@param color Color
 ---@param speed number
 ---@return BulletsConfigModel
-function BulletsConfigModel:new(radius, draw, speed)
+function BulletsConfigModel:new(radius, color, speed)
     local newObj = {
         radius = radius,
-        draw = draw,
+        color = color,
         speed = speed,
     }
     setmetatable(newObj, self)

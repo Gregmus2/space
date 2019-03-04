@@ -56,7 +56,7 @@ function BulletEmitter:update(dt)
             self.x + math.cos(self.angle) * 30,
             self.y + math.sin(self.angle) * 3,
             self.bulletsConfig.radius,
-            self.bulletsConfig.draw
+            self.bulletsConfig.color
         )
         bullet:setAngle(self.angle)
         bullet:move(self.bulletsConfig.speed * dt, 1)
