@@ -60,4 +60,25 @@ function Scene:addUpdatable(updatable)
     self.updatable[#self.updatable + 1] = updatable
 end
 
+function Scene:createWorld()
+    self.world = love.physics.newWorld(0, 0, true)
+    self.world:setCallbacks(self.beginContact, self.endContact, self.preSolve, self.postSolve)
+end
+
+function Scene.beginContact(a, b, coll)
+
+end
+
+function Scene.endContact(a, b, coll)
+
+end
+
+function Scene.preSolve(a, b, coll)
+
+end
+
+function Scene.postSolve(a, b, coll, normalimpulse, tangentimpulse)
+
+end
+
 return Scene

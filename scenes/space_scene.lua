@@ -26,7 +26,6 @@ function SpaceScene:load(prevScene)
     end
 
     self.isLoaded = true
-    self.world = love.physics.newWorld(0, 0, true)
 
     for _ = 0, 15 do
         local color = Color:new(love.math.random(), love.math.random(), love.math.random())
