@@ -1,4 +1,5 @@
 local BulletBuilder = require('builder.bullet_builder')
+local Collection = require('collection.collection')
 
 ---@class BulletEmitter
 ---@field protected x number
@@ -6,7 +7,7 @@ local BulletBuilder = require('builder.bullet_builder')
 ---@field protected angle number
 ---@field protected creationPeriod number
 ---@field protected timer number
----@field protected bullets GameObject[]
+---@field protected bullets Collection
 ---@field protected bulletsConfig BulletsConfigModel
 local BulletEmitter = {}
 
@@ -16,7 +17,8 @@ function BulletEmitter:new(bulletsPerSec, bulletsConfig)
     local newObj = {
         creationPeriod = 1 / bulletsPerSec,
         timer = 1 / bulletsPerSec,
-        bullets = {},
+        bullets = Collection:new({}),
+        emptyKeys = {},
         bulletsConfig = bulletsConfig
     }
 
@@ -48,6 +50,17 @@ end
 
 ---@param dt number
 function BulletEmitter:update(dt)
+    local now = love.timer.getTime()
+    ---@param bullet GameObject
+    for _, bullet in ipairs(self.bullets.elements) do
+        local lifetime = now - bullet.createdAt
+        print(lifetime)
+        if lifetime >= self.bulletsConfig.lifetime then
+            bullet:destroy()
+            self.bullets:remove(bullet)
+        end
+    end
+
     if not self.shooting then return end
     self.timer = self.timer + dt
     if self.timer >= self.creationPeriod then
@@ -60,13 +73,19 @@ function BulletEmitter:update(dt)
         )
         bullet:setAngle(self.angle)
         bullet:move(self.bulletsConfig.speed * dt, 1)
-        self.bullets[#self.bullets + 1] = bullet
+        bullet.createdAt = now
+        self.bullets:add(bullet)
     end
 end
 
 function BulletEmitter:draw()
-    for _, bullet in ipairs(self.bullets) do
-        bullet:draw()
+    ---@param bullet GameObject
+    for _, bullet in ipairs(self.bullets.elements) do
+        if bullet:isDestroyed() then
+            self.bullets:remove(bullet)
+        else
+            bullet:draw()
+        end
     end
 end
 

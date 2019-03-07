@@ -1,4 +1,5 @@
 ---@class Collection
+---@field public elements table[]
 local Collection = {}
 
 ---@param elements any[]
@@ -35,7 +36,7 @@ end
 
 function Collection:add(element)
     self.count = self.count + 1
-    self.element[self.count] = element
+    self.elements[self.count] = element
 end
 
 ---@param chunkCount number

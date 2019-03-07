@@ -62,6 +62,14 @@ function GameObject:setPosition(x, y)
     return self.fixture:getBody():setPosition(x, y)
 end
 
+function GameObject:isDestroyed()
+    return self.fixture:isDestroyed()
+end
+
+function GameObject:destroy()
+    self.fixture:destroy()
+end
+
 function GameObject:draw()
     if self.drawable == nil then
         return

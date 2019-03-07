@@ -16,7 +16,7 @@ function BuilderScene:load(prevScene, hero)
     self.hero = hero
     self.draggableObjects = {}
     self.objects = {}
-    self.world = love.physics.newWorld(0, 0, true)
+    self:createWorld()
 
     self.hero:unJoin()
     self.hero:clearVisual()

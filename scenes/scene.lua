@@ -65,8 +65,16 @@ function Scene:createWorld()
     self.world:setCallbacks(self.beginContact, self.endContact, self.preSolve, self.postSolve)
 end
 
+---@param a Fixture
+---@param b Fixture
+---@param coll Contact
 function Scene.beginContact(a, b, coll)
-
+    if (a:getBody():isBullet()) then
+        a:destroy();
+    end
+    if (b:getBody():isBullet()) then
+        b:destroy();
+    end
 end
 
 function Scene.endContact(a, b, coll)

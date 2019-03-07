@@ -10,7 +10,8 @@ local Params = {
             width = 1024,
             height = 768,
             msaa = 8
-        }
+        },
+        bullets_lifetime = 1.5
     },
     worldMeter = 64,
 }

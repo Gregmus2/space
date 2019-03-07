@@ -11,7 +11,7 @@ local TestScene = Scene:new()
 
 function TestScene:load(prevScene)
     self.objects = {}
-    self.world = love.physics.newWorld(0, 0, true)
+    self:createWorld()
 
     local engines = {}
     for i = 1, 20 do
