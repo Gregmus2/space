@@ -20,7 +20,8 @@ function love.load()
 end
 
 function love.update(dt)
-    local actions = App.scene.events:findActions(Event.UPDATE)
+    -- todo стоит ли так нагружать update ?
+    local actions = App.scene.events:findActions(Event.UPDATE) or App.events:findActions(Event.UPDATE)
     triggerEvent(actions, {dt = dt})
 
     App.update(dt)
@@ -28,37 +29,38 @@ function love.update(dt)
 end
 
 function love.mousepressed(x, y, button)
-    local actions = App.scene.events:findActions(Event.MOUSE, button)
+    local actions = App.scene.events:findActions(Event.MOUSE, button) or App.events:findActions(Event.MOUSE, button)
     triggerEvent(actions, {x = x, y = y})
 end
 
 function love.mousereleased(x, y, button)
-    local actions = App.scene.events:findActions(Event.MOUSE_RELEASE, button)
+    local actions = App.scene.events:findActions(Event.MOUSE_RELEASE, button) or App.events:findActions(Event.MOUSE_RELEASE, button)
     triggerEvent(actions, {x = x, y = y})
 
     App.scene.menu:mouseRelease(x, y)
 end
 
 function love.wheelmoved(x, y)
-    local actions = App.scene.events:findActions(Event.WHEEL)
+    local actions = App.scene.events:findActions(Event.WHEEL) or App.events:findActions(Event.WHEEL)
     triggerEvent(actions, {x = x, y = y})
 end
 
 function love.keypressed(key)
-    local actions = App.scene.events:findActions(Event.KEY, key)
+    local actions = App.scene.events:findActions(Event.KEY, key) or App.events:findActions(Event.KEY, key)
     triggerEvent(actions)
 end
 
 function love.mousemoved(x, y)
-    local actions = App.scene.events:findActions(Event.MOUSE_MOVE)
+    local actions = App.scene.events:findActions(Event.MOUSE_MOVE) or App.events:findActions(Event.MOUSE_MOVE)
     triggerEvent(actions, {x = x, y = y})
 end
 
 function love.keyreleased(key)
-    local actions = App.scene.events:findActions(Event.KEY_RELEASE, key)
+    local actions = App.scene.events:findActions(Event.KEY_RELEASE, key) or App.events:findActions(Event.KEY_RELEASE, key)
     triggerEvent(actions)
 end
 
 function love.draw()
+    App.draw()
     App.scene:draw()
 end

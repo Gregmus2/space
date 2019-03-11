@@ -2,6 +2,8 @@ local Camera = require('camera')
 local Params = require('params')
 local Config = require('config')
 local MainMenuScene = require('scenes.main_menu_scene')
+local Event = require('enum.event')
+local EventCollection = require('collection.event_collection')
 
 ---@class App
 ---@field public camera Camera
@@ -9,7 +11,8 @@ local MainMenuScene = require('scenes.main_menu_scene')
 App = {
     camera = nil,
     scene = MainMenuScene,
-    debug = false
+    debug = false,
+    events = EventCollection:new()
 }
 
 function App.load()
@@ -21,6 +24,8 @@ function App.load()
     App.debug = Config.debug
     Params:init()
     Params.default.scene = MainMenuScene
+
+    App.events:addAction(Event.KEY, function() App.debug = not App.debug end, '`')
 
     App.camera = Camera:new(Params.halfScreenW, Params.halfScreenH)
 end
@@ -49,4 +54,11 @@ end
 ---@param dt number
 function App.update(dt)
     App.scene:update(dt)
+end
+
+function App.draw()
+    if App.debug then
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.print('FPS: ' .. love.timer.getFPS(), 10, 10);
+    end
 end

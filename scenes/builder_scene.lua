@@ -4,6 +4,8 @@ local Event = require('enum.event')
 local Draw = require('drawable.drawable')
 local ShipComponentBuilder = require('ship_component_builder')
 local PolygonFactory = require('factory.polygon_factory')
+local BulletEmitter = require('bullet_emitter')
+local BulletsConfigModel = require('model.bullets_config_model')
 
 ---@class BuilderScene : Scene
 ---@field protected world World
@@ -30,7 +32,13 @@ function BuilderScene:load(prevScene, hero)
         local engine = ShipComponentBuilder:buildEngine(hero:getWorld(), prevScene, Draw:calcRealX(100), Draw:calcRealY(100), Color:red(), PolygonFactory.generateRocket(20, 40, 10), 0.1, 1500)
         self.hero:addEngine(engine)
         table.insert(self.draggableObjects, engine)
-    end, 'space')
+    end, 'e')
+    self.events:addAction(Event.KEY, function()
+        local bulletEmitter = BulletEmitter:new(5, BulletsConfigModel:new(5, Color:white(), 50))
+        local weapon = ShipComponentBuilder:buildWeapon(hero:getWorld(), prevScene, Draw:calcRealX(100), Draw:calcRealY(100), Color:red(), PolygonFactory.generateRectangle(10, 30), 0.1, bulletEmitter)
+        self.hero:addComponent(weapon)
+        table.insert(self.draggableObjects, weapon)
+    end, 'w')
 
     self.events:addAction(Event.KEY, function() App.changeScene(prevScene) end, 'f')
 end
@@ -46,7 +54,7 @@ function BuilderScene:draggableEvent()
     --]]
     self.events:addAction(Event.MOUSE,
         function(params)
-            ---@param go PhysicalDrawObject
+            ---@param go GameObject
             for _, go in ipairs(self.draggableObjects) do
                 if go.fixture:getShape():testPoint(
                     Draw.calcX(go.fixture:getBody():getX()),

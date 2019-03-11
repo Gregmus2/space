@@ -21,7 +21,10 @@ function BulletEmitter:new(bulletsPerSec, bulletsConfig)
         timer = 1 / bulletsPerSec,
         bullets = Collection:new({}),
         emptyKeys = {},
-        bulletsConfig = bulletsConfig
+        bulletsConfig = bulletsConfig,
+        angle = 2,
+        x = 0,
+        y = 0
     }
 
     setmetatable(newObj, self)
