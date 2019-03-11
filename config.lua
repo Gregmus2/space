@@ -4,6 +4,7 @@ local Params = require('params')
 ---@field public width number
 ---@field public height number
 ---@field public msaa number
+---@field public debug number
 local Config = {}
 
 local path = 'conf.txt';
@@ -19,6 +20,7 @@ function Config:load()
     self.width = tonumber(fileData.width)
     self.height = tonumber(fileData.height)
     self.msaa = tonumber(fileData.msaa)
+    self.debug = tonumber(fileData.debug)
 end
 
 ---@private

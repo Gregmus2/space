@@ -9,9 +9,10 @@ local Params = {
         config = {
             width = 1024,
             height = 768,
-            msaa = 8
+            msaa = 8,
+            debug = 0
         },
-        bullets_lifetime = 1.5
+        bullets_lifetime = 1
     },
     worldMeter = 64,
 }

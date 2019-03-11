@@ -1,5 +1,7 @@
 local BulletBuilder = require('builder.bullet_builder')
 local Collection = require('collection.collection')
+local Circle = require('drawable.circle')
+local Color = require('color')
 
 ---@class BulletEmitter
 ---@field protected x number
@@ -11,7 +13,7 @@ local Collection = require('collection.collection')
 ---@field protected bulletsConfig BulletsConfigModel
 local BulletEmitter = {}
 
----@param angle number
+---@param bulletsPerSec number
 ---@param bulletsPerSec number
 function BulletEmitter:new(bulletsPerSec, bulletsConfig)
     local newObj = {
@@ -54,7 +56,6 @@ function BulletEmitter:update(dt)
     ---@param bullet GameObject
     for _, bullet in ipairs(self.bullets.elements) do
         local lifetime = now - bullet.createdAt
-        print(lifetime)
         if lifetime >= self.bulletsConfig.lifetime then
             bullet:destroy()
             self.bullets:remove(bullet)
@@ -67,7 +68,7 @@ function BulletEmitter:update(dt)
         ---@type GameObject
         local bullet = BulletBuilder.buildBullet(
             self.x + math.cos(self.angle) * 30,
-            self.y + math.sin(self.angle) * 3,
+            self.y + math.sin(self.angle) * 30,
             self.bulletsConfig.radius,
             self.bulletsConfig.color
         )
@@ -79,6 +80,14 @@ function BulletEmitter:update(dt)
 end
 
 function BulletEmitter:draw()
+    if App.debug then
+        Circle:new('fill', Color:red(), 10):draw(
+            self.x + math.cos(self.angle) * 30,
+            self.y + math.sin(self.angle) * 30,
+            self.angle
+        )
+    end
+
     ---@param bullet GameObject
     for _, bullet in ipairs(self.bullets.elements) do
         if bullet:isDestroyed() then

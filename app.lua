@@ -8,7 +8,8 @@ local MainMenuScene = require('scenes.main_menu_scene')
 ---@field public scene Scene
 App = {
     camera = nil,
-    scene = MainMenuScene
+    scene = MainMenuScene,
+    debug = false
 }
 
 function App.load()
@@ -17,6 +18,7 @@ function App.load()
     love.math.setRandomSeed(love.timer.getTime())
     love.graphics.setBackgroundColor(0.03, 0.04, 0.08)
     love.physics.setMeter(Params.worldMeter)
+    App.debug = Config.debug
     Params:init()
     Params.default.scene = MainMenuScene
 
