@@ -12,6 +12,7 @@ function MainMenuScene:load(prevScene)
         return
     end
     self.isLoaded = true
+    self:createMenu()
 
     local gameButton = Button:new(Params.halfScreenW, Params.halfScreenH - 100, 200, 50, function() App.changeScene(SpaceScene) end);
     local testButton = Button:new(Params.halfScreenW, Params.halfScreenH + 100, 200, 50, function() App.changeScene(TestScene) end);

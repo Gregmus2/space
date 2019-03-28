@@ -71,4 +71,8 @@ function EventCollection:longUpdate(startEvent, endEvent, action, trigger)
     )
 end
 
+function EventCollection:clear()
+    self.events = {}
+end
+
 return EventCollection

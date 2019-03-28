@@ -18,8 +18,8 @@ function LoadScene:load(prevScene)
     local gameObject1 = DrawObject:new(rect, App.camera.x - 50, App.camera.y)
     local gameObject2 = DrawObject:new(rect, App.camera.x + 50, App.camera.y)
 
-    self.objects[#self.objects + 1] = gameObject1
-    self.objects[#self.objects + 1] = gameObject2
+    self:addVisible(gameObject1)
+    self.addVisible(gameObject2)
 
     self.events:addAction(Event.KEY, function() App.changeScene(prevScene) end, 'space')
 end

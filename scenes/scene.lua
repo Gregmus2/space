@@ -3,24 +3,25 @@ local Menu = require('menu')
 local Event = require('enum.event')
 local Params = require('params')
 local Updatable = require('interface.updatable')
+local Visible = require('interface.visible')
 
 ---@class Scene
----@field public objects GameObject[]|DrawObject[]
 ---@field public world World
 ---@field public isLoaded boolean
 ---@field public events EventCollection
 ---@field public menu Menu
 ---@field protected updatable Updatable[]
+---@field protected visible Visible[]
 local Scene = {}
 
 function Scene:new()
     local newObj = {
-        objects = {},
         events = EventCollection:new(),
         world = nil,
         isLoaded = false,
-        menu = Menu:new(),
-        updatable = {}
+        menu = nil,
+        updatable = {},
+        visible = {}
     }
     self.__index = self
     setmetatable(newObj, self)
@@ -40,10 +41,9 @@ end
 function Scene:sleep() end
 
 function Scene:draw()
-    for _, object in ipairs(self.objects) do
-        object:draw()
+    for _, visible in ipairs(self.visible) do
+        visible:draw()
     end
-    self.menu:draw()
 end
 
 ---@protected
@@ -60,9 +60,22 @@ function Scene:addUpdatable(updatable)
     self.updatable[#self.updatable + 1] = updatable
 end
 
+---@param visible Visible
+function Scene:addVisible(visible)
+    assert(isImplement(visible, Visible), 'object hasn\'t draw method')
+    self.visible[#self.visible + 1] = visible
+end
+
 function Scene:createWorld()
     self.world = love.physics.newWorld(0, 0, true)
     self.world:setCallbacks(self.beginContact, self.endContact, self.preSolve, self.postSolve)
+    self:addUpdatable(self.world)
+end
+
+function Scene:createMenu()
+    self.menu = Menu:new()
+    self:addUpdatable(self.menu)
+    self:addVisible(self.menu)
 end
 
 ---@param a Fixture
@@ -87,6 +100,12 @@ end
 
 function Scene.postSolve(a, b, coll, normalimpulse, tangentimpulse)
 
+end
+
+function Scene:reset()
+    self.events:clear()
+    self.updatable = {}
+    self.visible = {}
 end
 
 return Scene

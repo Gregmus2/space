@@ -27,6 +27,7 @@ function SpaceScene:load(prevScene)
 
     self.isLoaded = true
     self:createWorld()
+    self:createMenu()
 
     for _ = 0, 15 do
         local color = Color:new(love.math.random(), love.math.random(), love.math.random())
@@ -40,7 +41,7 @@ function SpaceScene:load(prevScene)
             :addPolygonPhysics(self.world, vertexes, 'dynamic', 0.1)
             :createGameObject()
             :addDraw(polygon)
-        self.objects[#self.objects + 1] = go
+        self:addVisible(go)
     end
 
     local core = ShipComponentBuilder:buildCore(self.world, App.camera.x, App.camera.y, Color:white(), PolygonFactory.generateRectangle(50, 50), 0.1, 1000)
@@ -49,7 +50,7 @@ function SpaceScene:load(prevScene)
     local bulletEmitter = BulletEmitter:new(5, BulletsConfigModel:new(5, Color:white(), 50))
     local weapon = ShipComponentBuilder:buildWeapon(self.world, self, App.camera.x + 50, App.camera.y, Color:blue(), PolygonFactory.generateRocket(10, 30, 5), 0.1, bulletEmitter)
     self.hero = Ship:new(core, {engine, engine2}, {weapon})
-    self.objects[#self.objects + 1] = self.hero
+    self:addVisible(self.hero)
 
 
     self.events:longUpdate(Event.KEY, Event.KEY_RELEASE, function(params) self.hero:rotate(params.dt, 1) end, 'd')
@@ -73,16 +74,8 @@ end
 
 ---@param dt number
 function SpaceScene:update(dt)
-    self.world:update(dt)
     self:updateElements(dt)
     App.camera:setCoords(self.hero:getPosition())
-end
-
-function Scene:draw()
-    for _, object in ipairs(self.objects) do
-        object:draw()
-    end
-    self.menu:draw()
 end
 
 return SpaceScene

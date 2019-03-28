@@ -10,7 +10,7 @@ local Grid = require('menu.grid')
 local TestScene = Scene:new()
 
 function TestScene:load(prevScene)
-    self.objects = {}
+    self:createMenu()
     self:createWorld()
 
     local engines = {}
@@ -21,10 +21,6 @@ function TestScene:load(prevScene)
     local collection = Collection:new(engines)
     grid:setCollection(collection)
     self.menu:addElement(grid)
-end
-
-function TestScene:update(dt)
-    self.menu:update()
 end
 
 return TestScene

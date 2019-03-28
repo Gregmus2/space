@@ -75,7 +75,6 @@ function ShipComponentBuilder:buildWeapon(world, scene, x, y, color, vertexes, m
     return weapon
 end
 
----@protected
 ---@param world World
 ---@param x number
 ---@param y number
