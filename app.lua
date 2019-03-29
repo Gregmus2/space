@@ -28,6 +28,9 @@ function App.load()
     App.events:addAction(Event.KEY, function() App.debug = not App.debug end, '`')
 
     App.camera = Camera:new(Params.halfScreenW, Params.halfScreenH)
+
+    App.wten = Config.width / 10
+    App.hten = Config.height / 10
 end
 
 ---@param scene Scene
@@ -61,4 +64,14 @@ function App.draw()
         love.graphics.setColor(1, 1, 1)
         love.graphics.print('FPS: ' .. love.timer.getFPS(), 10, 10);
     end
+end
+
+--- convert width tens to pixels
+function wpixels(tens)
+    return App.wten * tens
+end
+
+--- convert height tens to pixels
+function hpixels(tens)
+    return App.hten * tens
 end

@@ -25,9 +25,11 @@ local Grid = {}
 ---@param color Color
 ---@param columns number
 function Grid:new(x, y, w, h, columns, columnHeight, color)
+    x, y, w, h = math.ceil(x), math.ceil(y), math.ceil(w), math.ceil(h)
+
     local newObj = {
-        x = x - w / 2,
-        y = y - h / 2,
+        x = x,
+        y = y,
         w = w,
         h = h,
         columns = columns,

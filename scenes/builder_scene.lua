@@ -32,7 +32,7 @@ function BuilderScene:load(prevScene, hero)
     self.TRIGGER_DRAG_NAME = 'dragging_builder';
     self:draggableEvent();
 
-    self.grid = Grid:new(App.camera.x / 2 * 3, App.camera.y, App.camera.x / 2.0, App.camera.y / 1.4, 2, 100)
+    self.grid = Grid:new(wpixels(7), hpixels(2), wpixels(2), hpixels(6), 2, hpixels(0.5))
     self.templatesCollection = Collection:new({})
     self.grid:setCollection(self.templatesCollection)
     self.menu:addElement(self.grid)
