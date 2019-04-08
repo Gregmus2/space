@@ -67,7 +67,16 @@ end
 ---@param x number
 ---@param y number
 function Ship:setPosition(x, y)
+    local xOrigin, yOrigin = self.core:getPosition()
+    local xDiff, yDiff = x - xOrigin, y - yOrigin
+
     self.core:setPosition(x, y)
+    for _, engine in ipairs(self.engines) do
+        engine:addPosition(xDiff, yDiff)
+    end
+    for _, component in ipairs(self.other) do
+        component:addPosition(xDiff, yDiff)
+    end
 end
 
 function Ship:draw()
@@ -108,6 +117,9 @@ end
 function Ship:clearVisual()
     for _, engine in ipairs(self.engines) do
         engine:resetParticles()
+    end
+    for _, component in ipairs(self.other) do
+        component:clearVisual()
     end
 end
 

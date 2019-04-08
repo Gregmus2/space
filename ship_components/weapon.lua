@@ -33,9 +33,18 @@ function Weapon:update(dt)
     self.bulletEmitter:update(dt)
 end
 
+function Weapon:addPosition(dx, dy)
+    GameObject.addPosition(self, dx, dy)
+    self.bulletEmitter:setPosition(self:getPosition())
+end
 ---@param dt number
 ---@param direction number
 function Weapon:move(dt, direction) end
+
+function Weapon:clearVisual()
+    self.bulletEmitter:stop()
+    self.bulletEmitter:reset()
+end
 
 function Weapon:draw()
     self.bulletEmitter:draw()

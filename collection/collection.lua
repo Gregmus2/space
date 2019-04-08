@@ -34,6 +34,11 @@ function Collection:remove(element)
     return false
 end
 
+function Collection:clear()
+    self.elements = {}
+    self.count = 0
+end
+
 function Collection:add(element)
     self.count = self.count + 1
     self.elements[self.count] = element

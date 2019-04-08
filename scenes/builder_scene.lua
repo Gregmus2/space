@@ -23,10 +23,16 @@ function BuilderScene:load(prevScene, hero)
     self:createWorld()
     self:createMenu()
 
+    self.state = {}
+    self.state.heroX, self.state.heroY = self.hero:getPosition()
+    self.state.cameraState = App.camera:getState()
+
+    App.camera:setCoords(wpixels(5) * App.camera.scale, hpixels(5) * App.camera.scale)
+    self.hero:setPosition(wpixels(5) * App.camera.scale, hpixels(5) * App.camera.scale)
+
     self.hero:unJoin()
     self.hero:clearVisual()
     self:addVisible(self.hero)
-    App.camera:setCoords(self.hero:getPosition())
     table.merge(self.draggableObjects, self.hero:getObjects())
 
     self.TRIGGER_DRAG_NAME = 'dragging_builder';
@@ -57,6 +63,15 @@ function BuilderScene:load(prevScene, hero)
         self.hero:addEngine(engine)
 
         return engine
+    end)
+    d, f = ShipComponentBuilder.build(self.world, 100, 100, Color:red(), PolygonFactory.generateRectangle(30, 10))
+    go = GameObject:new(f):addDraw(d)
+    self:addTemplate(go, function()
+        local bulletEmitter = BulletEmitter:new(5, BulletsConfigModel:new(5, Color:white(), 50))
+        local weapon = ShipComponentBuilder:buildWeapon(hero:getWorld(), prevScene, self.grid.x + Draw.calcX(go.fixture:getBody():getX()), self.grid.y + Draw.calcY(go.fixture:getBody():getY()), Color:red(), PolygonFactory.generateRectangle(30, 10), 0.1, bulletEmitter)
+        self.hero:addComponent(weapon)
+
+        return weapon
     end)
 
     self.events:addAction(Event.KEY, function() App.changeScene(prevScene) end, 'f')
@@ -114,6 +129,9 @@ end
 function BuilderScene:sleep()
     self.hero:reJoin()
     self:reset();
+
+    self.hero:setPosition(self.state.heroX, self.state.heroY)
+    App.camera:setState(self.state.cameraState)
 end
 
 return BuilderScene

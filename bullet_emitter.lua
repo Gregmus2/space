@@ -20,7 +20,6 @@ function BulletEmitter:new(bulletsPerSec, bulletsConfig)
         creationPeriod = 1 / bulletsPerSec,
         timer = 1 / bulletsPerSec,
         bullets = Collection:new({}),
-        emptyKeys = {},
         bulletsConfig = bulletsConfig,
         angle = 2,
         x = 0,
@@ -51,6 +50,11 @@ end
 
 function BulletEmitter:stop()
     self.shooting = false
+end
+
+function BulletEmitter:reset()
+    self.timer = self.creationPeriod
+    self.bullets:clear()
 end
 
 ---@param dt number

@@ -59,7 +59,14 @@ end
 ---@param x number
 ---@param y number
 function GameObject:setPosition(x, y)
-    return self.fixture:getBody():setPosition(x, y)
+    self.fixture:getBody():setPosition(x, y)
+end
+
+---@param dx number
+---@param dy number
+function GameObject:addPosition(dx, dy)
+    local x, y = self.fixture:getBody():getPosition()
+    self.fixture:getBody():setPosition(x + dx, y + dy)
 end
 
 function GameObject:isDestroyed()
