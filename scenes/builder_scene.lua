@@ -43,18 +43,6 @@ function BuilderScene:load(prevScene, hero)
     self.grid:setCollection(self.templatesCollection)
     self.menu:addElement(self.grid)
 
-    self.events:addAction(Event.KEY, function()
-        local engine = ShipComponentBuilder:buildEngine(hero:getWorld(), prevScene, Draw:calcRealX(100), Draw:calcRealY(100), Color:red(), PolygonFactory.generateRocket(20, 40, 10), 0.1, 1500)
-        self.hero:addEngine(engine)
-        table.insert(self.draggableObjects, engine)
-    end, 'e')
-    self.events:addAction(Event.KEY, function()
-        local bulletEmitter = BulletEmitter:new(5, BulletsConfigModel:new(5, Color:white(), 50))
-        local weapon = ShipComponentBuilder:buildWeapon(hero:getWorld(), prevScene, Draw:calcRealX(100), Draw:calcRealY(100), Color:red(), PolygonFactory.generateRectangle(30, 10), 0.1, bulletEmitter)
-        self.hero:addComponent(weapon)
-        table.insert(self.draggableObjects, weapon)
-    end, 'w')
-
     -- add templates for building parts of ship
     local d, f = ShipComponentBuilder.build(self.world, 100, 100, Color:red(), PolygonFactory.generateRocket(20, 40, 10))
     local go = GameObject:new(f):addDraw(d)
