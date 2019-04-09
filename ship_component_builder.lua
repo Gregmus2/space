@@ -66,11 +66,8 @@ end
 ---@param bulletEmitter BulletEmitter
 function ShipComponentBuilder:buildWeapon(world, scene, x, y, color, vertexes, mass, bulletEmitter)
     local draw, fixture = self.build(world, x, y, color, vertexes, mass)
-    local weapon =  Weapon:new(draw, fixture, bulletEmitter)
+    local weapon =  Weapon:new(draw, fixture, bulletEmitter, 1)
     scene:addUpdatable(weapon)
-
-    scene.events:addAction(Event.MOUSE, function() bulletEmitter:start() end, 1)
-    scene.events:addAction(Event.MOUSE_RELEASE, function() bulletEmitter:stop() end, 1)
 
     return weapon
 end

@@ -1,18 +1,22 @@
 local GameObject = require('game_object.game_object')
 local Params = require('params')
+local Event = require('enum.event')
 
 ---@class Weapon : GameObject
 ---@field protected bulletEmitter BulletEmitter
+---@field protected energyPoints number
 local Weapon = GameObject:new()
 
 ---@param drawable Draw
 ---@param fixture Fixture
 ---@param bulletEmitter BulletEmitter
-function Weapon:new(drawable, fixture, bulletEmitter)
+---@param energyPoints number
+function Weapon:new(drawable, fixture, bulletEmitter, energyPoints)
     local newObj = {
         drawable = drawable,
         fixture = fixture,
-        bulletEmitter = bulletEmitter
+        bulletEmitter = bulletEmitter,
+        energyPoints = energyPoints
     }
     fixture:getBody():setFixedRotation(false)
 
@@ -54,6 +58,17 @@ function Weapon:draw()
     if math.abs(distance) <= Params.screenOutRadius * (1/App.camera.scale) then
         self.drawable:draw(x, y, self.fixture:getBody():getAngle())
     end
+end
+
+---@param ship Ship
+function Weapon:connect(ship)
+    ship.events:addAction(Event.MOUSE, function()
+        if ship:spendEnergy(self.energyPoints) then
+            -- todo тратить энергию не при старте а каждый период времени пока стреляет
+            self.bulletEmitter:start()
+        end
+    end, 1)
+    ship.events:addAction(Event.MOUSE_RELEASE, function() self.bulletEmitter:stop() end, 1)
 end
 
 return Weapon
