@@ -62,13 +62,20 @@ end
 
 ---@param ship Ship
 function Weapon:connect(ship)
+    local uniq = love.math.random()
     ship.events:addAction(Event.MOUSE, function()
-        if ship:spendEnergy(self.energyPoints) then
-            -- todo тратить энергию не при старте а каждый период времени пока стреляет
-            self.bulletEmitter:start()
-        end
+        self.bulletEmitter:start()
+        ship.events:addAction(Event.UPDATE, function(params)
+            if ship:spendEnergy(self.energyPoints * params.dt) == false then
+                ship.events:removeAction(Event.UPDATE, nil, uniq)
+                self.bulletEmitter:stop()
+            end
+        end, nil, uniq)
     end, 1)
-    ship.events:addAction(Event.MOUSE_RELEASE, function() self.bulletEmitter:stop() end, 1)
+    ship.events:addAction(Event.MOUSE_RELEASE, function()
+        ship.events:removeAction(Event.UPDATE, nil, uniq)
+        self.bulletEmitter:stop()
+    end, 1)
 end
 
 return Weapon
