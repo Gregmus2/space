@@ -50,6 +50,7 @@ function SpaceScene:load(prevScene)
     local bulletEmitter = BulletEmitter:new(5, BulletsConfigModel:new(5, Color:white(), 50))
     local weapon = ShipComponentBuilder:buildWeapon(self.world, self, App.camera.x + 50, App.camera.y, Color:blue(), PolygonFactory.generateRocket(10, 30, 5), 0.1, bulletEmitter)
     self.hero = Ship:new(core, {engine, engine2}, {weapon}, self.events)
+    self:addUpdatable(self.hero)
     self:addVisible(self.hero)
 
 

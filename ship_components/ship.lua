@@ -6,6 +6,7 @@ local Components = require('interface.component')
 ---@field protected other GameObject[]
 ---@field protected joints table<Engine, Joint>
 ---@field protected energy number
+---@field protected energyCapacity number
 ---@field public events EventCollection
 local Ship = {}
 
@@ -19,7 +20,9 @@ function Ship:new(core, engines, other, events)
         engines = {},
         other = {},
         joints = {},
-        energy = 10,
+        energy = 0,
+        energyCapacity = 100,
+        energyRecoverSpeed = 1, -- in sec
         events = events
     }
 
@@ -149,6 +152,13 @@ function Ship:spendEnergy(points)
     self.energy = self.energy - points
 
     return true
+end
+
+---@param dt number
+function Ship:update(dt)
+    if self.energy < self.energyCapacity then
+        self.energy = self.energy + (self.energyRecoverSpeed * dt)
+    end
 end
 
 return Ship
