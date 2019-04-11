@@ -124,6 +124,7 @@ function Grid:draw()
     love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setBlendMode("alpha", "premultiplied") -- need to call before canvas rendering
     love.graphics.draw(self.canvas, self.x, self.y)
+    love.graphics.setBlendMode("alpha", "alphamultiply") -- reset
 end
 
 return Grid

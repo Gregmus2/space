@@ -74,7 +74,9 @@ function GameObject:isDestroyed()
 end
 
 function GameObject:destroy()
-    self.fixture:destroy()
+    if not self.fixture:isDestroyed() then
+        self.fixture:destroy()
+    end
 end
 
 function GameObject:draw()

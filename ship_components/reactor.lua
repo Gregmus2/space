@@ -1,5 +1,6 @@
 local GameObject = require('game_object.game_object')
 local Params = require('params')
+local Event = require('enum.event')
 
 ---@class Reactor: GameObject
 ---@field public drawable Draw
@@ -8,6 +9,7 @@ local Params = require('params')
 ---@field protected rotateSpeed number
 ---@field protected particle ParticleSystem
 ---@field protected joint Joint
+---@field protected uniq string
 local Reactor = GameObject:new()
 
 ---@param drawable Draw
@@ -16,6 +18,7 @@ local Reactor = GameObject:new()
 ---@param recoverySpeed number
 function Reactor:new(drawable, fixture, capacity, recoverySpeed)
     local newObj = {
+        uniq = string.random(10),
         drawable = drawable,
         fixture = fixture,
         capacity = capacity,
@@ -55,12 +58,16 @@ end
 function Reactor:connect(ship)
     ship.energyCapacity = ship.energyCapacity + self.capacity
     ship.energyRecoverSpeed= ship.energyRecoverSpeed + self.recoverySpeed
+    ship.events:addAction(Event.UPDATE, function ()
+        self.drawable.color.a = ship.energy / ship.energyCapacity
+    end, nil, self.uniq)
 end
 
 ---@param ship Ship
 function Reactor:disconnect(ship)
     ship.energyCapacity = ship.energyCapacity - self.capacity
     ship.energyRecoverSpeed= ship.energyRecoverSpeed - self.recoverySpeed
+    ship.events:removeAction(Event.UPDATE, nil, self.uniq)
 end
 
 function Reactor:clearVisual() end

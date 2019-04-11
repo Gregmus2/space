@@ -45,6 +45,7 @@ function BuilderScene:load(prevScene, hero)
 
     -- add templates for building parts of ship
     local d, f = ShipComponentBuilder.build(self.world, 100, 100, Color:red(), PolygonFactory.generateRocket(20, 40, 10))
+    f:getBody():setFixedRotation(true)
     local go = GameObject:new(f):addDraw(d)
     self:addTemplate(go, function()
         local engine = ShipComponentBuilder:buildEngine(hero:getWorld(), prevScene, self.grid.x + Draw.calcX(go.fixture:getBody():getX()), self.grid.y + Draw.calcY(go.fixture:getBody():getY()), Color:red(), PolygonFactory.generateRocket(20, 40, 10), 0.1, 1500)
@@ -53,6 +54,7 @@ function BuilderScene:load(prevScene, hero)
         return engine
     end)
     d, f = ShipComponentBuilder.build(self.world, 100, 100, Color:red(), PolygonFactory.generateRectangle(30, 10))
+    f:getBody():setFixedRotation(true)
     go = GameObject:new(f):addDraw(d)
     self:addTemplate(go, function()
         local bulletEmitter = BulletEmitter:new(5, BulletsConfigModel:new(5, Color:white(), 50))
@@ -62,6 +64,7 @@ function BuilderScene:load(prevScene, hero)
         return weapon
     end)
     d, f = ShipComponentBuilder.build(self.world, 100, 100, Color:blue(), PolygonFactory.generateRectangle(25, 25))
+    f:getBody():setFixedRotation(true)
     go = GameObject:new(f):addDraw(d)
     self:addTemplate(go, function()
         local reactor = ShipComponentBuilder:buildReactor(hero:getWorld(), self.grid.x + Draw.calcX(go.fixture:getBody():getX()), self.grid.y + Draw.calcY(go.fixture:getBody():getY()), Color:blue(), PolygonFactory.generateRectangle(25, 25), 0.5, 10, 1)
