@@ -55,7 +55,7 @@ end
 ---@param action function
 ---@param trigger string|nil
 function EventCollection:longUpdate(startEvent, endEvent, action, trigger)
-    local uniq = love.math.random()
+    local uniq = string.random(10)
     self:addAction(
         startEvent,
         function()

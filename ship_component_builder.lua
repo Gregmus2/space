@@ -2,6 +2,7 @@ local Params = require('params')
 local Core = require('ship_components.core')
 local Engine = require('ship_components.engine')
 local Weapon = require('ship_components.weapon')
+local Reactor = require('ship_components.reactor')
 local Polygon = require('drawable.polygon')
 local ParticlesFactory = require('factory.particles_factory')
 local Event = require('enum.event')
@@ -70,6 +71,21 @@ function ShipComponentBuilder:buildWeapon(world, scene, x, y, color, vertexes, m
     scene:addUpdatable(weapon)
 
     return weapon
+end
+
+---@param world World
+---@param x number
+---@param y number
+---@param color Color
+---@param vertexes number[]
+---@param mass number
+---@param capacity number
+---@param recovery number
+function ShipComponentBuilder:buildReactor(world, x, y, color, vertexes, mass, capacity, recovery)
+    local draw, fixture = self.build(world, x, y, color, vertexes, mass)
+    local reactor =  Reactor:new(draw, fixture, capacity, recovery)
+
+    return reactor
 end
 
 ---@param world World

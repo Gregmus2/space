@@ -6,8 +6,9 @@ local Components = require('interface.component')
 ---@field protected other GameObject[]
 ---@field protected joints table<Engine, Joint>
 ---@field protected energy number
----@field protected energyCapacity number
+---@field public energyCapacity number
 ---@field public events EventCollection
+---@field public energyRecoverSpeed number
 local Ship = {}
 
 ---@param core Core
@@ -21,7 +22,7 @@ function Ship:new(core, engines, other, events)
         other = {},
         joints = {},
         energy = 0,
-        energyCapacity = 100,
+        energyCapacity = 0,
         energyRecoverSpeed = 1, -- in sec
         events = events
     }

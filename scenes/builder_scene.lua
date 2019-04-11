@@ -61,6 +61,14 @@ function BuilderScene:load(prevScene, hero)
 
         return weapon
     end)
+    d, f = ShipComponentBuilder.build(self.world, 100, 100, Color:blue(), PolygonFactory.generateRectangle(25, 25))
+    go = GameObject:new(f):addDraw(d)
+    self:addTemplate(go, function()
+        local reactor = ShipComponentBuilder:buildReactor(hero:getWorld(), self.grid.x + Draw.calcX(go.fixture:getBody():getX()), self.grid.y + Draw.calcY(go.fixture:getBody():getY()), Color:blue(), PolygonFactory.generateRectangle(25, 25), 0.5, 10, 1)
+        self.hero:addComponent(reactor)
+
+        return reactor
+    end)
 
     self.events:addAction(Event.KEY, function() App.changeScene(prevScene) end, 'f')
 end

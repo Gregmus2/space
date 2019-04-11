@@ -6,9 +6,7 @@ local Draw = require('drawable.drawable')
 ---@field public drawable Draw
 ---@field public fixture Fixture
 ---@field protected speed number
----@field protected rotateSpeed number
 ---@field protected particle ParticleSystem
----@field protected joint Joint
 local Engine = GameObject:new()
 
 ---@param drawable Draw

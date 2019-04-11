@@ -13,6 +13,7 @@ local Weapon = GameObject:new()
 ---@param energyPoints number
 function Weapon:new(drawable, fixture, bulletEmitter, energyPoints)
     local newObj = {
+        uniq = string.random(10),
         drawable = drawable,
         fixture = fixture,
         bulletEmitter = bulletEmitter,
@@ -41,6 +42,7 @@ function Weapon:addPosition(dx, dy)
     GameObject.addPosition(self, dx, dy)
     self.bulletEmitter:setPosition(self:getPosition())
 end
+
 ---@param dt number
 ---@param direction number
 function Weapon:move(dt, direction) end
@@ -62,20 +64,26 @@ end
 
 ---@param ship Ship
 function Weapon:connect(ship)
-    local uniq = love.math.random()
     ship.events:addAction(Event.MOUSE, function()
         self.bulletEmitter:start()
         ship.events:addAction(Event.UPDATE, function(params)
             if ship:spendEnergy(self.energyPoints * params.dt) == false then
-                ship.events:removeAction(Event.UPDATE, nil, uniq)
+                ship.events:removeAction(Event.UPDATE, nil, self.uniq)
                 self.bulletEmitter:stop()
             end
-        end, nil, uniq)
-    end, 1)
+        end, nil, self.uniq)
+    end, 1, self.uniq)
     ship.events:addAction(Event.MOUSE_RELEASE, function()
-        ship.events:removeAction(Event.UPDATE, nil, uniq)
+        ship.events:removeAction(Event.UPDATE, nil, self.uniq)
         self.bulletEmitter:stop()
-    end, 1)
+    end, 1, self.uniq)
+end
+
+---@param ship Ship
+function Weapon:disconnect(ship)
+    ship.events:removeAction(Event.UPDATE, nil, self.uniq)
+    ship.events:removeAction(Event.MOUSE, 1, self.uniq)
+    ship.events:removeAction(Event.MOUSE_RELEASE, 1, self.uniq)
 end
 
 return Weapon
