@@ -1,33 +1,46 @@
+local Components = require('interface.component')
+
 ---@class Ship : GameObject
 ---@field protected core Core
 ---@field protected engines Engine[]
 ---@field protected other GameObject[]
 ---@field protected joints table<Engine, Joint>
+---@field protected energy number
+---@field public energyCapacity number
+---@field public events EventCollection
+---@field public energyRecoverSpeed number
 local Ship = {}
 
 ---@param core Core
 ---@param engines Engine[]
 ---@param other GameObject[]
-function Ship:new(core, engines, other)
+---@param events EventCollection
+function Ship:new(core, engines, other, events)
     local newObj = {
         core = core,
-        engines = engines,
-        other = other,
-        joints = {}
+        engines = {},
+        other = {},
+        joints = {},
+        energy = 0,
+        energyCapacity = 0,
+        energyRecoverSpeed = 1, -- in sec
+        events = events
     }
+
+    setmetatable(newObj, self)
+    self.__index = self
 
     local coreBody = core.fixture:getBody()
     for _, engine in ipairs(engines) do
         local joint = love.physics.newWeldJoint( coreBody, engine.fixture:getBody(), coreBody:getX(), coreBody:getY() )
         newObj.joints[engine] = joint
+        newObj:addEngine(engine)
     end
     for _, component in ipairs(other) do
         local joint = love.physics.newWeldJoint( coreBody, component.fixture:getBody(), coreBody:getX(), coreBody:getY() )
         newObj.joints[component] = joint
+        newObj:addComponent(component)
     end
-
-    setmetatable(newObj, self)
-    self.__index = self
 
     return newObj
 end
@@ -37,9 +50,11 @@ function Ship:addEngine(engine)
     self.engines[#self.engines + 1] = engine
 end
 
----@param component GameObject
+---@param component Component
 function Ship:addComponent(component)
+    assert(isImplement(component, Components), 'object hasn\'t connect method')
     self.other[#self.other + 1] = component
+    component:connect(self)
 end
 
 ---@param dt number
@@ -126,6 +141,25 @@ end
 ---@return World
 function Ship:getWorld()
     return self.core.fixture:getBody():getWorld()
+end
+
+---@param points number
+---@return boolean
+function Ship:spendEnergy(points)
+    if self.energy < points then
+        return false
+    end
+
+    self.energy = self.energy - points
+
+    return true
+end
+
+---@param dt number
+function Ship:update(dt)
+    if self.energy < self.energyCapacity then
+        self.energy = self.energy + (self.energyRecoverSpeed * dt)
+    end
 end
 
 return Ship

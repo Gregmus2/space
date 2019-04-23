@@ -1,18 +1,23 @@
 local GameObject = require('game_object.game_object')
 local Params = require('params')
+local Event = require('enum.event')
 
 ---@class Weapon : GameObject
 ---@field protected bulletEmitter BulletEmitter
+---@field protected energyPoints number
 local Weapon = GameObject:new()
 
 ---@param drawable Draw
 ---@param fixture Fixture
 ---@param bulletEmitter BulletEmitter
-function Weapon:new(drawable, fixture, bulletEmitter)
+---@param energyPoints number
+function Weapon:new(drawable, fixture, bulletEmitter, energyPoints)
     local newObj = {
+        uniq = string.random(10),
         drawable = drawable,
         fixture = fixture,
-        bulletEmitter = bulletEmitter
+        bulletEmitter = bulletEmitter,
+        energyPoints = energyPoints
     }
     fixture:getBody():setFixedRotation(false)
 
@@ -37,6 +42,7 @@ function Weapon:addPosition(dx, dy)
     GameObject.addPosition(self, dx, dy)
     self.bulletEmitter:setPosition(self:getPosition())
 end
+
 ---@param dt number
 ---@param direction number
 function Weapon:move(dt, direction) end
@@ -54,6 +60,30 @@ function Weapon:draw()
     if math.abs(distance) <= Params.screenOutRadius * (1/App.camera.scale) then
         self.drawable:draw(x, y, self.fixture:getBody():getAngle())
     end
+end
+
+---@param ship Ship
+function Weapon:connect(ship)
+    ship.events:addAction(Event.MOUSE, function()
+        self.bulletEmitter:start()
+        ship.events:addAction(Event.UPDATE, function(params)
+            if ship:spendEnergy(self.energyPoints * params.dt) == false then
+                ship.events:removeAction(Event.UPDATE, nil, self.uniq)
+                self.bulletEmitter:stop()
+            end
+        end, nil, self.uniq)
+    end, 1, self.uniq)
+    ship.events:addAction(Event.MOUSE_RELEASE, function()
+        ship.events:removeAction(Event.UPDATE, nil, self.uniq)
+        self.bulletEmitter:stop()
+    end, 1, self.uniq)
+end
+
+---@param ship Ship
+function Weapon:disconnect(ship)
+    ship.events:removeAction(Event.UPDATE, nil, self.uniq)
+    ship.events:removeAction(Event.MOUSE, 1, self.uniq)
+    ship.events:removeAction(Event.MOUSE_RELEASE, 1, self.uniq)
 end
 
 return Weapon

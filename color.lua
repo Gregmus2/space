@@ -2,13 +2,15 @@
 ---@field public r number
 ---@field public g number
 ---@field public b number
+---@field public a number
 local Color = {}
 
 ---@param r number
 ---@param g number
 ---@param b number
-function Color:new(r, g ,b)
-    local newObj = { r = r, g = g, b = b }
+---@param a number
+function Color:new(r, g ,b, a)
+    local newObj = { r = r, g = g, b = b, a = a or 1 }
     self.__index = self
 
     return setmetatable(newObj, self)

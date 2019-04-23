@@ -20,7 +20,7 @@ end
 function Draw:draw(x, y, angle)
     love.graphics.push()
     love.graphics.setShader(self.shader)
-    love.graphics.setColor(self.color.r, self.color.g, self.color.b)
+    love.graphics.setColor(self.color.r, self.color.g, self.color.b, self.color.a)
 
     local realXCenter = self.calcX(x)
     local realYCenter = self.calcY(y)
