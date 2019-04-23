@@ -39,7 +39,7 @@ end
 ---@param pitch number See TEsound.play
 function TEsound.playLooping(sound, sourceType, tags, n, volume, pitch)
     return TEsound.play( sound, sourceType, tags, volume, pitch,
-        (not n or n > 1) and function(d) TEsound.playLooping(sound, tags, (n and n-1), d[1], d[2]) end
+        (not n or n > 1) and function(d) TEsound.playLooping(sound, sourceType, tags, (n and n-1), d[1], d[2]) end
     )
 end
 
