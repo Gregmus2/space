@@ -13,16 +13,15 @@ local Button = {}
 ---@param y number
 ---@param w number
 ---@param h number
----@param color Color
 ---@param action function
-function Button:new(x, y, w, h, action, color)
+function Button:new(x, y, w, h, action)
     local newObj = {
         x = x,
         y = y,
         w = w,
         h = h,
-        color = color or Color:white(),
-        action = action
+        action = action,
+        drawable = {}
     }
     setmetatable(newObj, self)
     self.__index = self
@@ -30,15 +29,18 @@ function Button:new(x, y, w, h, action, color)
     return newObj
 end
 
+---@param drawable Draw
+function Button:addDrawable(drawable)
+    table.insert(self.drawable, drawable)
+
+    return self
+end
+
 function Button:draw()
-    love.graphics.setColor(self.color.r, self.color.g, self.color.b)
-    love.graphics.rectangle(
-        'fill',
-        self.x - self.w / 2,
-        self.y - self.h / 2,
-        self.w,
-        self.h
-    )
+    ---@param drawable Draw
+    for _, drawable in ipairs(self.drawable) do
+        drawable:draw(self.x, self.y, 0)
+    end
 end
 
 ---@param x number
