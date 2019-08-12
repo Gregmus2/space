@@ -8,4 +8,8 @@ Android: `cd android && docker-compose up`
 
 ## Debug
 https://emmylua.github.io/run.html#get-ready
-maybe you must install mobdebug with luarocks 
+maybe you must install mobdebug with luarocks
+
+- put `require("debug.mobdebug").start()` in start of code (f.e. in love.load)
+- create idea configuration for moddebug and start it
+- start app
