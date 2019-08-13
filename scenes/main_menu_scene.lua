@@ -1,5 +1,4 @@
 local Scene = require('scenes.scene')
-local Params = require('params')
 local SpaceScene = require('scenes.space_scene')
 local TestScene = require('scenes.test_scene')
 local Button = require('menu.button')
@@ -17,23 +16,41 @@ function MainMenuScene:load(prevScene)
     self.isLoaded = true
     self:createMenu()
 
-    local d = Rectangle:new('fill', Color:white(), 200, 50)
-    local gameButton = Button:new(
-            Params.halfScreenW,
-            Params.halfScreenH - 100,
-            200, 50,
-            function() App.changeScene(SpaceScene) end
-    ):addDrawable(d):addDrawable(Text:new("start", Params.halfScreenW, Params.halfScreenH - 100, Color:blue()));
-    local testButton = Button:new(
-            Params.halfScreenW,
-            Params.halfScreenH + 100,
-            200,
-            50,
-            function() App.changeScene(TestScene) end
-    ):addDrawable(d);
+    local menuX = wpixels(0.2)
+    local quitButton = Button:newWithText(
+            menuX,
+            hpixels(9.5),
+            'quit',
+            Resources:getFont(FONT_CASANOVA, 26),
+            false,
+            function()
+                love.event.quit()
+            end
+    );
+    local testButton = Button:newWithText(
+            menuX,
+            quitButton.y - quitButton.h,
+            'test',
+            Resources:getFont(FONT_CASANOVA, 26),
+            false,
+            function()
+                App.changeScene(TestScene)
+            end
+    );
+    local gameButton = Button:newWithText(
+            menuX,
+            testButton.y - testButton.h,
+            'start',
+            Resources:getFont(FONT_CASANOVA, 26),
+            false,
+            function()
+                App.changeScene(SpaceScene)
+            end
+    );
 
     self.menu:addElement(gameButton)
     self.menu:addElement(testButton)
+    self.menu:addElement(quitButton)
 end
 
 return MainMenuScene
