@@ -1,9 +1,4 @@
-local Camera = require('camera')
-local Params = require('params')
-local Config = require('config')
-local MainMenuScene = require('scenes.main_menu_scene')
-local Event = require('enum.event')
-local EventCollection = require('collection.event_collection')
+require('utils.os')
 
 ---@class Resources
 ---@field public fonts Font[]
@@ -11,6 +6,20 @@ Resources = {
     fonts = {},
 }
 
-function Resources.load()
+FONT_CASANOVA = 'CasanovaScotia.ttf';
 
+function Resources:load()
+    for i, v in ipairs(scandir('resources/fonts')) do
+        self.fonts[v] = {}
+    end
+end
+
+---@param name string
+---@param size number
+function Resources:getFont(name, size)
+    if self.fonts[name][size] == nil then
+        self.fonts[name][size] = love.graphics.newFont('resources/fonts/' .. name, size)
+    end
+
+    return self.fonts[name][size]
 end

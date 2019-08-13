@@ -4,6 +4,7 @@ local Config = require('config')
 local MainMenuScene = require('scenes.main_menu_scene')
 local Event = require('enum.event')
 local EventCollection = require('collection.event_collection')
+require('resources')
 
 ---@class App
 ---@field public camera Camera
@@ -24,6 +25,7 @@ function App.load()
     App.debug = Config.debug
     Params:init()
     Params.default.scene = MainMenuScene
+    Resources:load()
 
     App.events:addAction(Event.KEY, function() App.debug = not App.debug end, '`')
 
