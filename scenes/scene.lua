@@ -12,6 +12,7 @@ local Visible = require('interface.visible')
 ---@field public menu Menu
 ---@field protected updatable Updatable[]
 ---@field protected visible Visible[]
+---@field public cameraState table<string, any>
 local Scene = {}
 
 function Scene:new()

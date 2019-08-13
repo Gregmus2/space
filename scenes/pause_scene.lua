@@ -15,8 +15,8 @@ function LoadScene:load(prevScene)
     self.isLoaded = true
 
     local rect = Rectangle:new('fill', Color:white(), 50, 100)
-    local gameObject1 = DrawObject:new(rect, App.camera.x - 50, App.camera.y)
-    local gameObject2 = DrawObject:new(rect, App.camera.x + 50, App.camera.y)
+    local gameObject1 = DrawObject:new(rect, wpixels(4.5), App.camera.y)
+    local gameObject2 = DrawObject:new(rect, wpixels(5.5), App.camera.y)
 
     self:addVisible(gameObject1)
     self:addVisible(gameObject2)
