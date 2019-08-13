@@ -68,12 +68,21 @@ function App.draw()
     end
 end
 
---- convert width tens to pixels
-function wpixels(tens)
-    return App.wten * tens
+---@param tens number
+---@param round boolean
+function wpixels(tens, round)
+    round = round or true
+    local result = App.wten * tens
+
+    return round and math.floor(result) or result
 end
 
 --- convert height tens to pixels
-function hpixels(tens)
-    return App.hten * tens
+---@param tens number
+---@param round boolean
+function hpixels(tens, round)
+    round = round or true
+    local result = App.hten * tens
+
+    return round and math.floor(result) or result
 end
