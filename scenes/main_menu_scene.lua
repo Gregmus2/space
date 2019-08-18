@@ -3,6 +3,9 @@ local SpaceScene = require('scenes.space_scene')
 local TestScene = require('scenes.test_scene')
 local Button = require('menu.button')
 local Config = require('config')
+local Canvas = require('drawable.canvas')
+local Area = require('model.area')
+local Point = require('model.point')
 
 ---@class MainMenuScene : Scene
 local MainMenuScene = Scene:new()
@@ -18,34 +21,34 @@ function MainMenuScene:load(prevScene)
 
     local menuX = wpixels(0.2)
     local quitButton = Button:newWithText(
-            menuX,
-            hpixels(9.5),
-            'quit',
-            Resources:getFont(FONT_CASANOVA, 26),
-            false,
-            function()
-                love.event.quit()
-            end
+        menuX,
+        hpixels(9.5),
+        'quit',
+        Resources:getFont(FONT_CASANOVA, 26),
+        false,
+        function()
+            love.event.quit()
+        end
     );
     local testButton = Button:newWithText(
-            menuX,
-            quitButton.y - quitButton.h,
-            'test',
-            Resources:getFont(FONT_CASANOVA, 26),
-            false,
-            function()
-                App.changeScene(TestScene)
-            end
+        menuX,
+        quitButton.y - quitButton.h,
+        'test',
+        Resources:getFont(FONT_CASANOVA, 26),
+        false,
+        function()
+            App.changeScene(TestScene)
+        end
     );
     local gameButton = Button:newWithText(
-            menuX,
-            testButton.y - testButton.h,
-            'start',
-            Resources:getFont(FONT_CASANOVA, 26),
-            false,
-            function()
-                App.changeScene(SpaceScene)
-            end
+        menuX,
+        testButton.y - testButton.h,
+        'start',
+        Resources:getFont(FONT_CASANOVA, 26),
+        false,
+        function()
+            App.changeScene(SpaceScene)
+        end
     );
 
     self.menu:addElement(gameButton)
@@ -53,14 +56,13 @@ function MainMenuScene:load(prevScene)
     self.menu:addElement(quitButton)
 end
 
-
 function MainMenuScene:draw()
     for _, visible in ipairs(self.visible) do
         visible:draw()
     end
 
     if self.back ~= nil then
-        love.graphics.draw(self.back, 0, 0)
+        self.back:drawShape()
     end
 end
 
@@ -71,16 +73,21 @@ function MainMenuScene:buildBack(prevScene)
         return
     end
 
-    local canvas = love.graphics.newCanvas(Config.width, Config.height)
-    love.graphics.setCanvas(canvas)
-    love.graphics.clear()
-    if prevScene.cameraState then
-        App.camera:setState(prevScene.cameraState)
+    if self.back == nil then
+        self.back = Canvas:new(
+            Area:new(Config.width, Config.height),
+            function()
+                if prevScene.cameraState then
+                    App.camera:setState(prevScene.cameraState)
+                end
+                prevScene:draw()
+                App.camera:reset()
+            end,
+            Point:new(0, 0)
+        )
     end
-    prevScene:draw()
-    App.camera:reset()
-    love.graphics.setCanvas()
-    self.back = canvas
+
+    self.back:snapshot()
 end
 
 return MainMenuScene
