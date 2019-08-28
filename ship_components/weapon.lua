@@ -38,8 +38,9 @@ function Weapon:update(dt)
     self.bulletEmitter:update(dt)
 end
 
-function Weapon:addPosition(dx, dy)
-    GameObject.addPosition(self, dx, dy)
+---@param point Point
+function Weapon:addPosition(point)
+    GameObject.addPosition(self, point)
     self.bulletEmitter:setPosition(self:getPosition())
 end
 
@@ -55,10 +56,10 @@ end
 function Weapon:draw()
     self.bulletEmitter:draw()
 
-    local x, y = self:getPosition()
-    local distance = math.sqrt((x - (App.camera.x)) ^ 2 + (y - (App.camera.y)) ^ 2) - self.drawable.visibilityRadius
+    local point = self:getPosition()
+    local distance = math.distance(point, App.camera.point) - self.drawable.visibilityRadius
     if math.abs(distance) <= Params.screenOutRadius * (1/App.camera.scale) then
-        self.drawable:draw(x, y, self.fixture:getBody():getAngle())
+        self.drawable:draw(point, self.fixture:getBody():getAngle())
     end
 end
 

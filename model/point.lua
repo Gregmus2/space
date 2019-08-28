@@ -18,4 +18,24 @@ function Point:new(x, y)
     return newObj
 end
 
+---@param x number
+---@param y number
+function Point:diff(x, y)
+    self.x, self.y = self.x - x, self.y - y
+end
+
+---@param dX number
+---@param dY number
+function Point:clone(dX, dY)
+    return Point:new(self.x + (dX or 0), self.y + (dY or 0))
+end
+
+function Point:diffPoint(point)
+    self.x, self.y = self.x - point.x, self.y - point.y
+end
+
+function Point:get()
+    return self.x, self.y
+end
+
 return Point

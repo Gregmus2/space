@@ -3,17 +3,14 @@ local Params = require('params')
 ---@class DrawObject
 ---@field protected drawable Draw
 ---@field protected angle number
----@field protected x number
----@field protected y number
+---@field protected point Point
 local DrawObject = {}
 
 ---@param drawable Draw
----@param x number
----@param y number
-function DrawObject:new(drawable, x, y)
+---@param point Point
+function DrawObject:new(drawable, point)
     local newObj = {
-        x = x,
-        y = y,
+        point = point,
         angle = 0,
         drawable = drawable
     }
@@ -24,9 +21,9 @@ function DrawObject:new(drawable, x, y)
 end
 
 function DrawObject:draw()
-    local distance = math.sqrt((self.x - (App.camera.x)) ^ 2 + (self.y - (App.camera.y)) ^ 2) - self.drawable.visibilityRadius
+    local distance = math.sqrt((self.point.x - (App.camera.x)) ^ 2 + (self.point.y - (App.camera.y)) ^ 2) - self.drawable.visibilityRadius
     if math.abs(distance) <= Params.screenOutRadius * (1/App.camera.scale) then
-        self.drawable:draw(self.x, self.y, self.angle)
+        self.drawable:draw(self.point, self.angle)
     end
 end
 

@@ -79,18 +79,17 @@ function Ship:getPosition()
     return body:getX(), body:getY()
 end
 
----@param x number
----@param y number
-function Ship:setPosition(x, y)
-    local xOrigin, yOrigin = self.core:getPosition()
-    local xDiff, yDiff = x - xOrigin, y - yOrigin
+---@param point Point
+function Ship:setPosition(point)
+    local origin_point = self.core:getPosition()
+    local diff_point = point:diffPoint(origin_point)
 
-    self.core:setPosition(x, y)
+    self.core:setPosition(point)
     for _, engine in ipairs(self.engines) do
-        engine:addPosition(xDiff, yDiff)
+        engine:addPosition(diff_point)
     end
     for _, component in ipairs(self.other) do
-        component:addPosition(xDiff, yDiff)
+        component:addPosition(diff_point)
     end
 end
 

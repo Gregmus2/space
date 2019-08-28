@@ -41,10 +41,10 @@ function Reactor:rotate(dt, direction) end
 function Reactor:move(dt, direction) end
 
 function Reactor:draw()
-    local x, y = self:getPosition()
-    local distance = math.sqrt((x - (App.camera.x)) ^ 2 + (y - (App.camera.y)) ^ 2) - self.drawable.visibilityRadius
+    local point = self:getPosition()
+    local distance = math.distance(point, App.camera.point) - self.drawable.visibilityRadius
     if math.abs(distance) <= Params.screenOutRadius * (1/App.camera.scale) then
-        self.drawable:draw(x, y, self.fixture:getBody():getAngle())
+        self.drawable:draw(point, self.fixture:getBody():getAngle())
     end
 end
 

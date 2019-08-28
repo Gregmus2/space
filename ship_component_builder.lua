@@ -23,18 +23,17 @@ end
 
 ---@param world World
 ---@param scene Scene
----@param x number
----@param y number
+---@param point Point
 ---@param color Color
 ---@param vertexes number[]
 ---@param mass number
 ---@param speed number
-function ShipComponentBuilder:buildEngine(world, scene, x, y, color, vertexes, mass, speed)
-    local draw, fixture = self.build(world, x, y, color, vertexes, mass)
+function ShipComponentBuilder:buildEngine(world, scene, point, color, vertexes, mass, speed)
+    local draw, fixture = self.build(world, point, color, vertexes, mass)
     local particle = ParticlesFactory.getEngineFire(3)
     local engine = Engine:new(draw, fixture, speed, particle)
     particle:stop()
-    particle:setPosition(x, y)
+    particle:setPosition(point:get())
     particle:setDirection(engine.fixture:getBody():getAngle() - 3.14159)
     scene:addUpdatable(particle)
 
@@ -58,14 +57,13 @@ end
 
 ---@param world World
 ---@param scene Scene
----@param x number
----@param y number
+---@param point Point
 ---@param color Color
 ---@param vertexes number[]
 ---@param mass number
 ---@param bulletEmitter BulletEmitter
-function ShipComponentBuilder:buildWeapon(world, scene, x, y, color, vertexes, mass, bulletEmitter)
-    local draw, fixture = self.build(world, x, y, color, vertexes, mass)
+function ShipComponentBuilder:buildWeapon(world, scene, point, color, vertexes, mass, bulletEmitter)
+    local draw, fixture = self.build(world, point, color, vertexes, mass)
     local weapon =  Weapon:new(draw, fixture, bulletEmitter, 5)
     scene:addUpdatable(weapon)
 
@@ -73,15 +71,14 @@ function ShipComponentBuilder:buildWeapon(world, scene, x, y, color, vertexes, m
 end
 
 ---@param world World
----@param x number
----@param y number
+---@param point Point
 ---@param color Color
 ---@param vertexes number[]
 ---@param mass number
 ---@param capacity number
 ---@param recovery number
-function ShipComponentBuilder:buildReactor(world, x, y, color, vertexes, mass, capacity, recovery)
-    local draw, fixture = self.build(world, x, y, color, vertexes, mass)
+function ShipComponentBuilder:buildReactor(world, point, color, vertexes, mass, capacity, recovery)
+    local draw, fixture = self.build(world, point, color, vertexes, mass)
     local reactor =  Reactor:new(draw, fixture, capacity, recovery)
 
     return reactor

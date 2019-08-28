@@ -1,26 +1,21 @@
+local Area = require('model.area')
+
 ---@class Button : MenuObject
----@field public x number
----@field public y number
----@field public w number
----@field public h number
+---@field public point Point
+---@field public area Area
 ---@field public color Color
 ---@field public action function
 ---@field public print Text
----@field public print_x number
----@field public print_y number
+---@field public print_point Point
 local Button = {}
 
----@param x number
----@param y number
----@param w number
----@param h number
+---@param point Point
+---@param area Area
 ---@param action function
-function Button:new(x, y, w, h, action)
+function Button:new(point, area, action)
     local newObj = {
-        x = x,
-        y = y,
-        w = w,
-        h = h,
+        point = point,
+        area = area,
         action = action,
         drawable = {}
     }
@@ -30,27 +25,26 @@ function Button:new(x, y, w, h, action)
     return newObj
 end
 
----@param x number
----@param y number
+---@param point Point
 ---@param text string
 ---@param font Font
 ---@param action function
-function Button:newWithText(x, y, text, font, center, action)
+function Button:newWithText(point, text, font, center, action)
     local newObj = {
-        x = x,
-        y = y,
+        point = point,
         action = action,
         drawable = {},
         center = center
     }
 
     newObj.print = love.graphics.newText( font, text )
-    newObj.w = newObj.print:getWidth()
-    newObj.h = newObj.print:getHeight()
+    newObj.area = Area:new(
+        newObj.print:getWidth(),
+        newObj.print:getHeight()
+    )
 
     if center then
-        newObj.print_x = x - newObj.print:getWidth() / 2
-        newObj.print_y = y - newObj.print:getHeight() / 2
+        newObj.print_point = point:clone(-newObj.print:getWidth() / 2, -newObj.print:getHeight() / 2)
     end
 
     setmetatable(newObj, self)
@@ -69,23 +63,22 @@ end
 function Button:draw()
     ---@param drawable Draw
     for _, drawable in ipairs(self.drawable) do
-        drawable:draw(self.x, self.y, 0)
+        drawable:draw(self.point, 0)
     end
 
     if self.print ~= nil then
-        love.graphics.draw(self.print, self.print_x or self.x, self.print_y or self.y)
+        love.graphics.draw(self.print, self.print_point.x or self.point.x, self.print_point.y or self.point.y)
     end
 end
 
----@param x number
----@param y number
+---@param point Point
 ---@return boolean
-function Button:checkPoint(x, y)
+function Button:checkPoint(point)
     return
-        x > (self.center and self.x - self.w / 2 or self.x) and
-        x < (self.center and self.x + self.w / 2 or self.x + self.w) and
-        y > (self.center and self.y - self.h / 2 or self.y) and
-        y < (self.center and self.y + self.h / 2 or self.y + self.h)
+        point.x > (self.center and self.point.x - self.area.w / 2 or self.point.x) and
+        point.x < (self.center and self.point.x + self.area.w / 2 or self.point.x + self.area.w) and
+        point.y > (self.center and self.point.y - self.area.h / 2 or self.point.y) and
+        point.y < (self.center and self.point.y + self.area.h / 2 or self.point.y + self.area.h)
 end
 
 return Button

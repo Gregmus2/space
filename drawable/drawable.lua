@@ -42,21 +42,21 @@ function Draw:drawShape(point, realPoint) end
 ---@param x number
 ---@return number
 function Draw.calcX(x)
-    return (x - App.camera.x) * App.camera.scale + params.halfScreenW
+    return (x - App.camera.point.x) * App.camera.scale + params.halfScreenW
 end
 
 ---@param y number
 ---@return number
 function Draw.calcY(y)
-    return (y - App.camera.y) * App.camera.scale + params.halfScreenH
+    return (y - App.camera.point.y) * App.camera.scale + params.halfScreenH
 end
 
 function Draw:calcRealX(x)
-    return (x - params.halfScreenW) * App.camera.scale + App.camera.x
+    return (x - params.halfScreenW) * App.camera.scale + App.camera.point.x
 end
 
 function Draw:calcRealY(y)
-    return (y - params.halfScreenH) * App.camera.scale + App.camera.y
+    return (y - params.halfScreenH) * App.camera.scale + App.camera.point.y
 end
 
 ---@param realPoint Point

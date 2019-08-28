@@ -1,18 +1,15 @@
 ---@class Camera
----@field public x number
----@field public y number
+---@field public point Point
 ---@field public scale number
 ---@field protected default table<string, any>
 local Camera = {}
 
----@param x number
----@param y number
+---@param point Point
 ---@return Camera
-function Camera:new(x, y)
+function Camera:new(point)
     local newObj = {
         default = {
-            x = x,
-            y = y,
+            point = point,
             scale = 1,
         }
     }
@@ -24,28 +21,24 @@ function Camera:new(x, y)
     return newObj
 end
 
----@param x number
----@param y number
-function Camera:setCoords(x, y)
-    self.x = x
-    self.y = y
+---@param point Point
+function Camera:setCoords(point)
+    self.point = point
 end
 
 function Camera:reset()
-    self.x = self.default.x
-    self.y = self.default.y
+    self.point = self.default.point
     self.scale = self.default.scale
 end
 
 ---@return table<string, any>
 function Camera:getState()
-    return { x = self.x, y = self.y, scale = self.scale }
+    return { point = self.point, scale = self.scale }
 end
 
 ---@param state table<string, any>
 function Camera:setState(state)
-    self.x = state.x or self.x
-    self.y = state.y or self.y
+    self.point = state.point or self.point
     self.scale = state.scale or self.scale
 end
 

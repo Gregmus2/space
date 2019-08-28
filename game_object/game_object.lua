@@ -1,4 +1,5 @@
 local Params = require('params')
+local Point = require('model.point')
 
 ---@class GameObject
 ---@field public drawable Draw
@@ -51,22 +52,20 @@ function GameObject:move(dt, direction)
     self.fixture:getBody():applyForce(math.cos(self.fixture:getBody():getAngle()) * dSpeed, math.sin(self.fixture:getBody():getAngle()) * dSpeed)
 end
 
----@return number, number @ x, y
+---@return Point
 function GameObject:getPosition()
-    return self.fixture:getBody():getPosition()
+    return Point:new(self.fixture:getBody():getPosition())
 end
 
----@param x number
----@param y number
-function GameObject:setPosition(x, y)
-    self.fixture:getBody():setPosition(x, y)
+---@param point Point
+function GameObject:setPosition(point)
+    self.fixture:getBody():setPosition(point:get())
 end
 
----@param dx number
----@param dy number
-function GameObject:addPosition(dx, dy)
-    local x, y = self.fixture:getBody():getPosition()
-    self.fixture:getBody():setPosition(x + dx, y + dy)
+---@param point Point
+function GameObject:addPosition(point)
+    local newPosition = self:getPosition():clone(point:get())
+    self.fixture:getBody():setPosition(newPosition:get())
 end
 
 function GameObject:isDestroyed()
@@ -84,10 +83,10 @@ function GameObject:draw()
         return
     end
 
-    local x, y = self:getPosition()
-    local distance = math.sqrt((x - (App.camera.x)) ^ 2 + (y - (App.camera.y)) ^ 2) - self.drawable.visibilityRadius
+    local point = self:getPosition()
+    local distance = math.distance(point, App.camera.point) - self.drawable.visibilityRadius
     if math.abs(distance) <= Params.screenOutRadius * (1/App.camera.scale) then
-        self.drawable:draw(x, y, self.fixture:getBody():getAngle())
+        self.drawable:draw(point, self.fixture:getBody():getAngle())
     end
 end
 
