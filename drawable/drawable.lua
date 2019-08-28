@@ -1,4 +1,5 @@
 local params = require('params')
+local Point = require('model.point')
 
 ---@class Draw
 ---@field public visibilityRadius number
@@ -15,28 +16,28 @@ function Draw:new()
     return newObj
 end
 
----@param x number
----@param y number
-function Draw:draw(x, y, angle)
+---@param point Point
+---@param angle number
+function Draw:draw(point, angle)
     love.graphics.push()
     love.graphics.setShader(self.shader)
     love.graphics.setColor(self.color.r, self.color.g, self.color.b, self.color.a)
 
-    local realXCenter = self.calcX(x)
-    local realYCenter = self.calcY(y)
-    self:rotate(realXCenter, realYCenter, angle)
+    local realPoint = Point:new(
+        self.calcX(point.x),
+        self.calcY(point.y)
+    )
+    self:rotate(realPoint, angle)
 
-    self:drawShape(x, y, realXCenter, realYCenter)
+    self:drawShape(point, realPoint)
     love.graphics.setShader()
     love.graphics.pop()
 end
 
 ---@protected
----@param x number
----@param y number
----@param realX number
----@param realY number
-function Draw:drawShape(x, y, realX, realY) end
+---@param point Point
+---@param realPoint Point
+function Draw:drawShape(point, realPoint) end
 
 ---@param x number
 ---@return number
@@ -58,14 +59,13 @@ function Draw:calcRealY(y)
     return (y - params.halfScreenH) * App.camera.scale + App.camera.y
 end
 
----@param realXCenter number
----@param realYCenter number
+---@param realPoint Point
 ---@param angle number
 ---@protected
-function Draw:rotate(realXCenter, realYCenter, angle)
-    love.graphics.translate(realXCenter, realYCenter)
+function Draw:rotate(realPoint, angle)
+    love.graphics.translate(realPoint.x, realPoint.y)
     love.graphics.rotate(angle)
-    love.graphics.translate(-realXCenter, -realYCenter)
+    love.graphics.translate(-realPoint.x, -realPoint.y)
 end
 
 return Draw

@@ -31,13 +31,12 @@ function Canvas:snapshot()
     love.graphics.setCanvas()
 end
 
----@param x number
----@param y number
----@param realX number
----@param realY number
-function Canvas:drawShape(x, y, realX, realY)
+---@param point Point
+---@param realPoint Point
+function Canvas:drawShape(point, realPoint)
+    love.graphics.setColor(1, 1, 1, 1)
     love.graphics.setBlendMode("alpha", "premultiplied")
-    love.graphics.draw(self.canvas, self.point.x or realX, self.point.y or realY)
+    love.graphics.draw(self.canvas, self.point.x or realPoint.x, self.point.y or realPoint.y)
     love.graphics.setBlendMode("alpha", "alphamultiply")
 end
 

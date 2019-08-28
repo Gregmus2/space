@@ -11,14 +11,13 @@ local Event = require('enum.event')
 local ShipComponentBuilder = {}
 
 ---@param world World
----@param x number
----@param y number
+---@param point Point
 ---@param color Color
 ---@param vertexes number[]
 ---@param mass number
 ---@param rotateSpeed number
-function ShipComponentBuilder:buildCore(world, x, y, color, vertexes, mass, rotateSpeed)
-    local draw, fixture = self.build(world, x, y, color, vertexes, mass)
+function ShipComponentBuilder:buildCore(world, point, color, vertexes, mass, rotateSpeed)
+    local draw, fixture = self.build(world, point, color, vertexes, mass)
     return Core:new(draw, fixture, rotateSpeed)
 end
 
@@ -89,16 +88,15 @@ function ShipComponentBuilder:buildReactor(world, x, y, color, vertexes, mass, c
 end
 
 ---@param world World
----@param x number
----@param y number
+---@param point Point
 ---@param color Color
 ---@param vertexes number[]
 ---@param mass number
 ---@return Drawable, Fixture
-function ShipComponentBuilder.build(world, x, y, color, vertexes, mass)
+function ShipComponentBuilder.build(world, point, color, vertexes, mass)
     local draw = Polygon:new('fill', color, vertexes)
     local shape = love.physics.newPolygonShape(vertexes)
-    local body = love.physics.newBody(world, x, y, 'dynamic')
+    local body = love.physics.newBody(world, point.x, point.y, 'dynamic')
     body:setFixedRotation(false)
     body:setLinearDamping(1)
     body:setAngularDamping(10)

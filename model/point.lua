@@ -9,8 +9,8 @@ local Point = {}
 ---@return Point
 function Point:new(x, y)
     local newObj = {
-        x = x,
-        y = y
+        x = x or 0,
+        y = y or 0
     }
     setmetatable(newObj, self)
     self.__index = self

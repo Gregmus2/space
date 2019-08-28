@@ -9,6 +9,7 @@ local BulletsConfigModel = require('model.bullets_config_model')
 local Collection = require('collection.collection')
 local Grid = require('menu.grid')
 local GameObject = require('game_object.game_object')
+local Point = require('model.point')
 
 ---@class BuilderScene : Scene
 ---@field protected world World
@@ -43,8 +44,10 @@ function BuilderScene:load(prevScene, hero)
     self.grid:setCollection(self.templatesCollection)
     self.menu:addElement(self.grid)
 
+    local mainPoint = Point:new(100, 100)
+
     -- add templates for building parts of ship
-    local d, f = ShipComponentBuilder.build(self.world, 100, 100, Color:red(), PolygonFactory.generateRocket(20, 40, 10))
+    local d, f = ShipComponentBuilder.build(self.world, mainPoint, Color:red(), PolygonFactory.generateRocket(20, 40, 10))
     f:getBody():setFixedRotation(true)
     local go = GameObject:new(f):addDraw(d)
     self:addTemplate(go, function()
@@ -53,7 +56,7 @@ function BuilderScene:load(prevScene, hero)
 
         return engine
     end)
-    d, f = ShipComponentBuilder.build(self.world, 100, 100, Color:red(), PolygonFactory.generateRectangle(30, 10))
+    d, f = ShipComponentBuilder.build(self.world, mainPoint, Color:red(), PolygonFactory.generateRectangle(30, 10))
     f:getBody():setFixedRotation(true)
     go = GameObject:new(f):addDraw(d)
     self:addTemplate(go, function()
@@ -63,11 +66,11 @@ function BuilderScene:load(prevScene, hero)
 
         return weapon
     end)
-    d, f = ShipComponentBuilder.build(self.world, 100, 100, Color:blue(), PolygonFactory.generateRectangle(25, 25))
+    d, f = ShipComponentBuilder.build(self.world, mainPoint, Color:blue(), PolygonFactory.generateRectangle(25, 25))
     f:getBody():setFixedRotation(true)
     go = GameObject:new(f):addDraw(d)
     self:addTemplate(go, function()
-        local reactor = ShipComponentBuilder:buildReactor(hero:getWorld(), self.grid.x + Draw.calcX(go.fixture:getBody():getX()), self.grid.y + Draw.calcY(go.fixture:getBody():getY()), Color:blue(), PolygonFactory.generateRectangle(25, 25), 0.5, 10, 1)
+        local reactor = ShipComponentBuilder:buildReactor(hero:getWorld(), Point:new(self.grid.x + Draw.calcX(go.fixture:getBody():getX()), self.grid.y + Draw.calcY(go.fixture:getBody():getY())), Color:blue(), PolygonFactory.generateRectangle(25, 25), 0.5, 10, 1)
         self.hero:addComponent(reactor)
 
         return reactor

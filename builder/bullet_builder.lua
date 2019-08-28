@@ -4,14 +4,13 @@ local Circle = require('drawable.circle')
 ---@class BulletBuilder
 local BulletBuilder = {}
 
----@param x number
----@param y number
+---@param point Point
 ---@param radius number
 ---@param color Color
 ---@return GameObject
-function BulletBuilder.buildBullet(x, y, radius, color)
+function BulletBuilder.buildBullet(point, radius, color)
     local obj = GameObjectBuilder
-        :new(x, y)
+        :new(point)
         :addCirclePhysics(App.scene.world, radius, 'dynamic', 0.1, 0)
         :createGameObject()
         :addDraw(Circle:new('fill', color, radius))

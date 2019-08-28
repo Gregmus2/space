@@ -21,15 +21,13 @@ function Circle:new(mode, color, r)
     return newObj
 end
 
----@param x number
----@param y number
----@param realX number
----@param realY number
-function Circle:drawShape(x, y, realX, realY)
+---@param point
+---@param realPoint Point
+function Circle:drawShape(point, realPoint)
     love.graphics.circle(
         self.mode,
-        realX,
-        realY,
+        realPoint.x,
+        realPoint.y,
         self.r * App.camera.scale
     )
 end

@@ -24,15 +24,13 @@ function Rectangle:new(mode, color, w, h)
     return newObj
 end
 
----@param x number
----@param y number
----@param realX number
----@param realY number
-function Rectangle:drawShape(x, y, realX, realY)
+---@param point Point
+---@param realPoint Point
+function Rectangle:drawShape(point, realPoint)
     love.graphics.rectangle(
         self.mode,
-        realX - self.w * App.camera.scale / 2,
-        realY - self.h * App.camera.scale / 2,
+        realPoint.x - self.w * App.camera.scale / 2,
+        realPoint.y - self.h * App.camera.scale / 2,
         self.w * App.camera.scale,
         self.h * App.camera.scale
     )

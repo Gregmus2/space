@@ -6,6 +6,7 @@ local Config = require('config')
 local Canvas = require('drawable.canvas')
 local Area = require('model.area')
 local Point = require('model.point')
+local Event = require('enum.event')
 
 ---@class MainMenuScene : Scene
 local MainMenuScene = Scene:new()
@@ -54,6 +55,8 @@ function MainMenuScene:load(prevScene)
     self.menu:addElement(gameButton)
     self.menu:addElement(testButton)
     self.menu:addElement(quitButton)
+
+    self.events:addAction(Event.KEY, function() App.changeScene(SpaceScene) end, 'escape', 'menu')
 end
 
 function MainMenuScene:draw()

@@ -26,7 +26,6 @@ function Scene:new()
     }
     self.__index = self
     setmetatable(newObj, self)
-    newObj.events:addAction(Event.KEY, function() App.changeScene(Params.default.scene) end, 'escape')
 
     return newObj
 end

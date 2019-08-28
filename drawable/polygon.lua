@@ -23,21 +23,18 @@ function Polygon:new(mode, color, vertexes)
 end
 
 ---@protected
----@param x number
----@param y number
----@param realX number
----@param realY number
-function Polygon:drawShape(x, y, realX, realY)
-    love.graphics.polygon(self.mode, self:calcRealVertexes(x, y))
+---@param point Point
+---@param realPoint Point
+function Polygon:drawShape(point, realPoint)
+    love.graphics.polygon(self.mode, self:calcRealVertexes(point))
 end
 
----@param x number
----@param y number
+---@param point Point
 ---@return table
-function Polygon:calcRealVertexes(x, y)
+function Polygon:calcRealVertexes(point)
     local realVertexes = {}
-    for i = 1, self.countOfVertexes, 2 do realVertexes[i] = self.calcX(x + self.vertexes[i]) end
-    for i = 2, self.countOfVertexes, 2 do realVertexes[i] = self.calcY(y + self.vertexes[i]) end
+    for i = 1, self.countOfVertexes, 2 do realVertexes[i] = self.calcX(point.x + self.vertexes[i]) end
+    for i = 2, self.countOfVertexes, 2 do realVertexes[i] = self.calcY(point.y + self.vertexes[i]) end
 
     return realVertexes
 end

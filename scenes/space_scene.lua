@@ -1,5 +1,4 @@
 local Scene = require('scenes.scene')
-local PauseScene = require('scenes.pause_scene')
 local BuilderScene = require('scenes.builder_scene')
 local Color = require('color')
 local GameObjectBuilder = require('game_object_builder')
@@ -10,6 +9,8 @@ local Ship = require('ship_components.ship')
 local Polygon = require('drawable.polygon')
 local BulletEmitter = require('bullet_emitter')
 local BulletsConfigModel = require('model.bullets_config_model')
+local Params = require('params')
+local Point = require('model.point')
 
 ---@class SpaceScene : Scene
 ---@field protected hero Ship
@@ -35,8 +36,10 @@ function SpaceScene:load(prevScene)
         local polygon = Polygon:new('fill', color, vertexes)
 
         local go = GameObjectBuilder:new(
-            love.math.random(0, 5000),
-            love.math.random(0, 5000)
+            Point:new(
+                love.math.random(0, 5000),
+                love.math.random(0, 5000)
+            )
         )
             :addPolygonPhysics(self.world, vertexes, 'dynamic', 0.1)
             :createGameObject()
@@ -62,7 +65,7 @@ function SpaceScene:load(prevScene)
 
     self.events:addAction(Event.WHEEL, function(params) App.camera:addScale(params.y * 0.1) end)
 
-    self.events:addAction(Event.KEY, function() App.changeScene(PauseScene) end, 'space')
+    self.events:addAction(Event.KEY, function() App.changeScene(Params.default.scene) end, 'escape', 'menu')
     self.events:addAction(Event.KEY, function() App.changeSceneWithParam(BuilderScene, self.hero) end, 'f')
 end
 

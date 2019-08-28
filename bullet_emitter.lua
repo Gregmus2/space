@@ -2,10 +2,10 @@ local BulletBuilder = require('builder.bullet_builder')
 local Collection = require('collection.collection')
 local Circle = require('drawable.circle')
 local Color = require('color')
+local Point = require('model.point')
 
 ---@class BulletEmitter
----@field protected x number
----@field protected y number
+---@field protected point Point
 ---@field protected angle number
 ---@field protected creationPeriod number
 ---@field protected timer number
@@ -22,8 +22,7 @@ function BulletEmitter:new(bulletsPerSec, bulletsConfig)
         bullets = Collection:new({}),
         bulletsConfig = bulletsConfig,
         angle = 2,
-        x = 0,
-        y = 0
+        point = Point:new()
     }
 
     setmetatable(newObj, self)
@@ -32,10 +31,9 @@ function BulletEmitter:new(bulletsPerSec, bulletsConfig)
     return newObj
 end
 
----@param x number
----@param y number
-function BulletEmitter:setPosition(x, y)
-    self.x, self.y = x, y
+---@param point Point
+function BulletEmitter:setPosition(point)
+    self.point = point
 end
 
 ---@param angle number
@@ -74,8 +72,10 @@ function BulletEmitter:update(dt)
     if self.timer >= self.creationPeriod then
         ---@type GameObject
         local bullet = BulletBuilder.buildBullet(
-            self.x + math.cos(self.angle) * 30,
-            self.y + math.sin(self.angle) * 30,
+            Point:new(
+                self.point.x + math.cos(self.angle) * 30,
+                self.point.y + math.sin(self.angle) * 30
+            ),
             self.bulletsConfig.radius,
             self.bulletsConfig.color
         )
@@ -89,8 +89,10 @@ end
 function BulletEmitter:draw()
     if App.debug then
         Circle:new('fill', Color:red(), 10):draw(
-            self.x + math.cos(self.angle) * 30,
-            self.y + math.sin(self.angle) * 30,
+            Point:new(
+                self.point.x + math.cos(self.angle) * 30,
+                self.point.y + math.sin(self.angle) * 30
+            ),
             self.angle
         )
     end

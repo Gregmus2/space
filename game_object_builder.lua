@@ -4,16 +4,13 @@ local Params = require('params')
 
 ---@class GameObjectBuilder
 ---@field protected fixture Fixture
----@field protected x number
----@field protected y number
+---@field protected point Point
 local GameObjectBuilder = {}
 
----@param x number
----@param y number
-function GameObjectBuilder:new(x, y)
+---@param point Point
+function GameObjectBuilder:new(point)
     local newObj = {
-        x = x,
-        y = y
+        point = point
     }
     self.__index = self
     setmetatable(newObj, self)
@@ -59,7 +56,7 @@ end
 ---@param friction number|nil
 ---@return Fixture
 function GameObjectBuilder:addPhysics(shape, world, bodyType, mass, linearDamping, friction)
-    local body = love.physics.newBody(world, self.x, self.y, bodyType)
+    local body = love.physics.newBody(world, self.point.x, self.point.y, bodyType)
     body:setFixedRotation(false)
     if (linearDamping ~= nil) then
         body:setLinearDamping(linearDamping or Params.default.linearDumping)
