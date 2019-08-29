@@ -1,5 +1,6 @@
 local Clickable = require('interface.clickable')
 local Updatable = require('interface.updatable')
+local Point = require('model.point')
 
 ---@class Menu
 ---@field protected elements MenuObject[]
@@ -24,7 +25,7 @@ end
 ---@param y number
 function Menu:mouseRelease(x, y)
     for _, element in ipairs(self.clickable) do
-        if element:checkPoint(x, y) then
+        if element:checkPoint(Point:new(x, y)) then
             element.action()
         end
     end

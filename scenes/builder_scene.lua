@@ -10,6 +10,7 @@ local Collection = require('collection.collection')
 local Grid = require('menu.grid')
 local GameObject = require('game_object.game_object')
 local Point = require('model.point')
+local Area = require('model.area')
 
 ---@class BuilderScene : Scene
 ---@field protected world World
@@ -25,11 +26,11 @@ function BuilderScene:load(prevScene, hero)
     self:createMenu()
 
     self.state = {}
-    self.state.heroX, self.state.heroY = self.hero:getPosition()
+    self.state.heroPoint = self.hero:getPosition()
     self.state.cameraState = App.camera:getState()
 
-    App.camera:setCoords(wpixels(5) * App.camera.scale, hpixels(5) * App.camera.scale)
-    self.hero:setPosition(wpixels(5) * App.camera.scale, hpixels(5) * App.camera.scale)
+    App.camera:setCoords(Point:new(wpixels(5) * App.camera.scale, hpixels(5) * App.camera.scale))
+    self.hero:setPosition(Point:new(wpixels(5) * App.camera.scale, hpixels(5) * App.camera.scale))
 
     self.hero:unJoin()
     self.hero:clearVisual()
@@ -39,7 +40,7 @@ function BuilderScene:load(prevScene, hero)
     self.TRIGGER_DRAG_NAME = 'dragging_builder';
     self:draggableEvent();
 
-    self.grid = Grid:new(wpixels(7), hpixels(2), wpixels(2), hpixels(6), 2, hpixels(0.5))
+    self.grid = Grid:new(Point:new(wpixels(7), hpixels(2)), Area:new(wpixels(2), hpixels(6)), 2, hpixels(0.5))
     self.templatesCollection = Collection:new({})
     self.grid:setCollection(self.templatesCollection)
     self.menu:addElement(self.grid)
@@ -51,7 +52,7 @@ function BuilderScene:load(prevScene, hero)
     f:getBody():setFixedRotation(true)
     local go = GameObject:new(f):addDraw(d)
     self:addTemplate(go, function()
-        local engine = ShipComponentBuilder:buildEngine(hero:getWorld(), prevScene, self.grid.x + Draw.calcX(go.fixture:getBody():getX()), self.grid.y + Draw.calcY(go.fixture:getBody():getY()), Color:red(), PolygonFactory.generateRocket(20, 40, 10), 0.1, 1500)
+        local engine = ShipComponentBuilder:buildEngine(hero:getWorld(), prevScene, Point:new(self.grid.point.x + Draw.calcX(go.fixture:getBody():getX()), self.grid.point.y + Draw.calcY(go.fixture:getBody():getY())), Color:red(), PolygonFactory.generateRocket(20, 40, 10), 0.1, 1500)
         self.hero:addEngine(engine)
 
         return engine
@@ -61,7 +62,7 @@ function BuilderScene:load(prevScene, hero)
     go = GameObject:new(f):addDraw(d)
     self:addTemplate(go, function()
         local bulletEmitter = BulletEmitter:new(5, BulletsConfigModel:new(5, Color:white(), 50))
-        local weapon = ShipComponentBuilder:buildWeapon(hero:getWorld(), prevScene, self.grid.x + Draw.calcX(go.fixture:getBody():getX()), self.grid.y + Draw.calcY(go.fixture:getBody():getY()), Color:red(), PolygonFactory.generateRectangle(30, 10), 0.1, bulletEmitter)
+        local weapon = ShipComponentBuilder:buildWeapon(hero:getWorld(), prevScene, Point:new(self.grid.point.x + Draw.calcX(go.fixture:getBody():getX()), self.grid.point.y + Draw.calcY(go.fixture:getBody():getY())), Color:red(), PolygonFactory.generateRectangle(30, 10), 0.1, bulletEmitter)
         self.hero:addComponent(weapon)
 
         return weapon
@@ -70,7 +71,7 @@ function BuilderScene:load(prevScene, hero)
     f:getBody():setFixedRotation(true)
     go = GameObject:new(f):addDraw(d)
     self:addTemplate(go, function()
-        local reactor = ShipComponentBuilder:buildReactor(hero:getWorld(), Point:new(self.grid.x + Draw.calcX(go.fixture:getBody():getX()), self.grid.y + Draw.calcY(go.fixture:getBody():getY())), Color:blue(), PolygonFactory.generateRectangle(25, 25), 0.5, 10, 1)
+        local reactor = ShipComponentBuilder:buildReactor(hero:getWorld(), Point:new(self.grid.point.x + Draw.calcX(go.fixture:getBody():getX()), self.grid.point.y + Draw.calcY(go.fixture:getBody():getY())), Color:blue(), PolygonFactory.generateRectangle(25, 25), 0.5, 10, 1)
         self.hero:addComponent(reactor)
 
         return reactor
@@ -95,7 +96,7 @@ function BuilderScene:draggableEvent()
                     Draw.calcY(go.fixture:getBody():getY()),
                     0, params.x, params.y
                 ) then
-                    self.events:addAction(Event.MOUSE_MOVE, function(moveParams) go:setPosition(Draw:calcRealX(moveParams.x), Draw:calcRealY(moveParams.y)) end, nil, self.TRIGGER_DRAG_NAME)
+                    self.events:addAction(Event.MOUSE_MOVE, function(moveParams) go:setPosition(Point:new(Draw:calcRealX(moveParams.x), Draw:calcRealY(moveParams.y))) end, nil, self.TRIGGER_DRAG_NAME)
                     self.events:addAction(Event.WHEEL, function(wheelParams) go:forceRotate(wheelParams.y * 0.1) end, nil, self.TRIGGER_DRAG_NAME)
                 end
             end
@@ -114,14 +115,14 @@ function BuilderScene:addTemplate(template, buildFunction)
     self.events:addAction(Event.MOUSE,
             function(params)
                 if template.fixture:getShape():testPoint(
-                        self.grid.x + Draw.calcX(template.fixture:getBody():getX()),
-                        self.grid.y + Draw.calcY(template.fixture:getBody():getY()),
+                        self.grid.point.x + Draw.calcX(template.fixture:getBody():getX()),
+                        self.grid.point.y + Draw.calcY(template.fixture:getBody():getY()),
                         0, params.x, params.y
                 ) then
                     local object = buildFunction()
                     table.insert(self.draggableObjects, object)
 
-                    self.events:addAction(Event.MOUSE_MOVE, function(moveParams) object:setPosition(Draw:calcRealX(moveParams.x), Draw:calcRealY(moveParams.y)) end, nil, self.TRIGGER_DRAG_NAME)
+                    self.events:addAction(Event.MOUSE_MOVE, function(moveParams) object:setPosition(Point:new(Draw:calcRealX(moveParams.x), Draw:calcRealY(moveParams.y))) end, nil, self.TRIGGER_DRAG_NAME)
                     self.events:addAction(Event.WHEEL, function(wheelParams) object:forceRotate(wheelParams.y * 0.1) end, nil, self.TRIGGER_DRAG_NAME)
                 end
             end, 1
@@ -132,7 +133,7 @@ function BuilderScene:sleep()
     self.hero:reJoin()
     self:reset();
 
-    self.hero:setPosition(self.state.heroX, self.state.heroY)
+    self.hero:setPosition(self.state.heroPoint)
     App.camera:setState(self.state.cameraState)
 end
 

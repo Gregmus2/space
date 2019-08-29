@@ -38,7 +38,7 @@ function Engine:move(dt, direction)
     self.fixture:getBody():applyForce(math.cos(self.fixture:getBody():getAngle()) * dSpeed, math.sin(self.fixture:getBody():getAngle()) * dSpeed)
 
     self.particle:setDirection(self.fixture:getBody():getAngle() - 3.14159)
-    self.particle:moveTo(self:getPosition())
+    self.particle:moveTo(self:getPosition():get())
 end
 
 function Engine:draw()

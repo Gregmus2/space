@@ -4,6 +4,7 @@ local Config = require('config')
 local MainMenuScene = require('scenes.main_menu_scene')
 local Event = require('enum.event')
 local EventCollection = require('collection.event_collection')
+local Point = require('model.point')
 require('resources')
 
 ---@class App
@@ -29,7 +30,7 @@ function App.load()
 
     App.events:addAction(Event.KEY, function() App.debug = not App.debug end, '`')
 
-    App.camera = Camera:new(Params.halfScreenW, Params.halfScreenH)
+    App.camera = Camera:new(Point:new(Params.halfScreenW, Params.halfScreenH))
 
     App.wten = Config.width / 10
     App.hten = Config.height / 10

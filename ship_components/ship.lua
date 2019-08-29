@@ -1,4 +1,5 @@
 local Components = require('interface.component')
+local Point = require('model.point')
 
 ---@class Ship : GameObject
 ---@field protected core Core
@@ -72,17 +73,18 @@ function Ship:move(dt, direction)
     end
 end
 
----@return number, number @ x, y
+---@return Point
 function Ship:getPosition()
     local body = self.core.fixture:getBody()
 
-    return body:getX(), body:getY()
+    return Point:new(body:getPosition())
 end
 
 ---@param point Point
 function Ship:setPosition(point)
     local origin_point = self.core:getPosition()
-    local diff_point = point:diffPoint(origin_point)
+    local diff_point = point:clone()
+    diff_point:diffPoint(origin_point)
 
     self.core:setPosition(point)
     for _, engine in ipairs(self.engines) do

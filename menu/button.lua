@@ -67,7 +67,7 @@ function Button:draw()
     end
 
     if self.print ~= nil then
-        love.graphics.draw(self.print, self.print_point.x or self.point.x, self.print_point.y or self.point.y)
+        love.graphics.draw(self.print, self.print_point and self.print_point.x or self.point.x, self.print_point and self.print_point.y or self.point.y)
     end
 end
 

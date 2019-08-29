@@ -2,9 +2,8 @@
 ---@field public action function
 local Clickable = {}
 
----@param x number
----@param y number
+---@param point Point
 ---@return boolean
-function Clickable:checkPoint(x, y) end
+function Clickable:checkPoint(point) end
 
 return Clickable

@@ -38,4 +38,9 @@ function Point:get()
     return self.x, self.y
 end
 
+function Point:ceil()
+    self.x = math.ceil(self.x)
+    self.y = math.ceil(self.y)
+end
+
 return Point

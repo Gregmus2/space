@@ -18,4 +18,13 @@ function Area:new(w, h)
     return newObj
 end
 
+function Area:ceil()
+    self.w = math.ceil(self.w)
+    self.h = math.ceil(self.h)
+end
+
+function Area:get()
+    return self.w, self.h
+end
+
 return Area

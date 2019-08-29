@@ -22,8 +22,10 @@ function MainMenuScene:load(prevScene)
 
     local menuX = wpixels(0.2)
     local quitButton = Button:newWithText(
-        menuX,
-        hpixels(9.5),
+        Point:new(
+            menuX,
+            hpixels(9.5)
+        ),
         'quit',
         Resources:getFont(FONT_CASANOVA, 26),
         false,
@@ -32,8 +34,10 @@ function MainMenuScene:load(prevScene)
         end
     );
     local testButton = Button:newWithText(
-        menuX,
-        quitButton.y - quitButton.h,
+        Point:new(
+            menuX,
+            quitButton.point.y - quitButton.area.h
+        ),
         'test',
         Resources:getFont(FONT_CASANOVA, 26),
         false,
@@ -42,8 +46,10 @@ function MainMenuScene:load(prevScene)
         end
     );
     local gameButton = Button:newWithText(
-        menuX,
-        testButton.y - testButton.h,
+        Point:new(
+            menuX,
+            testButton.point.y - testButton.area.h
+        ),
         'start',
         Resources:getFont(FONT_CASANOVA, 26),
         false,

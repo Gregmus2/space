@@ -9,17 +9,13 @@ local Color = require('color')
 ---@field protected objects MenuObject[]
 local Container = {}
 
----@param x number
----@param y number
----@param w number
----@param h number
+---@param point Point
+---@param area Area
 ---@param color Color
-function Container:new(x, y, w, h, color)
+function Container:new(point, area, color)
     local newObj = {
-        x = x,
-        y = y,
-        w = w,
-        h = h,
+        point = point,
+        area = area,
         color = color or Color:white(),
         objects = {}
     }
@@ -38,10 +34,10 @@ function Container:draw()
     love.graphics.setColor(self.color.r, self.color.g, self.color.b, 0.4)
     love.graphics.rectangle(
         'fill',
-        self.x - self.w / 2,
-        self.y - self.h / 2,
-        self.w,
-        self.h
+        self.point.x - self.area.w / 2,
+        self.point.y - self.area.h / 2,
+        self.area.w,
+        self.area.h
     )
 
     for _, object in ipairs(self.objects) do

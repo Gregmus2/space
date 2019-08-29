@@ -1,5 +1,6 @@
 local GameObject = require('game_object.game_object')
 local Params = require('params')
+local Point = require('model.point')
 
 ---@class ComplicatedObject : PhysicalDrawObject
 ---@field public drawable[] Draw
@@ -55,10 +56,11 @@ function ComplicatedObject:draw()
     end
 
     local x, y = self.fixture[1]:getBody():getPosition()
-    local distance = math.sqrt((x - (App.camera.x)) ^ 2 + (y - (App.camera.y)) ^ 2) - self.drawable[1].visibilityRadius
+    local point = Point:new(x, y)
+    local distance = math.distance(point, App.camera.point) - self.drawable[1].visibilityRadius
     if math.abs(distance) <= Params.screenOutRadius * (1/App.camera.scale) then
         for _, drawable in ipairs(self.drawable) do
-            drawable:draw(x, y, self.fixture[1]:getBody():getAngle())
+            drawable:draw(point, self.fixture[1]:getBody():getAngle())
         end
     end
 end
