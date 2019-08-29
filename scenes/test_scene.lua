@@ -17,7 +17,7 @@ function TestScene:load(prevScene)
 
     local engines = {}
     for i = 1, 20 do
-        engines[i] = ShipComponentBuilder:buildEngine(self.world, prevScene, Draw:calcRealX(100), Draw:calcRealY(100), Color:new(math.random(), math.random(), math.random()), PolygonFactory.generateRocket(20, 40, 10), 0.1, 1500)
+        engines[i] = ShipComponentBuilder:buildEngine(self.world, prevScene, Point:new(Draw:calcRealX(100), Draw:calcRealY(100)), Color:new(math.random(), math.random(), math.random()), PolygonFactory.generateRocket(20, 40, 10), 0.1, 1500)
     end
     local grid = Grid:new(Point:new(App.camera.point.x / 2, App.camera.point.y / 2), Area:new(400, 500), 2, 100)
     local collection = Collection:new(engines)
