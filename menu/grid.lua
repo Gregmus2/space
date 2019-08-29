@@ -108,10 +108,12 @@ function Grid:renderCanvas()
         love.graphics.line(relativeX, y, x2, y) -- horizontal line every stage
     end
 
-    local x = relativeX + self.area.w / 2
-    local y = #self.grid * self.columnHeight
     love.graphics.setColor(self.color.r, self.color.g, self.color.b)
-    love.graphics.line(x, relativeY, x, relativeY + (y < self.area.h and y or self.area.h)) -- vertical line
+    for i = 1, self.columns - 1 do
+        local x = relativeX + self.columnWidth * i
+        local y = #self.grid * self.columnHeight
+        love.graphics.line(x, relativeY, x, relativeY + (y < self.area.h and y or self.area.h)) -- vertical line
+    end
 
     love.graphics.setCanvas() -- set default layout
 end

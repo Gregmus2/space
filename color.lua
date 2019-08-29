@@ -28,4 +28,8 @@ function Color:white()
     return Color:new(1, 1, 1)
 end
 
+function Color:get()
+    return self.r, self.g, self.b, self.a
+end
+
 return Color

@@ -5,6 +5,7 @@ local Collection = {}
 ---@param elements any[]
 ---@field protected count number
 function Collection:new(elements)
+    elements = elements or {}
     local list = {}
     for _, value in pairs(elements) do
         list[#list + 1] = value

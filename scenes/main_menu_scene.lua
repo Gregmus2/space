@@ -1,6 +1,7 @@
 local Scene = require('scenes.scene')
 local SpaceScene = require('scenes.space_scene')
 local TestScene = require('scenes.test_scene')
+local SettingsScene = require('scenes.settings_scene')
 local Button = require('menu.button')
 local Config = require('config')
 local Canvas = require('drawable.canvas')
@@ -21,13 +22,14 @@ function MainMenuScene:load(prevScene)
     self:createMenu()
 
     local menuX = wpixels(0.2)
+    local font = Resources:getFont(FONT_CASANOVA, 26)
     local quitButton = Button:newWithText(
         Point:new(
             menuX,
             hpixels(9.5)
         ),
         'quit',
-        Resources:getFont(FONT_CASANOVA, 26),
+        font,
         false,
         function()
             love.event.quit()
@@ -39,19 +41,31 @@ function MainMenuScene:load(prevScene)
             quitButton.point.y - quitButton.area.h
         ),
         'test',
-        Resources:getFont(FONT_CASANOVA, 26),
+        font,
         false,
         function()
             App.changeScene(TestScene)
         end
     );
-    local gameButton = Button:newWithText(
+    local settingsButton = Button:newWithText(
         Point:new(
             menuX,
             testButton.point.y - testButton.area.h
         ),
+        'settings',
+        font,
+        false,
+        function()
+            App.changeScene(SettingsScene)
+        end
+    );
+    local gameButton = Button:newWithText(
+        Point:new(
+            menuX,
+            settingsButton.point.y - settingsButton.area.h
+        ),
         'start',
-        Resources:getFont(FONT_CASANOVA, 26),
+        font,
         false,
         function()
             App.changeScene(SpaceScene)
@@ -60,6 +74,7 @@ function MainMenuScene:load(prevScene)
 
     self.menu:addElement(gameButton)
     self.menu:addElement(testButton)
+    self.menu:addElement(settingsButton)
     self.menu:addElement(quitButton)
 
     self.events:addAction(Event.KEY, function() App.changeScene(SpaceScene) end, 'escape', 'menu')
