@@ -46,8 +46,8 @@ function love.wheelmoved(x, y)
     triggerEvent(actions, {x = x, y = y})
 end
 
-function love.keypressed(key)
-    local actions = App.scene.events:findActions(Event.KEY, key) or App.events:findActions(Event.KEY, key)
+function love.keypressed(_, scancode)
+    local actions = App.scene.events:findActions(Event.KEY, scancode) or App.events:findActions(Event.KEY, scancode)
     triggerEvent(actions)
 end
 
@@ -56,8 +56,8 @@ function love.mousemoved(x, y)
     triggerEvent(actions, {x = x, y = y})
 end
 
-function love.keyreleased(key)
-    local actions = App.scene.events:findActions(Event.KEY_RELEASE, key) or App.events:findActions(Event.KEY_RELEASE, key)
+function love.keyreleased(_, scancode)
+    local actions = App.scene.events:findActions(Event.KEY_RELEASE, scancode) or App.events:findActions(Event.KEY_RELEASE, scancode)
     triggerEvent(actions)
 end
 

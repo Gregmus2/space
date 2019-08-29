@@ -24,6 +24,7 @@ function App.load()
     love.graphics.setBackgroundColor(0.03, 0.04, 0.08)
     love.physics.setMeter(Params.worldMeter)
     App.debug = Config.debug
+
     Params:init()
     Params.default.scene = MainMenuScene
     Resources:load()
