@@ -1,5 +1,5 @@
 local Scene = require('scenes.scene')
-local Grid = require('menu.grid')
+local Container = require('menu.container')
 local Collection = require('collection.collection')
 local Area = require('model.area')
 local Point = require('model.point')
@@ -17,13 +17,11 @@ function SettingsScene:load(prevScene)
     self.isLoaded = true
     self:createMenu()
 
-    local grid = Grid:new(Point:new(App.camera.point.x / 2, App.camera.point.y / 2), Area:new(400, 500), 1, 100)
-    local elements = Collection:new({})
-    grid:setCollection(elements)
-    self.menu:addElement(grid)
+    local container = Container:new(Point:new(App.camera.point.x, App.camera.point.y), Area:new(400, 500), Color:white(), 100)
+    self.menu:addElement(container)
 
     local slider = Slider:new(Point:new(0, 0), 300, {'1024*768', '768*664', '445*21'}, Color:white())
-    elements:add(slider)
+    container:add(slider)
 
     self.events:addAction(Event.KEY, function() App.changeScene(prevScene) end, 'escape', 'menu')
 end

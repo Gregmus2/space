@@ -115,8 +115,8 @@ function BuilderScene:addTemplate(template, buildFunction)
     self.events:addAction(Event.MOUSE,
             function(params)
                 if template.fixture:getShape():testPoint(
-                        self.grid.point.x + Draw.calcX(template.fixture:getBody():getX()),
-                        self.grid.point.y + Draw.calcY(template.fixture:getBody():getY()),
+                        Draw.calcX(template.fixture:getBody():getX()),
+                        Draw.calcY(template.fixture:getBody():getY()),
                         0, params.x, params.y
                 ) then
                     local object = buildFunction()

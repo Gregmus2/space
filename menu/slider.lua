@@ -35,14 +35,18 @@ function Slider:new(point, width, choices, color)
         function(params)
             local mouse_point = Point:new(params.x, params.y)
             local slider_point = newObj.start_point:clone(newObj.current_index * newObj.step_offset)
-            -- todo слайдер находится в grid и поэтому имеет виртуальную позицию. А сравнивает тут с реальной позицией мыши, надо что-то делать
-            print(newObj.start_point.x)
-            print(math.distance(mouse_point, slider_point))
             if math.distance(mouse_point, slider_point) <= newObj.circle.r then
-                print(1)
                 App.scene.events:addAction(Event.MOUSE_MOVE,
                     function(moveParams)
-                        newObj.current_index = math.floor((moveParams.x - newObj.start_point.x) / newObj.step_offset)
+                        local diff = (moveParams.x - newObj.start_point.x) % newObj.step_offset
+                        if diff > newObj.circle.r and newObj.step_offset - diff > newObj.circle.r then
+                            return
+                        end
+
+                        local index = math.floor((moveParams.x - newObj.start_point.x - newObj.step_offset / 2) / newObj.step_offset) + 1
+                        index = index < 0 and 0 or index
+                        index = index > #newObj.choices and #newObj.choices or index
+                        newObj.current_index = index
                     end, nil, slider_trigger_uniq
                 )
             end

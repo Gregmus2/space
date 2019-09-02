@@ -97,8 +97,11 @@ function Grid:renderCanvas()
         local y = (relativeY - self.offset % self.columnHeight) + self.columnHeight * i
         for j, element in ipairs(self.grid[i]) do
             local elementY = y - self.columnHeight / 2
-            element:setPosition(Point:new(relativeX + self.columnWidth * (j - 0.5), elementY))
+            local relative_position = Point:new(relativeX + self.columnWidth * (j - 0.5), elementY)
+            element:setPosition(relative_position)
             element:draw()
+            -- For internal logic of elements (if elements depends on their position)
+            element:setPosition(relative_position:clone(self.point.x, self.point.y))
         end
         if i == #self.grid then -- without last element
             break;

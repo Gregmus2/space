@@ -1,9 +1,9 @@
 ---@class Collection
 ---@field public elements table[]
+---@field protected count number
 local Collection = {}
 
 ---@param elements any[]
----@field protected count number
 function Collection:new(elements)
     elements = elements or {}
     local list = {}
