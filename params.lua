@@ -15,6 +15,18 @@ local Params = {
         bullets_lifetime = 1
     },
     worldMeter = 64,
+    resolutions = {
+        "640x480",
+        "800x600",
+        "1280x720",
+        "1280x800",
+        "1366x768",
+        "1440x900",
+        "1600x900",
+        "1680x1050",
+        "1920x1080",
+        "1920x1200",
+    }
 }
 
 function Params:init()

@@ -2,6 +2,7 @@ local Event = require('enum.event')
 local Circle = require('drawable.circle')
 local Color = require('color')
 local Point = require('model.point')
+local Txt = require('drawable.text')
 
 ---@class Slider
 ---@field protected width number
@@ -11,6 +12,7 @@ local Point = require('model.point')
 ---@field protected step_offset number
 ---@field protected current_index number
 ---@field protected color Color
+---@field protected text_elements Txt[]
 local Slider = {}
 
 ---@param width number
@@ -23,12 +25,18 @@ function Slider:new(point, width, choices, color)
         choices = choices,
         circle = Circle:new('fill', Color:red(), 10),
         start_point = point:clone(-(width / 2)),
-        step_offset = width / #choices,
+        step_offset = width / (#choices - 1),
         current_index = 0,
-        color = color
+        color = color,
+        text_elements = {}
     }
     setmetatable(newObj, self)
     self.__index = self
+
+    local font = Resources:getFont(FONT_CASANOVA, 14)
+    for i, value in pairs(choices) do
+        newObj.text_elements[i] = Txt:new(value, Color:white(), font)
+    end
 
     local slider_trigger_uniq = 'slider_drag_trigger' .. love.math.random()
     App.scene.events:addAction(Event.MOUSE,
@@ -45,7 +53,7 @@ function Slider:new(point, width, choices, color)
 
                         local index = math.floor((moveParams.x - newObj.start_point.x - newObj.step_offset / 2) / newObj.step_offset) + 1
                         index = index < 0 and 0 or index
-                        index = index > #newObj.choices and #newObj.choices or index
+                        index = index > #newObj.choices - 1 and #newObj.choices - 1 or index
                         newObj.current_index = index
                     end, nil, slider_trigger_uniq
                 )
@@ -67,9 +75,12 @@ function Slider:getCurrent()
 end
 
 function Slider:draw()
-    self.circle:draw(self.start_point:clone(self.current_index * self.step_offset), 0)
     love.graphics.setColor(self.color:get())
     love.graphics.line(self.start_point.x, self.start_point.y, self.start_point.x + self.width, self.start_point.y)
+
+    local circle_point = self.start_point:clone(self.current_index * self.step_offset)
+    self.circle:draw(circle_point, 0)
+    self.text_elements[self.current_index + 1]:draw(circle_point:clone(0, -(self.circle.r * 2)), 0)
 end
 
 ---@param point Point
