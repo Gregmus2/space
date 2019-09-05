@@ -1,6 +1,6 @@
----@class Visible
-local Visible = {}
+---@class IVisible
+local IVisible = {}
 
-function Visible:draw() end
+function IVisible:draw() end
 
-return Visible
+return IVisible

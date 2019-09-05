@@ -70,7 +70,7 @@ function Slider:new(point, width, choices, color)
 end
 
 ---@return any
-function Slider:getCurrent()
+function Slider:getValue()
     return self.choices[self.current_index + 1]
 end
 

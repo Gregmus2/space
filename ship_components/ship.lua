@@ -51,7 +51,7 @@ function Ship:addEngine(engine)
     self.engines[#self.engines + 1] = engine
 end
 
----@param component Component
+---@param component IComponent
 function Ship:addComponent(component)
     assert(isImplement(component, Components), 'object hasn\'t connect method')
     self.other[#self.other + 1] = component

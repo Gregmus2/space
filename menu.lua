@@ -1,11 +1,12 @@
-local Clickable = require('interface.clickable')
-local Updatable = require('interface.updatable')
+local IClickable = require('interface.clickable')
+local IUpdatable = require('interface.updatable')
+local ICollection = require('interface.collection')
 local Point = require('model.point')
 
 ---@class Menu
 ---@field protected elements MenuObject[]
----@field protected updatable Updatable[]
----@field protected clickable Clickable[]
+---@field protected updatable IUpdatable[]
+---@field protected clickable IClickable[]
 local Menu = {}
 
 ---@return Menu
@@ -34,11 +35,16 @@ end
 ---@param element MenuObject
 function Menu:addElement(element)
     self.elements[#self.elements + 1] = element
-    if isImplement(element, Clickable) then
+    if isImplement(element, IClickable) then
         self.clickable[#self.clickable + 1] = element
     end
-    if isImplement(element, Updatable) then
+    if isImplement(element, IUpdatable) then
         self.updatable[#self.updatable+ 1] = element
+    end
+    if isImplement(element, ICollection) then
+        for _, el in ipairs(element:getElements()) do
+            self:addElement(el)
+        end
     end
 end
 

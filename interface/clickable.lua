@@ -1,9 +1,9 @@
----@class Clickable
+---@class IClickable
 ---@field public action function
-local Clickable = {}
+local IClickable = {}
 
 ---@param point Point
 ---@return boolean
-function Clickable:checkPoint(point) end
+function IClickable:checkPoint(point) end
 
-return Clickable
+return IClickable

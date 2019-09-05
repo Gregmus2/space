@@ -2,16 +2,16 @@ local EventCollection = require('collection.event_collection')
 local Menu = require('menu')
 local Event = require('enum.event')
 local Params = require('params')
-local Updatable = require('interface.updatable')
-local Visible = require('interface.visible')
+local IUpdatable = require('interface.updatable')
+local IVisible = require('interface.visible')
 
 ---@class Scene
 ---@field public world World
 ---@field public isLoaded boolean
 ---@field public events EventCollection
 ---@field public menu Menu
----@field protected updatable Updatable[]
----@field protected visible Visible[]
+---@field protected updatable IUpdatable[]
+---@field protected visible IVisible[]
 ---@field public cameraState table<string, any>
 local Scene = {}
 
@@ -54,15 +54,15 @@ function Scene:updateElements(dt)
     end
 end
 
----@param updatable Updatable
+---@param updatable IUpdatable
 function Scene:addUpdatable(updatable)
-    assert(isImplement(updatable, Updatable), 'object hasn\'t update method')
+    assert(isImplement(updatable, IUpdatable), 'object hasn\'t update method')
     self.updatable[#self.updatable + 1] = updatable
 end
 
----@param visible Visible
+---@param visible IVisible
 function Scene:addVisible(visible)
-    assert(isImplement(visible, Visible), 'object hasn\'t draw method')
+    assert(isImplement(visible, IVisible), 'object hasn\'t draw method')
     self.visible[#self.visible + 1] = visible
 end
 

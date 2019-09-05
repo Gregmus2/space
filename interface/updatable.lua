@@ -1,7 +1,7 @@
----@class Updatable
-local Updatable = {}
+---@class IUpdatable
+local IUpdatable = {}
 
 ---@param dt number
-function Updatable:update(dt) end
+function IUpdatable:update(dt) end
 
-return Updatable
+return IUpdatable

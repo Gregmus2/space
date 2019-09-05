@@ -1,12 +1,12 @@
----@class Component
-local Component = {}
+---@class IComponent
+local IComponent = {}
 
 ---@param ship Ship
-function Component:connect(ship) end
+function IComponent:connect(ship) end
 
 ---@param ship Ship
-function Component:disconnect(ship) end
+function IComponent:disconnect(ship) end
 
-function Component:clearVisual() end
+function IComponent:clearVisual() end
 
-return Component
+return IComponent

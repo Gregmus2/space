@@ -8,3 +8,16 @@ function string.random(length)
     if not length or length <= 0 then return '' end
     return string.random(length - 1) .. charset[math.random(1, #charset)]
 end
+
+function string:split(sep)
+    if sep == nil then
+        sep = "%s"
+    end
+
+    local t={}
+    for str in string.gmatch(self, "([^"..sep.."]+)") do
+        table.insert(t, str)
+    end
+
+    return t
+end
