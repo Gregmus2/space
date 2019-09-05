@@ -6,7 +6,7 @@ local Button = require('menu.button')
 ---@field protected point Point
 ---@field protected area Area
 ---@field protected color Color
----@field protected elements table<IFormElement>function
+---@field protected elements table<IFormElement, function>
 ---@field protected columnHeight number
 ---@field protected acceptButton Button
 local FormContainer = {}
@@ -27,9 +27,7 @@ function FormContainer:new(point, area, columnHeight)
         Resources:getFont(FONT_CASANOVA, 26),
         true,
         function()
-            print(1)
             for _, callback in pairs(newObj.elements) do
-                print(2)
                 callback()
             end
         end

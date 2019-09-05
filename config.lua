@@ -12,7 +12,7 @@ local path = 'conf.txt';
 function Config:load()
     local fileData
     if love.filesystem.getInfo(path) == nil then
-        self:createConfig()
+        self:writeConfig()
         fileData = Params.default.config
     end
     fileData = fileData or self.readConfig()
@@ -23,9 +23,11 @@ function Config:load()
     self.debug = tonumber(fileData.debug)
 end
 
----@private
-function Config:createConfig()
-    local success, message = love.filesystem.write(path, self.tableToConfig(Params.default.config))
+function Config:writeConfig(config)
+    config = config or Params.default.config
+    local oldConfig = self.readConfig()
+    table.mergeAssoc(oldConfig, config)
+    local success, message = love.filesystem.write(path, self.tableToConfig(oldConfig))
     if success == false then
         love.window.showMessageBox("Can't write the config file", message, 'error')
     end

@@ -17,16 +17,19 @@ local Slider = {}
 
 ---@param width number
 ---@param choices table
+---@param current number
 ---@param color Color
 ---@return Slider
-function Slider:new(point, width, choices, color)
+function Slider:new(point, width, choices, current, color)
+    color = color or Color:white()
+
     local newObj = {
         width = width,
         choices = choices,
         circle = Circle:new('fill', Color:red(), 10),
         start_point = point:clone(-(width / 2)),
         step_offset = width / (#choices - 1),
-        current_index = 0,
+        current_index = current or 0,
         color = color,
         text_elements = {}
     }

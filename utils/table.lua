@@ -6,6 +6,12 @@ function table.merge(table1, table2)
     end
 end
 
+function table.mergeAssoc(table1, table2)
+    for key, value in pairs(table2) do
+        table1[key] = value
+    end
+end
+
 ---@param t table
 function table.shuffle(t)
     local iterations = #t
@@ -35,4 +41,14 @@ function table.deepCopy(orig, deep)
         copy = orig
     end
     return copy
+end
+
+function table.find(t, v)
+    for i, val in ipairs(t) do
+        if v == val then
+            return i
+        end
+    end
+
+    return nil
 end

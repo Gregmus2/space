@@ -21,10 +21,16 @@ function SettingsScene:load(prevScene)
     local container = FormContainer:new(Point:new(App.camera.point.x, App.camera.point.y), Area:new(wpixels(5, true), hpixels(8, true)), 100)
     self.menu:addElement(container)
 
-    local slider = Slider:new(Point:new(0, 0), 300, Params.resolutions, Color:white())
+    local current_res = Config.width .. 'x' .. Config.height
+    local current_resolution_index = table.find(Params.resolutions, current_res) - 1
+    local slider = Slider:new(Point:new(0, 0), 300, Params.resolutions, current_resolution_index)
     container:add(slider, function()
         local values = slider:getValue():split('x')
-        love.window.setMode(values[1], values[2], { msaa = Config.msaa } )
+        Config:writeConfig({
+            width = values[1],
+            height = values[2]
+        })
+        love.window.showMessageBox('info', 'Changes will accepted after restart the game', 'info')
     end)
 
     self.events:addAction(Event.KEY, function() App.changeScene(prevScene) end, 'escape', 'menu')
