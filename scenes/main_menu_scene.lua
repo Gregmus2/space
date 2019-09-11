@@ -13,7 +13,7 @@ local Event = require('enum.event')
 local MainMenuScene = Scene:new()
 
 function MainMenuScene:load(prevScene)
-    self:buildBack(prevScene)
+    self:buildBack()
 
     if self.isLoaded then
         return
@@ -91,9 +91,8 @@ function MainMenuScene:draw()
 end
 
 ---@private
----@param prevScene Scene
-function MainMenuScene:buildBack(prevScene)
-    if prevScene == nil then
+function MainMenuScene:buildBack()
+    if SpaceScene.isLoaded == false then
         return
     end
 
@@ -101,10 +100,10 @@ function MainMenuScene:buildBack(prevScene)
         self.back = Canvas:new(
             Area:new(Config.width, Config.height),
             function()
-                if prevScene.cameraState then
-                    App.camera:setState(prevScene.cameraState)
+                if SpaceScene.cameraState then
+                    App.camera:setState(SpaceScene.cameraState)
                 end
-                prevScene:draw()
+                SpaceScene:draw()
                 App.camera:reset()
             end,
             Point:new(0, 0)
