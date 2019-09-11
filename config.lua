@@ -10,12 +10,11 @@ local Config = {}
 local path = 'conf.txt';
 
 function Config:load()
-    local fileData
-    if love.filesystem.getInfo(path) == nil then
+    local fileData = self.readConfig()
+    if fileData == nil then
         self:writeConfig()
         fileData = Params.default.config
     end
-    fileData = fileData or self.readConfig()
 
     self.width = tonumber(fileData.width)
     self.height = tonumber(fileData.height)
@@ -25,7 +24,7 @@ end
 
 function Config:writeConfig(config)
     config = config or Params.default.config
-    local oldConfig = self.readConfig()
+    local oldConfig = self.readConfig() or {}
     table.mergeAssoc(oldConfig, config)
     local success, message = love.filesystem.write(path, self.tableToConfig(oldConfig))
     if success == false then
@@ -47,6 +46,10 @@ end
 ---@private
 ---@return table<string, string>
 function Config.readConfig()
+    if love.filesystem.getInfo(path) == nil then
+        return nil
+    end
+
     local config = {}
     for line in love.filesystem.lines(path) do
         local pos = string.find(line, '=')

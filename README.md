@@ -9,11 +9,11 @@ Android: `cd android && docker-compose up`
 ## Luarocks
 If you want to install lua dependencies simply, you have to install luarocks.
 ```shell script
-sudo apt install liblua5.1-dev && \
+sudo apt install -y lua5.1 liblua5.1-dev && \
 wget https://luarocks.org/releases/luarocks-3.2.0.tar.gz && \
 tar zxpf luarocks-3.2.0.tar.gz && rm luarocks-3.2.0.tar.gz && \
 cd luarocks-3.2.0 && ./configure --lua-version=5.1 && \
-make build && make install
+make build && sudo make install
 ```
 
 ## Debug

@@ -7,6 +7,8 @@ local Collection = require('collection.collection')
 local Grid = require('menu.grid')
 local Point = require('model.point')
 local Area = require('model.area')
+local Params = require('params')
+local Event = require('enum.event')
 
 ---@class TestScene : Scene
 local TestScene = Scene:new()
@@ -23,6 +25,8 @@ function TestScene:load(prevScene)
     local collection = Collection:new(engines)
     grid:setCollection(collection)
     self.menu:addElement(grid)
+
+    self.events:addAction(Event.KEY, function() App.changeScene(Params.default.scene) end, 'escape', 'menu')
 end
 
 return TestScene
