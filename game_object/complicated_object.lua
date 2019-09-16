@@ -42,12 +42,19 @@ function ComplicatedObject:forceRotate(angle) end
 ---@param direction number
 function ComplicatedObject:move(dt, direction) end
 
----@return number, number @ x, y
-function ComplicatedObject:getPosition() end
+---@return Point
+function ComplicatedObject:getPosition()
+    return Point:new(self.fixture[1]:getBody():getPosition())
+end
 
----@param x number
----@param y number
-function ComplicatedObject:setPosition(x, y) end
+---@param point Point
+function ComplicatedObject:setPosition(point)
+    self.fixture[1]:getBody():setPosition(point:get())
+end
+
+function ComplicatedObject:testPoint(tx, ty, tr, x, y)
+    return self.fixture[1]:getShape():testPoint(tx, ty, tr, x, y)
+end
 
 -- TODO refactoring
 function ComplicatedObject:draw()
