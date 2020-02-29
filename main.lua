@@ -1,4 +1,5 @@
 require('app')
+require('player')
 require('utils.string')
 require('utils.table')
 require('utils.oop')
@@ -64,4 +65,5 @@ end
 function love.draw()
     App.draw()
     App.scene:draw()
+    Player.draw()
 end

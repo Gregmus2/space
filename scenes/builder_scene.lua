@@ -9,8 +9,10 @@ local BulletsConfigModel = require('model.bullets_config_model')
 local Collection = require('collection.collection')
 local Grid = require('menu.grid')
 local GameObject = require('game_object.game_object')
+local ComplicatedObject = require('game_object.complicated_object')
 local Point = require('model.point')
 local Area = require('model.area')
+local Text = require('drawable.text')
 
 ---@class BuilderScene : Scene
 ---@field protected world World
@@ -50,32 +52,38 @@ function BuilderScene:load(prevScene, hero)
     -- add templates for building parts of ship
     local d, f = ShipComponentBuilder.build(self.world, mainPoint, Color:red(), PolygonFactory.generateRocket(20, 40, 10))
     f:getBody():setFixedRotation(true)
-    local go = GameObject:new(f):addDraw(d)
+    local price = Text:new('$50', Color:white(), Resources:getFont(FONT_CASANOVA, 12))
+    local go = ComplicatedObject:new({f}):addDraw(d):addDraw(price)
     self:addTemplate(go, function()
-        local engine = ShipComponentBuilder:buildEngine(hero:getWorld(), prevScene, Point:new(self.grid.point.x + Draw.calcX(go.fixture:getBody():getX()), self.grid.point.y + Draw.calcY(go.fixture:getBody():getY())), Color:red(), PolygonFactory.generateRocket(20, 40, 10), 0.1, 1500)
+        local point = go:getPosition()
+        local engine = ShipComponentBuilder:buildEngine(hero:getWorld(), prevScene, Point:new(self.grid.point.x + Draw.calcX(point.x), self.grid.point.y + Draw.calcY(point.y)), Color:red(), PolygonFactory.generateRocket(20, 40, 10), 0.1, 1500)
         self.hero:addEngine(engine)
 
         return engine
-    end)
+    end, 50)
     d, f = ShipComponentBuilder.build(self.world, mainPoint, Color:red(), PolygonFactory.generateRectangle(30, 10))
     f:getBody():setFixedRotation(true)
-    go = GameObject:new(f):addDraw(d)
+    price = Text:new('$100', Color:white(), Resources:getFont(FONT_CASANOVA, 12))
+    go = ComplicatedObject:new({f}):addDraw(d):addDraw(price)
     self:addTemplate(go, function()
+        local point = go:getPosition()
         local bulletEmitter = BulletEmitter:new(5, BulletsConfigModel:new(5, Color:white(), 50))
-        local weapon = ShipComponentBuilder:buildWeapon(hero:getWorld(), prevScene, Point:new(self.grid.point.x + Draw.calcX(go.fixture:getBody():getX()), self.grid.point.y + Draw.calcY(go.fixture:getBody():getY())), Color:red(), PolygonFactory.generateRectangle(30, 10), 0.1, bulletEmitter)
+        local weapon = ShipComponentBuilder:buildWeapon(hero:getWorld(), prevScene, Point:new(self.grid.point.x + Draw.calcX(point.x), self.grid.point.y + Draw.calcY(point.y)), Color:red(), PolygonFactory.generateRectangle(30, 10), 0.1, bulletEmitter)
         self.hero:addComponent(weapon)
 
         return weapon
-    end)
+    end, 100)
     d, f = ShipComponentBuilder.build(self.world, mainPoint, Color:blue(), PolygonFactory.generateRectangle(25, 25))
     f:getBody():setFixedRotation(true)
-    go = GameObject:new(f):addDraw(d)
+    price = Text:new('$80', Color:white(), Resources:getFont(FONT_CASANOVA, 12))
+    go = ComplicatedObject:new({f}):addDraw(d):addDraw(price)
     self:addTemplate(go, function()
-        local reactor = ShipComponentBuilder:buildReactor(hero:getWorld(), Point:new(self.grid.point.x + Draw.calcX(go.fixture:getBody():getX()), self.grid.point.y + Draw.calcY(go.fixture:getBody():getY())), Color:blue(), PolygonFactory.generateRectangle(25, 25), 0.5, 10, 1)
+        local point = go:getPosition()
+        local reactor = ShipComponentBuilder:buildReactor(hero:getWorld(), Point:new(self.grid.point.x + Draw.calcX(point.x), self.grid.point.y + Draw.calcY(point.y)), Color:blue(), PolygonFactory.generateRectangle(25, 25), 0.5, 10, 1)
         self.hero:addComponent(reactor)
 
         return reactor
-    end)
+    end, 80)
 
     self.events:addAction(Event.KEY, function() App.changeScene(prevScene) end, 'f')
 end
@@ -110,15 +118,26 @@ function BuilderScene:draggableEvent()
     )
 end
 
-function BuilderScene:addTemplate(template, buildFunction)
+---@param template GameObject
+---@param buildFunction function
+---@param price number
+function BuilderScene:addTemplate(template, buildFunction, price)
     self.templatesCollection:add(template)
     self.events:addAction(Event.MOUSE,
             function(params)
-                if template.fixture:getShape():testPoint(
-                        Draw.calcX(template.fixture:getBody():getX()),
-                        Draw.calcY(template.fixture:getBody():getY()),
-                        0, params.x, params.y
+                local point = template:getPosition()
+                if template:testPoint(
+                    Draw.calcX(point.x),
+                    Draw.calcY(point.y),
+                    0, params.x, params.y
                 ) then
+                    if Player.money < price then
+                        love.window.showMessageBox('info', 'Not enough money', 'info')
+                        return
+                    end
+
+                    Player.money = Player.money - price
+
                     local object = buildFunction()
                     table.insert(self.draggableObjects, object)
 

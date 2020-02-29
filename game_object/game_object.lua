@@ -78,6 +78,10 @@ function GameObject:destroy()
     end
 end
 
+function GameObject:testPoint(tx, ty, tr, x, y)
+    return self.fixture:getShape():testPoint(tx, ty, tr, x, y)
+end
+
 function GameObject:draw()
     if self.drawable == nil then
         return
